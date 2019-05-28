@@ -3,11 +3,13 @@ function main() {
   setupInputListeners(html);
 }
 
-function setupInputListeners(element) {
-  // this will probably break during multi touch
-  let hasActiveEvent = false;
+function setLabelText(text) {
+  const label = document.getElementById('input');
+  label.innerText = text;
+}
 
-  // might want to handle a couple of these
+function setupInputListeners(element) {
+  // will probably break with multi touch.
   let touches = [];
 
   element.addEventListener('touchstart', handleTouchStart, false);
@@ -20,30 +22,45 @@ function setupInputListeners(element) {
   }
 
   function handleTouchMove(event) {
-    // TODO need to wait for a couple of events
-    if (!hasActiveEvent) {
-      hasActiveEvent = true;
+    touches.push(event.touches[0]);
+  }
 
-      const initialTouch = touches[0];
-      const currentTouch = event.touches[0];
+  function handleTouchEnd(event) {
+    const initialTouch = touches[0];
+    const lastTouch = touches[touches.length - 1];
 
-      const dx = currentTouch.pageX - initialTouch.pageX;
-      const dy = currentTouch.pageY - initialTouch.pageY;
+    const dx = lastTouch.pageX - initialTouch.pageX;
+    const dy = lastTouch.pageY - initialTouch.pageY;
 
-      if (Math.abs(dx) > Math.abs(dy)) {
-        alert('horizontal ' + dx + ' ' + dy);
+    const inputType = getInputType(dx, dy);
+    setLabelText(inputType);
+
+    touches = [];
+  }
+
+  function getInputType(dx, dy) {
+    if (dx === 0 && dy === 0) {
+      return 'tap';
+    }
+
+    const isHorizontal = Math.abs(dx) > Math.abs(dy);
+    if (isHorizontal) {
+      if (dx > 0) {
+        return 'right';
       } else {
-        alert('vertical ' + dx + ' ' + dy);
+        return 'left';
+      }
+    } else {
+      if (dy > 0) {
+        return 'down';
+      } else {
+        return 'up';
       }
     }
   }
 
-  function handleTouchEnd(event) {
-    hasActiveEvent = false;
-    touches = [];
-  }
-
   function handleTouchCancel(event) {
-    hasActiveEvent = false;
+    // not really sure when this is triggered. delegate it to touch end handler for now.
+    handleTouchEnd(event);
   }
 }
