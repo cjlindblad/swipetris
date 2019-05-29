@@ -1,3 +1,5 @@
+main();
+
 function main() {
   const html = document.getElementById('wrapper');
   setupInputListeners(html);
