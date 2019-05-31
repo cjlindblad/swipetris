@@ -65,19 +65,37 @@ export const initializeGameState = () => {
   const testPiece = createGamePiece(2, 2);
   gamePieces.push(testPiece);
 
+  // not sure how much the game pieces should know about game logic.
+  // we'll start by putting it here.
   const handleInput = input => {
     switch (input) {
       case INPUT_TYPES.INPUT_LEFT:
-        gamePieces.forEach(piece => piece.inputLeft());
+        gamePieces.forEach(piece => {
+          if (piece.getCoordinate().x > 0) {
+            piece.inputLeft();
+          }
+        });
         break;
       case INPUT_TYPES.INPUT_RIGHT:
-        gamePieces.forEach(piece => piece.inputRight());
+        gamePieces.forEach(piece => {
+          if (piece.getCoordinate().x < COLUMNS - 1) {
+            piece.inputRight();
+          }
+        });
         break;
       case INPUT_TYPES.INPUT_UP:
-        gamePieces.forEach(piece => piece.inputUp());
+        gamePieces.forEach(piece => {
+          if (piece.getCoordinate().y > 0) {
+            piece.inputUp();
+          }
+        });
         break;
       case INPUT_TYPES.INPUT_DOWN:
-        gamePieces.forEach(piece => piece.inputDown());
+        gamePieces.forEach(piece => {
+          if (piece.getCoordinate().y < ROWS - 1) {
+            piece.inputDown();
+          }
+        });
         break;
       case INPUT_TYPES.INPUT_MAIN_ACTION:
         break;
