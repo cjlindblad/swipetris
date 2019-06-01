@@ -1,99 +1,29 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
-
-/*
-
-piece rotation would work like this
-
-.... ..x. .... .x..
-xxxx ..x. .... .x..
-.... ..x. xxxx .x..
-.... ..x. .... .x..
-
-xxx ..x ... x..
-.x. .xx .x. xx.
-... ..x xxx x..
-
-xx. ..x ... .x.
-.xx .xx xx. xx.
-... .x. .xx x..
-
-.xx .x. ... x.. 
-xx. .xx .xx xx.
-... ..x xx. .x.
-
-xx xx xx xx
-xx xx xx xx
-
-*/
-
-const createGamePiece = (x, y) => {
-  let _x = x;
-  let _y = y;
-
-  const inputLeft = () => {
-    _x = _x - 1;
-  };
-  const inputRight = () => {
-    _x = _x + 1;
-  };
-  const inputUp = () => {
-    _y = _y - 1;
-  };
-  const inputDown = () => {
-    _y = _y + 1;
-  };
-
-  const getCoordinate = () => ({
-    x: _x,
-    y: _y
-  });
-
-  return {
-    inputLeft,
-    inputRight,
-    inputUp,
-    inputDown,
-    getCoordinate
-  };
-};
+import { createGamePiece } from './gamePiece.mjs';
 
 export const initializeGameState = () => {
   const COLUMNS = 8;
   const ROWS = 5;
 
   const gamePieces = [];
-  const testPiece = createGamePiece(2, 2);
+  const testPiece = createGamePiece({ x: 2, y: 2 });
   gamePieces.push(testPiece);
 
-  // not sure how much the game pieces should know about game logic.
-  // we'll start by putting it here.
   const handleInput = input => {
     switch (input) {
       case INPUT_TYPES.INPUT_LEFT:
-        gamePieces.forEach(piece => {
-          if (piece.getCoordinate().x > 0) {
-            piece.inputLeft();
-          }
-        });
-        break;
       case INPUT_TYPES.INPUT_RIGHT:
-        gamePieces.forEach(piece => {
-          if (piece.getCoordinate().x < COLUMNS - 1) {
-            piece.inputRight();
-          }
-        });
-        break;
       case INPUT_TYPES.INPUT_UP:
-        gamePieces.forEach(piece => {
-          if (piece.getCoordinate().y > 0) {
-            piece.inputUp();
-          }
-        });
-        break;
       case INPUT_TYPES.INPUT_DOWN:
         gamePieces.forEach(piece => {
-          if (piece.getCoordinate().y < ROWS - 1) {
-            piece.inputDown();
+          const nextState = piece.getNextState(input);
+          if (
+            nextState.x >= 0 &&
+            nextState.x < COLUMNS &&
+            nextState.y >= 0 &&
+            nextState.y < ROWS
+          ) {
+            piece.setState(nextState);
           }
         });
         break;
@@ -118,8 +48,8 @@ export const initializeGameState = () => {
 
     // place pieces
     gamePieces.forEach(piece => {
-      const coordinate = piece.getCoordinate();
-      gameBoard[coordinate.y][coordinate.x] = '👾';
+      const state = piece.getState();
+      gameBoard[state.y][state.x] = '👾';
     });
 
     // generate string representation
