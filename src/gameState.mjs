@@ -1,10 +1,8 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
 import { createGamePiece } from './gamePiece.mjs';
+import { COLUMNS, ROWS, EMPTY_SPACE_CHAR, GAME_PIECE_CHAR } from './config.mjs';
 
 export const initializeGameState = () => {
-  const COLUMNS = 8;
-  const ROWS = 5;
-
   const gamePieces = [];
   const testPiece = createGamePiece({ x: 2, y: 2 });
   gamePieces.push(testPiece);
@@ -42,14 +40,14 @@ export const initializeGameState = () => {
     for (let y = 0; y < ROWS; y++) {
       gameBoard[y] = [];
       for (let x = 0; x < COLUMNS; x++) {
-        gameBoard[y][x] = '〰️';
+        gameBoard[y][x] = EMPTY_SPACE_CHAR;
       }
     }
 
     // place pieces
     gamePieces.forEach(piece => {
       const state = piece.getState();
-      gameBoard[state.y][state.x] = '👾';
+      gameBoard[state.y][state.x] = GAME_PIECE_CHAR;
     });
 
     // generate string representation

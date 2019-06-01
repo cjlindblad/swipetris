@@ -53,7 +53,7 @@ export const setupInputListeners = (element, handleInput) => {
     touches.push(event.touches[0]);
   }
 
-  function handleTouchEnd(event) {
+  function handleTouchEnd() {
     const initialTouch = touches[0];
     const lastTouch = touches[touches.length - 1];
 
