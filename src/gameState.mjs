@@ -1,12 +1,17 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
-import { createGamePiece } from './gamePiece.mjs';
+import { createGamePiece, GAME_PIECE_TYPES } from './gamePiece.mjs';
 import { COLUMNS, ROWS, EMPTY_SPACE_CHAR, GAME_PIECE_CHAR } from './config.mjs';
 
 export const initializeGameState = () => {
   const gamePieces = [];
-  const testPiece = createGamePiece({ x: 2, y: 2 });
+  const testPiece = createGamePiece({
+    topLeftX: 2,
+    topLeftY: 1,
+    pieceType: GAME_PIECE_TYPES.TEEWEE
+  });
   gamePieces.push(testPiece);
 
+  // this will grow and should probably be moved out
   const handleInput = input => {
     switch (input) {
       case INPUT_TYPES.INPUT_LEFT:
@@ -15,12 +20,22 @@ export const initializeGameState = () => {
       case INPUT_TYPES.INPUT_DOWN:
         gamePieces.forEach(piece => {
           const nextState = piece.getNextState(input);
-          if (
-            nextState.x >= 0 &&
-            nextState.x < COLUMNS &&
-            nextState.y >= 0 &&
-            nextState.y < ROWS
-          ) {
+          let validMove = true;
+          const { coordinates } = nextState;
+          for (let i = 0; i < coordinates.length; i++) {
+            const coordinate = coordinates[i];
+            if (
+              coordinate.x < 0 ||
+              coordinate.x >= COLUMNS ||
+              coordinate.y < 0 ||
+              coordinate.y >= ROWS
+            ) {
+              validMove = false;
+              break;
+            }
+          }
+
+          if (validMove) {
             piece.setState(nextState);
           }
         });
@@ -47,7 +62,9 @@ export const initializeGameState = () => {
     // place pieces
     gamePieces.forEach(piece => {
       const state = piece.getState();
-      gameBoard[state.y][state.x] = GAME_PIECE_CHAR;
+      state.coordinates.forEach(coordinate => {
+        gameBoard[coordinate.y][coordinate.x] = GAME_PIECE_CHAR;
+      });
     });
 
     // generate string representation

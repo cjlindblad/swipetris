@@ -1,30 +1,39 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
 
-/*
+// the pieces actually have names.
+// https://www.joe.co.uk/gaming/tetris-block-names-221127
+export const GAME_PIECE_TYPES = {
+  TEEWEE: 'TEEWEE',
+  CLEVELAND: 'CLEVELAND'
+};
 
-piece rotation would work like this
+// piece rotation would work like this
 
-.... ..x. .... .x..
-xxxx ..x. .... .x..
-.... ..x. xxxx .x..
-.... ..x. .... .x..
+// .... ..x. .... .x..
+// xxxx ..x. .... .x..
+// .... ..x. xxxx .x..
+// .... ..x. .... .x..
 
-xxx ..x ... x..
-.x. .xx .x. xx.
-... ..x xxx x..
+// Teewee
+// xxx ..x ... x..
+// .x. .xx .x. xx.
+// ... ..x xxx x..
 
-xx. ..x ... .x.
-.xx .xx xx. xx.
-... .x. .xx x..
+// Cleveland
+// xx. ..x ... .x.
+// .xx .xx xx. xx.
+// ... .x. .xx x..
 
-.xx .x. ... x.. 
-xx. .xx .xx xx.
-... ..x xx. .x.
+// Rhode Island
+// .xx .x. ... x..
+// xx. .xx .xx xx.
+// ... ..x xx. .x.
 
-xx xx xx xx
-xx xx xx xx
+// Smashboy
+// xx xx xx xx
+// xx xx xx xx
 
-*/
+// TODO L-pieces!
 
 // Borrowing some React wording here.
 //
@@ -37,36 +46,47 @@ xx xx xx xx
 // from input handling.
 export const createGamePiece = initialState => {
   // this will probably be generalized
-  const { x, y } = initialState;
-  let _x = x;
-  let _y = y;
+  const { topLeftX, topLeftY, pieceType } = initialState;
+
+  let coordinates = getInitialCoordinates({
+    pieceType,
+    topLeftX,
+    topLeftY
+  });
 
   const getState = () => ({
-    x: _x,
-    y: _y
+    coordinates
   });
 
   const getNextState = input => {
     switch (input) {
       case INPUT_TYPES.INPUT_LEFT:
         return {
-          x: _x - 1,
-          y: _y
+          coordinates: coordinates.map(coordinate => ({
+            x: coordinate.x - 1,
+            y: coordinate.y
+          }))
         };
       case INPUT_TYPES.INPUT_RIGHT:
         return {
-          x: _x + 1,
-          y: _y
+          coordinates: coordinates.map(coordinate => ({
+            x: coordinate.x + 1,
+            y: coordinate.y
+          }))
         };
       case INPUT_TYPES.INPUT_UP:
         return {
-          x: _x,
-          y: _y - 1
+          coordinates: coordinates.map(coordinate => ({
+            x: coordinate.x,
+            y: coordinate.y - 1
+          }))
         };
       case INPUT_TYPES.INPUT_DOWN:
         return {
-          x: _x,
-          y: _y + 1
+          coordinates: coordinates.map(coordinate => ({
+            x: coordinate.x,
+            y: coordinate.y + 1
+          }))
         };
       default:
         throw new Error(`Unknown input - ${input}`);
@@ -74,8 +94,7 @@ export const createGamePiece = initialState => {
   };
 
   const setState = nextState => {
-    _x = nextState.x;
-    _y = nextState.y;
+    coordinates = nextState.coordinates;
   };
 
   // public API
@@ -84,4 +103,32 @@ export const createGamePiece = initialState => {
     setState,
     getState
   };
+};
+
+const getInitialCoordinates = ({ pieceType, topLeftX, topLeftY }) => {
+  switch (pieceType) {
+    case GAME_PIECE_TYPES.TEEWEE:
+      // xxx
+      //  x
+      return [
+        {
+          x: topLeftX,
+          y: topLeftY
+        },
+        {
+          x: topLeftX + 1,
+          y: topLeftY
+        },
+        {
+          x: topLeftX + 2,
+          y: topLeftY
+        },
+        {
+          x: topLeftX + 1,
+          y: topLeftY + 1
+        }
+      ];
+    default:
+      throw new Error(`Unknown piece type - ${pieceType}`);
+  }
 };
