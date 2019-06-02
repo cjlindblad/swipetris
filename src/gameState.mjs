@@ -18,12 +18,14 @@ export const initializeGameState = () => {
       case INPUT_TYPES.INPUT_RIGHT:
       case INPUT_TYPES.INPUT_UP:
       case INPUT_TYPES.INPUT_DOWN:
+      case INPUT_TYPES.INPUT_MAIN_ACTION:
         gamePieces.forEach(piece => {
           const nextState = piece.getNextState(input);
           let validMove = true;
           const { coordinates } = nextState;
           for (let i = 0; i < coordinates.length; i++) {
             const coordinate = coordinates[i];
+            // TODO collision detection
             if (
               coordinate.x < 0 ||
               coordinate.x >= COLUMNS ||
@@ -39,8 +41,6 @@ export const initializeGameState = () => {
             piece.setState(nextState);
           }
         });
-        break;
-      case INPUT_TYPES.INPUT_MAIN_ACTION:
         break;
       default:
         throw new Error(`Unknown input - ${input}`);

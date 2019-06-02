@@ -54,8 +54,11 @@ export const createGamePiece = initialState => {
     topLeftY
   });
 
+  let rotation = 0;
+
   const getState = () => ({
-    coordinates
+    coordinates,
+    rotation
   });
 
   const getNextState = input => {
@@ -88,13 +91,29 @@ export const createGamePiece = initialState => {
             y: coordinate.y + 1
           }))
         };
+      case INPUT_TYPES.INPUT_MAIN_ACTION:
+        const nextRotationCoordinates = getNextRotation({
+          pieceType,
+          coordinates,
+          rotation
+        });
+        return {
+          coordinates: nextRotationCoordinates,
+          rotation: (rotation + 1) % 4
+        };
       default:
         throw new Error(`Unknown input - ${input}`);
     }
   };
 
   const setState = nextState => {
-    coordinates = nextState.coordinates;
+    // TODO generalize this..
+    if (nextState.coordinates) {
+      coordinates = nextState.coordinates;
+    }
+    if (nextState.rotation !== null && nextState.rotation !== undefined) {
+      rotation = nextState.rotation;
+    }
   };
 
   // public API
@@ -128,6 +147,125 @@ const getInitialCoordinates = ({ pieceType, topLeftX, topLeftY }) => {
           y: topLeftY + 1
         }
       ];
+    default:
+      throw new Error(`Unknown piece type - ${pieceType}`);
+  }
+};
+
+// will have to handle reverse rotation as well
+const getNextRotation = ({ pieceType, coordinates, rotation }) => {
+  switch (pieceType) {
+    case GAME_PIECE_TYPES.TEEWEE:
+      // not very elegant. we'll see if we can come up with something better later on.
+      if (rotation === 0) {
+        const topLeftX = coordinates[0].x;
+        const topLeftY = coordinates[0].y;
+
+        // xxx        x
+        //  x   ->   xx
+        //            x
+
+        return [
+          {
+            x: topLeftX + 2,
+            y: topLeftY
+          },
+          {
+            x: topLeftX + 1,
+            y: topLeftY + 1
+          },
+          {
+            x: topLeftX + 2,
+            y: topLeftY + 1
+          },
+          {
+            x: topLeftX + 2,
+            y: topLeftY + 2
+          }
+        ];
+      }
+      if (rotation === 1) {
+        const topRightX = coordinates[0].x;
+        const topRightY = coordinates[0].y;
+
+        //   x
+        //  xx  ->   x
+        //   x      xxx
+
+        return [
+          {
+            x: topRightX - 1,
+            y: topRightY + 1
+          },
+          {
+            x: topRightX - 2,
+            y: topRightY + 2
+          },
+          {
+            x: topRightX - 1,
+            y: topRightY + 2
+          },
+          {
+            x: topRightX,
+            y: topRightY + 2
+          }
+        ];
+      }
+      if (rotation === 2) {
+        const middleX = coordinates[0].x;
+        const middleY = coordinates[0].y;
+
+        //          x
+        //  x   ->  xx
+        // xxx      x
+
+        return [
+          {
+            x: middleX - 1,
+            y: middleY - 1
+          },
+          {
+            x: middleX - 1,
+            y: middleY
+          },
+          {
+            x: middleX,
+            y: middleY
+          },
+          {
+            x: middleX - 1,
+            y: middleY + 1
+          }
+        ];
+      }
+      if (rotation === 3) {
+        const topLeftX = coordinates[0].x;
+        const topLeftY = coordinates[0].y;
+
+        // x       xxx
+        // xx  ->   x
+        // x
+
+        return [
+          {
+            x: topLeftX,
+            y: topLeftY
+          },
+          {
+            x: topLeftX + 1,
+            y: topLeftY
+          },
+          {
+            x: topLeftX + 2,
+            y: topLeftY
+          },
+          {
+            x: topLeftX + 1,
+            y: topLeftY + 1
+          }
+        ];
+      }
+      throw new Error(`Unknown rotation - ${rotation}`);
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
