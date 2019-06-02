@@ -9,6 +9,10 @@ export const GAME_PIECE_TYPES = {
 
 // piece rotation would work like this
 
+// TODO: general rotation algorithm
+// Keep track of origo and use relative positioning of all the pieces.
+// For each rotation: x2 = y1 * -1, y2 = x1
+
 // .... ..x. .... .x..
 // xxxx ..x. .... .x..
 // .... ..x. xxxx .x..
