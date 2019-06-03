@@ -11,6 +11,46 @@ export const initializeGameState = () => {
   });
   gamePieces.push(testPiece);
 
+  const isValidMove = coordinates => {
+    let validMove = true;
+
+    for (let i = 0; i < coordinates.length; i++) {
+      const coordinate = coordinates[i];
+      // check for out of bounds
+      if (
+        coordinate.x < 0 ||
+        coordinate.x >= COLUMNS ||
+        coordinate.y < 0 ||
+        coordinate.y >= ROWS
+      ) {
+        validMove = false;
+        break;
+      }
+
+      // check for collision with non-active pieces
+      // TODO optimize and clean this up..
+      gamePieces
+        .filter(piece => !piece.isActive())
+        .forEach(piece => {
+          if (!validMove) {
+            return;
+          }
+          piece.getState().coordinates.forEach(c => {
+            if (!validMove) {
+              return;
+            }
+
+            if (c.x === coordinate.x && c.y === coordinate.y) {
+              validMove = false;
+            }
+          });
+        });
+
+    }
+
+    return validMove;
+  }
+
   // this will grow and should probably be moved out
   const handleInput = input => {
     switch (input) {
@@ -25,51 +65,21 @@ export const initializeGameState = () => {
           }
 
           const nextState = piece.getNextState(input);
-          let validMove = true;
-          const { coordinates } = nextState;
-          for (let i = 0; i < coordinates.length; i++) {
-            const coordinate = coordinates[i];
-            // TODO collision detection
-            if (
-              coordinate.x < 0 ||
-              coordinate.x >= COLUMNS ||
-              coordinate.y < 0 ||
-              coordinate.y >= ROWS
-            ) {
-              validMove = false;
-              break;
-            }
-          }
-
+          const validMove = isValidMove(nextState.coordinates);
           if (validMove) {
             piece.setState(nextState);
           }
         });
         break;
       case INPUT_TYPES.GRAVITY_DROP:
-        // TODO pretty much the same as above. Fix!
         gamePieces.forEach(piece => {
           if (!piece.isActive()) {
             return;
           }
 
+          // similar to logic above, but we'll let it be for now
           const nextState = piece.getNextState(input);
-          let validMove = true;
-          const { coordinates } = nextState;
-          for (let i = 0; i < coordinates.length; i++) {
-            const coordinate = coordinates[i];
-            // TODO collision detection
-            if (
-              coordinate.x < 0 ||
-              coordinate.x >= COLUMNS ||
-              coordinate.y < 0 ||
-              coordinate.y >= ROWS
-            ) {
-              validMove = false;
-              break;
-            }
-          }
-
+          const validMove = isValidMove(nextState.coordinates);
           if (validMove) {
             piece.setState(nextState);
           } else {
