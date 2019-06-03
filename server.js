@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+// TODO look into using nodemon
+
 express.static.mime.define({ 'application/javascript': ['js'] });
 
 app.use('/src', express.static(__dirname + '/src'));
