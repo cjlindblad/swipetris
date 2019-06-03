@@ -4,7 +4,8 @@ export const INPUT_TYPES = {
   INPUT_RIGHT: 'INPUT_RIGHT',
   INPUT_UP: 'INPUT_UP',
   INPUT_DOWN: 'INPUT_DOWN',
-  INPUT_MAIN_ACTION: 'INPUT_MAIN_ACTION'
+  INPUT_MAIN_ACTION: 'INPUT_MAIN_ACTION',
+  GRAVITY_DROP: 'GRAVITY_DROP'
 };
 
 export const setupInputListeners = (element, handleInput) => {
@@ -28,6 +29,9 @@ export const setupInputListeners = (element, handleInput) => {
     const DOWN = 40;
     const SPACE = 32;
 
+    // temp gravity key
+    const Q = 81;
+
     if (event.keyCode === LEFT) {
       handleInput(INPUT_TYPES.INPUT_LEFT);
     }
@@ -42,6 +46,9 @@ export const setupInputListeners = (element, handleInput) => {
     }
     if (event.keyCode === SPACE) {
       handleInput(INPUT_TYPES.INPUT_MAIN_ACTION);
+    }
+    if (event.keyCode === Q) {
+      handleInput(INPUT_TYPES.GRAVITY_DROP);
     }
   }
 

@@ -6,7 +6,7 @@ export const initializeGameState = () => {
   const gamePieces = [];
   const testPiece = createGamePiece({
     topLeftX: 2,
-    topLeftY: 1,
+    topLeftY: 0,
     pieceType: GAME_PIECE_TYPES.TEEWEE
   });
   gamePieces.push(testPiece);
@@ -20,6 +20,10 @@ export const initializeGameState = () => {
       case INPUT_TYPES.INPUT_DOWN:
       case INPUT_TYPES.INPUT_MAIN_ACTION:
         gamePieces.forEach(piece => {
+          if (!piece.isActive()) {
+            return;
+          }
+
           const nextState = piece.getNextState(input);
           let validMove = true;
           const { coordinates } = nextState;
@@ -39,6 +43,45 @@ export const initializeGameState = () => {
 
           if (validMove) {
             piece.setState(nextState);
+          }
+        });
+        break;
+      case INPUT_TYPES.GRAVITY_DROP:
+        // TODO pretty much the same as above. Fix!
+        gamePieces.forEach(piece => {
+          if (!piece.isActive()) {
+            return;
+          }
+
+          const nextState = piece.getNextState(input);
+          let validMove = true;
+          const { coordinates } = nextState;
+          for (let i = 0; i < coordinates.length; i++) {
+            const coordinate = coordinates[i];
+            // TODO collision detection
+            if (
+              coordinate.x < 0 ||
+              coordinate.x >= COLUMNS ||
+              coordinate.y < 0 ||
+              coordinate.y >= ROWS
+            ) {
+              validMove = false;
+              break;
+            }
+          }
+
+          if (validMove) {
+            piece.setState(nextState);
+          } else {
+            piece.setState({
+              active: false
+            });
+            const newTestPiece = createGamePiece({
+              topLeftX: 2,
+              topLeftY: 0,
+              pieceType: GAME_PIECE_TYPES.TEEWEE
+            });
+            gamePieces.push(newTestPiece);
           }
         });
         break;

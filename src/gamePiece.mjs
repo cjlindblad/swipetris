@@ -58,7 +58,9 @@ export const createGamePiece = initialState => {
     topLeftY
   });
 
+  // initial values
   let rotation = 0;
+  let active = true;
 
   const getState = () => ({
     coordinates,
@@ -105,18 +107,31 @@ export const createGamePiece = initialState => {
           coordinates: nextRotationCoordinates,
           rotation: (rotation + 1) % 4
         };
+      case INPUT_TYPES.GRAVITY_DROP:
+        // same as input down, but I think we're gonna rebuild this
+        return {
+          coordinates: coordinates.map(coordinate => ({
+            x: coordinate.x,
+            y: coordinate.y + 1
+          }))
+        };
       default:
         throw new Error(`Unknown input - ${input}`);
     }
   };
 
+  const isActive = () => active;
+
   const setState = nextState => {
-    // TODO generalize this..
-    if (nextState.coordinates) {
+    // TODO generalize and clean up this..
+    if (nextState.coordinates !== null && nextState.coordinates !== undefined) {
       coordinates = nextState.coordinates;
     }
     if (nextState.rotation !== null && nextState.rotation !== undefined) {
       rotation = nextState.rotation;
+    }
+    if (nextState.active !== null && nextState.active !== undefined) {
+      active = nextState.active;
     }
   };
 
@@ -124,7 +139,8 @@ export const createGamePiece = initialState => {
   return {
     getNextState,
     setState,
-    getState
+    getState,
+    isActive
   };
 };
 
