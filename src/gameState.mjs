@@ -7,7 +7,7 @@ export const initializeGameState = () => {
   const testPiece = createGamePiece({
     topLeftX: 2,
     topLeftY: 0,
-    pieceType: GAME_PIECE_TYPES.TEEWEE
+    pieceType: GAME_PIECE_TYPES.TEEWEE,
   });
   gamePieces.push(testPiece);
 
@@ -45,11 +45,10 @@ export const initializeGameState = () => {
             }
           });
         });
-
     }
 
     return validMove;
-  }
+  };
 
   // this will grow and should probably be moved out
   const handleInput = input => {
@@ -83,13 +82,71 @@ export const initializeGameState = () => {
           if (validMove) {
             piece.setState(nextState);
           } else {
+            // this is where a piece lands
+
+            // deactivate current piece
             piece.setState({
-              active: false
+              active: false,
             });
+
+            // check for solid lines
+            const solidLineCoordinates = [];
+            for (let y = 0; y < ROWS; y++) {
+              let solidLine = true;
+
+              for (let x = 0; x < COLUMNS; x++) {
+                // really, really bad.
+                // optimize this.
+                let coordinateFound = false;
+
+                gamePieces.forEach(piece => {
+                  piece.getState().coordinates.forEach(coordinate => {
+                    if (coordinate.y === y && coordinate.x === x) {
+                      coordinateFound = true;
+                    }
+                  });
+                });
+
+                if (!coordinateFound) {
+                  solidLine = false;
+                }
+              }
+
+              if (solidLine) {
+                // TODO this becomes kind of cumbersome.
+                // we have to find all relevant pieces and modify their coordinates.
+                for (let x = 0; x < COLUMNS; x++) {
+                  if (!solidLineCoordinates[y]) {
+                    solidLineCoordinates[y] = [];
+                  }
+                  solidLineCoordinates[y][x] = true;
+                }
+              }
+            }
+            if (solidLineCoordinates.length > 0) {
+              // clear solid lines
+              gamePieces.forEach(gamePiece => {
+                const nextCoordinates = gamePiece
+                  .getState()
+                  .coordinates.filter(
+                    coordinate =>
+                      !solidLineCoordinates[coordinate.y] ||
+                      !solidLineCoordinates[coordinate.y][coordinate.x]
+                  );
+                gamePiece.setState({
+                  coordinates: nextCoordinates,
+                });
+              });
+
+              // TODO move everything above solid line down.
+              // might be a bit tricky.
+            }
+
+            // add new piece to board
             const newTestPiece = createGamePiece({
               topLeftX: 2,
               topLeftY: 0,
-              pieceType: GAME_PIECE_TYPES.TEEWEE
+              pieceType: GAME_PIECE_TYPES.TEEWEE,
             });
             gamePieces.push(newTestPiece);
           }
@@ -134,6 +191,6 @@ export const initializeGameState = () => {
 
   return {
     getRepresentation,
-    handleInput
+    handleInput,
   };
 };
