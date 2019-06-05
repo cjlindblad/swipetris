@@ -11,6 +11,15 @@ export const initializeGameState = () => {
   });
   gamePieces.push(testPiece);
 
+  // setup game board
+  const gameBoard = [];
+  for (let y = 0; y < ROWS; y++) {
+    gameBoard[y] = [];
+    for (let x = 0; x < COLUMNS; x++) {
+      gameBoard[y][x] = EMPTY_SPACE_CHAR;
+    }
+  }
+
   const isValidMove = coordinates => {
     let validMove = true;
 
@@ -27,24 +36,10 @@ export const initializeGameState = () => {
         break;
       }
 
-      // check for collision with non-active pieces
-      // TODO optimize and clean this up..
-      gamePieces
-        .filter(piece => !piece.isActive())
-        .forEach(piece => {
-          if (!validMove) {
-            return;
-          }
-          piece.getState().coordinates.forEach(c => {
-            if (!validMove) {
-              return;
-            }
-
-            if (c.x === coordinate.x && c.y === coordinate.y) {
-              validMove = false;
-            }
-          });
-        });
+      // check for collision with rest of board
+      if (gameBoard[coordinate.y][coordinate.x] !== EMPTY_SPACE_CHAR) {
+        validMove = false;
+      }
     }
 
     return validMove;
@@ -83,6 +78,18 @@ export const initializeGameState = () => {
             piece.setState(nextState);
           } else {
             // this is where a piece lands
+            // lots of stuff happening. maybe break it out to separate functions for clarity.
+            
+            // transfer active piece to game board
+            if (gamePieces.length > 1) {
+              throw new Error("Check me");
+            }
+            const activePiece = gamePieces[0];
+            const activePieceCoordinates = activePiece.getState().coordinates;
+            activePieceCoordinates.forEach(coordinate => {
+              gameBoard[coordinate.y][coordinate.x] = activePiece.getChar();
+            })
+            gamePieces.pop();
 
             // deactivate current piece
             piece.setState({
@@ -90,57 +97,28 @@ export const initializeGameState = () => {
             });
 
             // check for solid lines
-            const solidLineCoordinates = [];
-            for (let y = 0; y < ROWS; y++) {
-              let solidLine = true;
-
+            const solidRows = [];
+            for (let y = ROWS - 1; y >= 0; y--) {
+              let solid = true;
               for (let x = 0; x < COLUMNS; x++) {
-                // really, really bad.
-                // optimize this.
-                let coordinateFound = false;
-
-                gamePieces.forEach(piece => {
-                  piece.getState().coordinates.forEach(coordinate => {
-                    if (coordinate.y === y && coordinate.x === x) {
-                      coordinateFound = true;
-                    }
-                  });
-                });
-
-                if (!coordinateFound) {
-                  solidLine = false;
+                if (gameBoard[y][x] === EMPTY_SPACE_CHAR) {
+                  solid = false;
+                  break;
                 }
               }
-
-              if (solidLine) {
-                // TODO this becomes kind of cumbersome.
-                // we have to find all relevant pieces and modify their coordinates.
-                for (let x = 0; x < COLUMNS; x++) {
-                  if (!solidLineCoordinates[y]) {
-                    solidLineCoordinates[y] = [];
-                  }
-                  solidLineCoordinates[y][x] = true;
-                }
+              if (solid) {
+                solidRows.push(y);
               }
             }
-            if (solidLineCoordinates.length > 0) {
-              // clear solid lines
-              gamePieces.forEach(gamePiece => {
-                const nextCoordinates = gamePiece
-                  .getState()
-                  .coordinates.filter(
-                    coordinate =>
-                      !solidLineCoordinates[coordinate.y] ||
-                      !solidLineCoordinates[coordinate.y][coordinate.x]
-                  );
-                gamePiece.setState({
-                  coordinates: nextCoordinates,
-                });
-              });
 
-              // TODO move everything above solid line down.
-              // might be a bit tricky.
-            }
+            // clear solid lines
+            solidRows.forEach(y => {
+              for (let x = 0; x < COLUMNS; x++) {
+                gameBoard[y][x] = EMPTY_SPACE_CHAR;
+              }
+            });
+
+            // TODO move everything above solid line down.
 
             // add new piece to board
             const newTestPiece = createGamePiece({
@@ -161,19 +139,20 @@ export const initializeGameState = () => {
     // this might be a weird way to do it, but it's a start!
 
     // setup empty board
-    const gameBoard = [];
+    const gameBoardBuffer = [];
     for (let y = 0; y < ROWS; y++) {
-      gameBoard[y] = [];
+      gameBoardBuffer[y] = [];
       for (let x = 0; x < COLUMNS; x++) {
-        gameBoard[y][x] = EMPTY_SPACE_CHAR;
+        gameBoardBuffer[y][x] = gameBoard[y][x];
       }
     }
 
     // place pieces
+    // TODO should only be one
     gamePieces.forEach(piece => {
       const state = piece.getState();
       state.coordinates.forEach(coordinate => {
-        gameBoard[coordinate.y][coordinate.x] = GAME_PIECE_CHAR;
+        gameBoardBuffer[coordinate.y][coordinate.x] = GAME_PIECE_CHAR;
       });
     });
 
@@ -181,7 +160,7 @@ export const initializeGameState = () => {
     let renderString = '';
     for (let y = 0; y < ROWS; y++) {
       for (let x = 0; x < COLUMNS; x++) {
-        renderString += gameBoard[y][x];
+        renderString += gameBoardBuffer[y][x];
       }
       renderString += '\n';
     }

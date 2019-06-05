@@ -1,4 +1,5 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
+import { GAME_PIECE_CHAR } from './config.mjs';
 
 // the pieces actually have names.
 // https://www.joe.co.uk/gaming/tetris-block-names-221127
@@ -61,6 +62,7 @@ export const createGamePiece = initialState => {
   // initial values
   let rotation = 0;
   let active = true;
+  let char = GAME_PIECE_CHAR;
 
   const getState = () => ({
     coordinates,
@@ -122,6 +124,8 @@ export const createGamePiece = initialState => {
 
   const isActive = () => active;
 
+  const getChar = () => char;
+
   const setState = nextState => {
     // TODO generalize and clean up this..
     if (nextState.coordinates !== null && nextState.coordinates !== undefined) {
@@ -140,7 +144,8 @@ export const createGamePiece = initialState => {
     getNextState,
     setState,
     getState,
-    isActive
+    isActive,
+    getChar,
   };
 };
 

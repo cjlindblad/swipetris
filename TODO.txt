@@ -1,0 +1,1 @@
+- gamePieces should only have one piece (the active one).
