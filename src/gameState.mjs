@@ -7,7 +7,7 @@ export const initializeGameState = () => {
   const testPiece = createGamePiece({
     topLeftX: 2,
     topLeftY: 0,
-    pieceType: GAME_PIECE_TYPES.TEEWEE,
+    pieceType: GAME_PIECE_TYPES.TEEWEE
   });
   gamePieces.push(testPiece);
 
@@ -79,21 +79,21 @@ export const initializeGameState = () => {
           } else {
             // this is where a piece lands
             // lots of stuff happening. maybe break it out to separate functions for clarity.
-            
+
             // transfer active piece to game board
             if (gamePieces.length > 1) {
-              throw new Error("Check me");
+              throw new Error('Check me');
             }
             const activePiece = gamePieces[0];
             const activePieceCoordinates = activePiece.getState().coordinates;
             activePieceCoordinates.forEach(coordinate => {
               gameBoard[coordinate.y][coordinate.x] = activePiece.getChar();
-            })
+            });
             gamePieces.pop();
 
             // deactivate current piece
             piece.setState({
-              active: false,
+              active: false
             });
 
             // check for solid lines
@@ -118,13 +118,39 @@ export const initializeGameState = () => {
               }
             });
 
-            // TODO move everything above solid line down.
+            // move everything down after clearace
+            if (solidRows.length > 0) {
+              // start at first solid line row minus one
+              for (let y = solidRows[0] - 1; y >= 0; y--) {
+                for (let x = 0; x < COLUMNS; x++) {
+                  if (gameBoard[y][x] !== EMPTY_SPACE_CHAR) {
+                    const pieceChar = gameBoard[y][x];
+
+                    let nextY = y;
+                    let freeSpaceDownwards = true;
+                    while (freeSpaceDownwards && nextY < ROWS - 1) {
+                      if (gameBoard[nextY + 1][x] === EMPTY_SPACE_CHAR) {
+                        nextY++;
+                      } else {
+                        freeSpaceDownwards = false;
+                      }
+                    }
+
+                    // only swap if piece was moved
+                    if (y !== nextY) {
+                      gameBoard[y][x] = EMPTY_SPACE_CHAR;
+                      gameBoard[nextY][x] = pieceChar;
+                    }
+                  }
+                }
+              }
+            }
 
             // add new piece to board
             const newTestPiece = createGamePiece({
               topLeftX: 2,
               topLeftY: 0,
-              pieceType: GAME_PIECE_TYPES.TEEWEE,
+              pieceType: GAME_PIECE_TYPES.TEEWEE
             });
             gamePieces.push(newTestPiece);
           }
@@ -170,6 +196,6 @@ export const initializeGameState = () => {
 
   return {
     getRepresentation,
-    handleInput,
+    handleInput
   };
 };

@@ -1,1 +1,2 @@
 - gamePieces should only have one piece (the active one).
+- gameBoard should hide its internal structure
