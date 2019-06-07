@@ -8,38 +8,6 @@ export const GAME_PIECE_TYPES = {
   CLEVELAND: 'CLEVELAND'
 };
 
-// piece rotation would work like this
-
-// TODO: general rotation algorithm
-// Keep track of origo and use relative positioning of all the pieces.
-// For each rotation: x2 = y1 * -1, y2 = x1
-
-// .... ..x. .... .x..
-// xxxx ..x. .... .x..
-// .... ..x. xxxx .x..
-// .... ..x. .... .x..
-
-// Teewee
-// xxx ..x ... x..
-// .x. .xx .x. xx.
-// ... ..x xxx x..
-
-// Cleveland
-// xx. ..x ... .x.
-// .xx .xx xx. xx.
-// ... .x. .xx x..
-
-// Rhode Island
-// .xx .x. ... x..
-// xx. .xx .xx xx.
-// ... ..x xx. .x.
-
-// Smashboy
-// xx xx xx xx
-// xx xx xx xx
-
-// TODO L-pieces!
-
 // Borrowing some React wording here.
 //
 // I'm thinking that a given game piece
@@ -51,23 +19,32 @@ export const GAME_PIECE_TYPES = {
 // from input handling.
 export const createGamePiece = initialState => {
   // this will probably be generalized
-  const { topLeftX, topLeftY, pieceType } = initialState;
+  const { centerX, centerY, pieceType } = initialState;
 
   let coordinates = getInitialCoordinates({
     pieceType,
-    topLeftX,
-    topLeftY
+    centerX,
+    centerY
   });
+
+  let origo = {
+    x: centerX,
+    y: centerY
+  };
 
   // initial values
   let rotation = 0;
   let active = true;
   let char = GAME_PIECE_CHAR;
 
-  const getState = () => ({
-    coordinates,
-    rotation
-  });
+  const getState = () => {
+    const state = {
+      coordinates,
+      rotation,
+      origo
+    };
+    return state;
+  };
 
   const getNextState = input => {
     switch (input) {
@@ -76,34 +53,49 @@ export const createGamePiece = initialState => {
           coordinates: coordinates.map(coordinate => ({
             x: coordinate.x - 1,
             y: coordinate.y
-          }))
+          })),
+          origo: {
+            x: origo.x - 1,
+            y: origo.y
+          }
         };
       case INPUT_TYPES.INPUT_RIGHT:
         return {
           coordinates: coordinates.map(coordinate => ({
             x: coordinate.x + 1,
             y: coordinate.y
-          }))
+          })),
+          origo: {
+            x: origo.x + 1,
+            y: origo.y
+          }
         };
       case INPUT_TYPES.INPUT_UP:
         return {
           coordinates: coordinates.map(coordinate => ({
             x: coordinate.x,
             y: coordinate.y - 1
-          }))
+          })),
+          origo: {
+            x: origo.x,
+            y: origo.y - 1
+          }
         };
       case INPUT_TYPES.INPUT_DOWN:
         return {
           coordinates: coordinates.map(coordinate => ({
             x: coordinate.x,
             y: coordinate.y + 1
-          }))
+          })),
+          origo: {
+            x: origo.x,
+            y: origo.y + 1
+          }
         };
       case INPUT_TYPES.INPUT_MAIN_ACTION:
         const nextRotationCoordinates = getNextRotation({
-          pieceType,
           coordinates,
-          rotation
+          origo
         });
         return {
           coordinates: nextRotationCoordinates,
@@ -115,7 +107,11 @@ export const createGamePiece = initialState => {
           coordinates: coordinates.map(coordinate => ({
             x: coordinate.x,
             y: coordinate.y + 1
-          }))
+          })),
+          origo: {
+            x: origo.x,
+            y: origo.y + 1
+          }
         };
       default:
         throw new Error(`Unknown input - ${input}`);
@@ -137,6 +133,9 @@ export const createGamePiece = initialState => {
     if (nextState.active !== null && nextState.active !== undefined) {
       active = nextState.active;
     }
+    if (nextState.origo !== null && nextState.origo !== undefined) {
+      origo = nextState.origo;
+    }
   };
 
   // public API
@@ -145,31 +144,31 @@ export const createGamePiece = initialState => {
     setState,
     getState,
     isActive,
-    getChar,
+    getChar
   };
 };
 
-const getInitialCoordinates = ({ pieceType, topLeftX, topLeftY }) => {
+const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
   switch (pieceType) {
     case GAME_PIECE_TYPES.TEEWEE:
       // xxx
-      //  x
+      //  x<- origo
       return [
         {
-          x: topLeftX,
-          y: topLeftY
+          x: centerX - 1,
+          y: centerY - 1
         },
         {
-          x: topLeftX + 1,
-          y: topLeftY
+          x: centerX,
+          y: centerY - 1
         },
         {
-          x: topLeftX + 2,
-          y: topLeftY
+          x: centerX + 1,
+          y: centerY - 1
         },
         {
-          x: topLeftX + 1,
-          y: topLeftY + 1
+          x: centerX,
+          y: centerY
         }
       ];
     default:
@@ -178,120 +177,23 @@ const getInitialCoordinates = ({ pieceType, topLeftX, topLeftY }) => {
 };
 
 // will have to handle reverse rotation as well
-const getNextRotation = ({ pieceType, coordinates, rotation }) => {
-  switch (pieceType) {
-    case GAME_PIECE_TYPES.TEEWEE:
-      // not very elegant. we'll see if we can come up with something better later on.
-      if (rotation === 0) {
-        const topLeftX = coordinates[0].x;
-        const topLeftY = coordinates[0].y;
+const getNextRotation = ({ coordinates, origo }) => {
+  // General rotation algorithm:
+  // Keep track of origo and use relative positioning of all the pieces.
+  // For each rotation: x2 = y1 * -1, y2 = x1
+  return coordinates.map(coordinate => {
+    const dx1 = coordinate.x - origo.x;
+    const dy1 = coordinate.y - origo.y;
 
-        // xxx        x
-        //  x   ->   xx
-        //            x
+    const dx2 = dy1 * -1;
+    const dy2 = dx1;
 
-        return [
-          {
-            x: topLeftX + 2,
-            y: topLeftY
-          },
-          {
-            x: topLeftX + 1,
-            y: topLeftY + 1
-          },
-          {
-            x: topLeftX + 2,
-            y: topLeftY + 1
-          },
-          {
-            x: topLeftX + 2,
-            y: topLeftY + 2
-          }
-        ];
-      }
-      if (rotation === 1) {
-        const topRightX = coordinates[0].x;
-        const topRightY = coordinates[0].y;
+    const x2 = origo.x + dx2;
+    const y2 = origo.y + dy2;
 
-        //   x
-        //  xx  ->   x
-        //   x      xxx
-
-        return [
-          {
-            x: topRightX - 1,
-            y: topRightY + 1
-          },
-          {
-            x: topRightX - 2,
-            y: topRightY + 2
-          },
-          {
-            x: topRightX - 1,
-            y: topRightY + 2
-          },
-          {
-            x: topRightX,
-            y: topRightY + 2
-          }
-        ];
-      }
-      if (rotation === 2) {
-        const middleX = coordinates[0].x;
-        const middleY = coordinates[0].y;
-
-        //          x
-        //  x   ->  xx
-        // xxx      x
-
-        return [
-          {
-            x: middleX - 1,
-            y: middleY - 1
-          },
-          {
-            x: middleX - 1,
-            y: middleY
-          },
-          {
-            x: middleX,
-            y: middleY
-          },
-          {
-            x: middleX - 1,
-            y: middleY + 1
-          }
-        ];
-      }
-      if (rotation === 3) {
-        const topLeftX = coordinates[0].x;
-        const topLeftY = coordinates[0].y;
-
-        // x       xxx
-        // xx  ->   x
-        // x
-
-        return [
-          {
-            x: topLeftX,
-            y: topLeftY
-          },
-          {
-            x: topLeftX + 1,
-            y: topLeftY
-          },
-          {
-            x: topLeftX + 2,
-            y: topLeftY
-          },
-          {
-            x: topLeftX + 1,
-            y: topLeftY + 1
-          }
-        ];
-      }
-      throw new Error(`Unknown rotation - ${rotation}`);
-    default:
-      throw new Error(`Unknown piece type - ${pieceType}`);
-  }
+    return {
+      x: x2,
+      y: y2
+    };
+  });
 };

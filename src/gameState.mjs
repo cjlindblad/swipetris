@@ -5,8 +5,8 @@ import { COLUMNS, ROWS, EMPTY_SPACE_CHAR, GAME_PIECE_CHAR } from './config.mjs';
 export const initializeGameState = () => {
   const gamePieces = [];
   const testPiece = createGamePiece({
-    topLeftX: 2,
-    topLeftY: 0,
+    centerX: 2,
+    centerY: 1,
     pieceType: GAME_PIECE_TYPES.TEEWEE
   });
   gamePieces.push(testPiece);
@@ -148,8 +148,8 @@ export const initializeGameState = () => {
 
             // add new piece to board
             const newTestPiece = createGamePiece({
-              topLeftX: 2,
-              topLeftY: 0,
+              centerX: 2,
+              centerY: 1,
               pieceType: GAME_PIECE_TYPES.TEEWEE
             });
             gamePieces.push(newTestPiece);

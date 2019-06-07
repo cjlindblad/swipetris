@@ -1,2 +1,4 @@
 - gamePieces should only have one piece (the active one).
 - gameBoard should hide its internal structure
+- remove rotation member from gamePiece if dynamic rotation algorithm is used
+- add text document with piece shapes(?)
