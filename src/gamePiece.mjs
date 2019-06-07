@@ -5,7 +5,8 @@ import { GAME_PIECE_CHAR } from './config.mjs';
 // https://www.joe.co.uk/gaming/tetris-block-names-221127
 export const GAME_PIECE_TYPES = {
   TEEWEE: 'TEEWEE',
-  CLEVELAND: 'CLEVELAND'
+  ORANGE_RICKY: 'ORANGE_RICKY'
+  // CLEVELAND: 'CLEVELAND'
 };
 
 // Borrowing some React wording here.
@@ -151,23 +152,44 @@ export const createGamePiece = initialState => {
 const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
   switch (pieceType) {
     case GAME_PIECE_TYPES.TEEWEE:
+      //  x
       // xxx
-      //  x<- origo
       return [
-        {
-          x: centerX - 1,
-          y: centerY - 1
-        },
         {
           x: centerX,
           y: centerY - 1
         },
+        {
+          x: centerX - 1,
+          y: centerY
+        },
+        {
+          x: centerX,
+          y: centerY
+        },
+        {
+          x: centerX + 1,
+          y: centerY
+        }
+      ];
+    case GAME_PIECE_TYPES.ORANGE_RICKY:
+      //   x
+      // xxx
+      return [
         {
           x: centerX + 1,
           y: centerY - 1
         },
         {
+          x: centerX - 1,
+          y: centerY
+        },
+        {
           x: centerX,
+          y: centerY
+        },
+        {
+          x: centerX + 1,
           y: centerY
         }
       ];
