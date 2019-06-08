@@ -4,4 +4,5 @@
 - give pieces different chars
 - function for randomizing next pieces
 - show next piece in UI
+- wall kicks
 - add text document with piece shapes(?)

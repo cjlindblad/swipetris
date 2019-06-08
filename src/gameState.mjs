@@ -7,7 +7,7 @@ export const initializeGameState = () => {
   const testPiece = createGamePiece({
     centerX: 2,
     centerY: 1,
-    pieceType: GAME_PIECE_TYPES.ORANGE_RICKY
+    pieceType: GAME_PIECE_TYPES.S
   });
   gamePieces.push(testPiece);
 
@@ -150,7 +150,7 @@ export const initializeGameState = () => {
             const newTestPiece = createGamePiece({
               centerX: 2,
               centerY: 1,
-              pieceType: GAME_PIECE_TYPES.TEEWEE
+              pieceType: GAME_PIECE_TYPES.T
             });
             gamePieces.push(newTestPiece);
           }

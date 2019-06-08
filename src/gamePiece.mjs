@@ -1,12 +1,12 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
 import { GAME_PIECE_CHAR } from './config.mjs';
 
-// the pieces actually have names.
-// https://www.joe.co.uk/gaming/tetris-block-names-221127
 export const GAME_PIECE_TYPES = {
-  TEEWEE: 'TEEWEE',
-  ORANGE_RICKY: 'ORANGE_RICKY'
-  // CLEVELAND: 'CLEVELAND'
+  T: 'T',
+  L: 'L',
+  L_INVERTED: 'L_INVERTED',
+  S: 'S',
+  S_INVERTED: 'S_INVERTED'
 };
 
 // Borrowing some React wording here.
@@ -151,7 +151,7 @@ export const createGamePiece = initialState => {
 
 const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
   switch (pieceType) {
-    case GAME_PIECE_TYPES.TEEWEE:
+    case GAME_PIECE_TYPES.T:
       //  x
       // xxx
       return [
@@ -172,7 +172,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
-    case GAME_PIECE_TYPES.ORANGE_RICKY:
+    case GAME_PIECE_TYPES.L:
       //   x
       // xxx
       return [
@@ -193,12 +193,75 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
+    case GAME_PIECE_TYPES.L_INVERTED:
+      // x
+      // xxx
+      return [
+        {
+          x: centerX - 1,
+          y: centerY - 1
+        },
+        {
+          x: centerX - 1,
+          y: centerY
+        },
+        {
+          x: centerX,
+          y: centerY
+        },
+        {
+          x: centerX + 1,
+          y: centerY
+        }
+      ];
+    case GAME_PIECE_TYPES.S:
+      //  xx
+      // xx
+      return [
+        {
+          x: centerX,
+          y: centerY - 1
+        },
+        {
+          x: centerX + 1,
+          y: centerY - 1
+        },
+        {
+          x: centerX - 1,
+          y: centerY
+        },
+        {
+          x: centerX,
+          y: centerY
+        }
+      ];
+    case GAME_PIECE_TYPES.S_INVERTED:
+      // xx
+      //  xx
+      return [
+        {
+          x: centerX - 1,
+          y: centerY - 1
+        },
+        {
+          x: centerX,
+          y: centerY - 1
+        },
+        {
+          x: centerX,
+          y: centerY
+        },
+        {
+          x: centerX + 1,
+          y: centerY
+        }
+      ];
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
 };
 
-// will have to handle reverse rotation as well
+// TODO will have to handle reverse rotation as well
 const getNextRotation = ({ coordinates, origo }) => {
   // General rotation algorithm:
   // Keep track of origo and use relative positioning of all the pieces.
