@@ -1,13 +1,12 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
-import { createGamePiece, GAME_PIECE_TYPES } from './gamePiece.mjs';
+import { createGamePiece, getNextPieceType } from './gamePiece.mjs';
 import { COLUMNS, ROWS, EMPTY_SPACE_CHAR, GAME_PIECE_CHAR } from './config.mjs';
-
 export const initializeGameState = () => {
   const gamePieces = [];
   const testPiece = createGamePiece({
     centerX: 2,
     centerY: 1,
-    pieceType: GAME_PIECE_TYPES.S
+    pieceType: getNextPieceType()
   });
   gamePieces.push(testPiece);
 
@@ -150,7 +149,7 @@ export const initializeGameState = () => {
             const newTestPiece = createGamePiece({
               centerX: 2,
               centerY: 1,
-              pieceType: GAME_PIECE_TYPES.T
+              pieceType: getNextPieceType()
             });
             gamePieces.push(newTestPiece);
           }

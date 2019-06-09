@@ -9,6 +9,13 @@ export const GAME_PIECE_TYPES = {
   S_INVERTED: 'S_INVERTED'
 };
 
+export const getNextPieceType = () => {
+  const pieceTypes = Object.keys(GAME_PIECE_TYPES);
+  const nextTypeIndex =
+    Math.floor(Math.random() * pieceTypes.length) % pieceTypes.length; // better safe than sorry..
+  return GAME_PIECE_TYPES[pieceTypes[nextTypeIndex]];
+};
+
 // Borrowing some React wording here.
 //
 // I'm thinking that a given game piece
