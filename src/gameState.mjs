@@ -2,12 +2,21 @@ import { INPUT_TYPES } from './inputHandling.mjs';
 import { createGamePiece, getNextPieceType } from './gamePiece.mjs';
 import { COLUMNS, ROWS, EMPTY_SPACE_CHAR } from './config.mjs';
 export const initializeGameState = () => {
+  // TODO need to handle initial coordinates in a better way
   const initialPiece = createGamePiece({
     centerX: 2,
     centerY: 1,
     pieceType: getNextPieceType()
   });
+
+  const next = createGamePiece({
+    centerX: 2,
+    centerY: 1,
+    pieceType: getNextPieceType()
+  });
+
   let activePiece = initialPiece;
+  let nextPiece = next; 
 
   // setup game board
   const gameBoard = [];
@@ -126,12 +135,13 @@ export const initializeGameState = () => {
           }
 
           // add new active piece
-          const newTestPiece = createGamePiece({
+          const newPiece = createGamePiece({
             centerX: 2,
             centerY: 1,
             pieceType: getNextPieceType()
           });
-          activePiece = newTestPiece;
+          activePiece = nextPiece;
+          nextPiece = newPiece;
         }
         break;
       }
@@ -167,7 +177,12 @@ export const initializeGameState = () => {
       renderString += '\n';
     }
 
-    return renderString;
+    // not sure if we should just use a big string, or split the "UI" up
+
+    return {
+      renderString,
+      nextPieceChar: nextPiece.getChar(),
+    };
   };
 
   return {

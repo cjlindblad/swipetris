@@ -2,9 +2,11 @@ import { setupInputListeners } from './inputHandling.mjs';
 
 import { initializeGameState } from './gameState.mjs';
 
-function render(state) {
+function render({ renderString, nextPieceChar }) {
   const label = document.getElementById('input');
-  label.innerText = state;
+  label.innerText = renderString;
+  const next = document.getElementById('next');
+  next.innerText = nextPieceChar;
 }
 
 function main() {
