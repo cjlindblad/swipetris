@@ -1,9 +1,9 @@
 ✅ function for randomizing next pieces
+- give pieces different chars
+- show next piece in UI
 - gamePieces should only have one piece (the active one).
 - gameBoard should hide its internal structure
 - remove rotation member from gamePiece if dynamic rotation algorithm is used
-- give pieces different chars
-- show next piece in UI
 - wall kicks
 - make pieces fall automatically
 - add text document with piece shapes(?)

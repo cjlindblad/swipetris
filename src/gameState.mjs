@@ -1,6 +1,6 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
 import { createGamePiece, getNextPieceType } from './gamePiece.mjs';
-import { COLUMNS, ROWS, EMPTY_SPACE_CHAR, GAME_PIECE_CHAR } from './config.mjs';
+import { COLUMNS, ROWS, EMPTY_SPACE_CHAR } from './config.mjs';
 export const initializeGameState = () => {
   const gamePieces = [];
   const testPiece = createGamePiece({
@@ -177,7 +177,7 @@ export const initializeGameState = () => {
     gamePieces.forEach(piece => {
       const state = piece.getState();
       state.coordinates.forEach(coordinate => {
-        gameBoardBuffer[coordinate.y][coordinate.x] = GAME_PIECE_CHAR;
+        gameBoardBuffer[coordinate.y][coordinate.x] = piece.getChar();
       });
     });
 

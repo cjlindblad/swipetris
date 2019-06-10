@@ -1,5 +1,4 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
-import { GAME_PIECE_CHAR } from './config.mjs';
 
 export const GAME_PIECE_TYPES = {
   T: 'T',
@@ -43,7 +42,7 @@ export const createGamePiece = initialState => {
   // initial values
   let rotation = 0;
   let active = true;
-  let char = GAME_PIECE_CHAR;
+  let char = getPieceChar(pieceType);
 
   const getState = () => {
     const state = {
@@ -155,6 +154,23 @@ export const createGamePiece = initialState => {
     getChar
   };
 };
+
+const getPieceChar = pieceType => {
+  switch (pieceType) {
+    case GAME_PIECE_TYPES.L:
+      return '😁';
+    case GAME_PIECE_TYPES.L_INVERTED:
+      return '😫';
+    case GAME_PIECE_TYPES.S:
+      return '😜';
+    case GAME_PIECE_TYPES.S_INVERTED:
+      return '🤗';
+    case GAME_PIECE_TYPES.T:
+      return '🤯';
+    default:
+      throw new Error(`Unknown piece type - ${pieceType}`);
+  }
+}
 
 const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
   switch (pieceType) {
