@@ -41,7 +41,6 @@ export const createGamePiece = initialState => {
 
   // initial values
   let rotation = 0;
-  let active = true;
   let char = getPieceChar(pieceType);
 
   const getState = () => {
@@ -125,8 +124,6 @@ export const createGamePiece = initialState => {
     }
   };
 
-  const isActive = () => active;
-
   const getChar = () => char;
 
   const setState = nextState => {
@@ -136,9 +133,6 @@ export const createGamePiece = initialState => {
     }
     if (nextState.rotation !== null && nextState.rotation !== undefined) {
       rotation = nextState.rotation;
-    }
-    if (nextState.active !== null && nextState.active !== undefined) {
-      active = nextState.active;
     }
     if (nextState.origo !== null && nextState.origo !== undefined) {
       origo = nextState.origo;
@@ -150,7 +144,6 @@ export const createGamePiece = initialState => {
     getNextState,
     setState,
     getState,
-    isActive,
     getChar
   };
 };

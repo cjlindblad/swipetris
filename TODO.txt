@@ -1,7 +1,7 @@
 ✅ function for randomizing next pieces
-- give pieces different chars
+✅ give pieces different chars
+✅ gamePieces should only have one piece (the active one).
 - show next piece in UI
-- gamePieces should only have one piece (the active one).
 - gameBoard should hide its internal structure
 - remove rotation member from gamePiece if dynamic rotation algorithm is used
 - wall kicks
