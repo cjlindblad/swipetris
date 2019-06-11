@@ -5,7 +5,9 @@ export const GAME_PIECE_TYPES = {
   L: 'L',
   L_INVERTED: 'L_INVERTED',
   S: 'S',
-  S_INVERTED: 'S_INVERTED'
+  S_INVERTED: 'S_INVERTED',
+  I: 'I',
+  BLOCK: 'BLOCK'
 };
 
 export const getNextPieceType = () => {
@@ -159,11 +161,15 @@ const getPieceChar = pieceType => {
     case GAME_PIECE_TYPES.S_INVERTED:
       return '🤗';
     case GAME_PIECE_TYPES.T:
-      return '🤯';
+      return '😮';
+    case GAME_PIECE_TYPES.I:
+      return '😎';
+    case GAME_PIECE_TYPES.BLOCK:
+      return '😅';
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
-}
+};
 
 const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
   switch (pieceType) {
@@ -272,6 +278,44 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
+    case GAME_PIECE_TYPES.I:
+      return [
+        {
+          x: centerX - 2,
+          y: centerY - 1
+        },
+        {
+          x: centerX - 1,
+          y: centerY - 1
+        },
+        {
+          x: centerX + 1,
+          y: centerY - 1
+        },
+        {
+          x: centerX + 2,
+          y: centerY - 1
+        }
+      ];
+    case GAME_PIECE_TYPES.BLOCK:
+      return [
+        {
+          x: centerX - 1,
+          y: centerY - 1
+        },
+        {
+          x: centerX + 1,
+          y: centerY - 1
+        },
+        {
+          x: centerX - 1,
+          y: centerY + 1
+        },
+        {
+          x: centerX + 1,
+          y: centerY + 1
+        }
+      ];
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
@@ -282,6 +326,7 @@ const getNextRotation = ({ coordinates, origo }) => {
   // General rotation algorithm:
   // Keep track of origo and use relative positioning of all the pieces.
   // For each rotation: x2 = y1 * -1, y2 = x1
+
   return coordinates.map(coordinate => {
     const dx1 = coordinate.x - origo.x;
     const dy1 = coordinate.y - origo.y;

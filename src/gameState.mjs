@@ -16,7 +16,7 @@ export const initializeGameState = () => {
   });
 
   let activePiece = initialPiece;
-  let nextPiece = next; 
+  let nextPiece = next;
 
   // setup game board
   const gameBoard = [];
@@ -68,8 +68,6 @@ export const initializeGameState = () => {
         break;
       }
       case INPUT_TYPES.GRAVITY_DROP: {
-
-        // similar to logic above, but we'll let it be for now
         const nextState = activePiece.getNextState(input);
         const validMove = isValidMove(nextState.coordinates);
         if (validMove) {
@@ -181,7 +179,7 @@ export const initializeGameState = () => {
 
     return {
       renderString,
-      nextPieceChar: nextPiece.getChar(),
+      nextPieceChar: nextPiece.getChar()
     };
   };
 

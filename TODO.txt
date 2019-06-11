@@ -1,9 +1,11 @@
 ✅ function for randomizing next pieces
 ✅ give pieces different chars
 ✅ gamePieces should only have one piece (the active one).
+- make pieces fall automatically
 - show next piece in UI
 - gameBoard should hide its internal structure
 - remove rotation member from gamePiece if dynamic rotation algorithm is used
-- wall kicks
-- make pieces fall automatically
 - add text document with piece shapes(?)
+- wall kicks
+
+🐛 gravity shouldn't pull existing pieces as far down as possible, only the number of lines removed under it
