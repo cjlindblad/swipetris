@@ -11,7 +11,7 @@ export const GAME_PIECE_TYPES = {
 };
 
 export const getNextPieceType = () => {
-  const pieceTypes = Object.keys(GAME_PIECE_TYPES);
+  const pieceTypes = Object.keys(GAME_PIECE_TYPES)
   const nextTypeIndex =
     Math.floor(Math.random() * pieceTypes.length) % pieceTypes.length; // better safe than sorry..
   return GAME_PIECE_TYPES[pieceTypes[nextTypeIndex]];
@@ -281,34 +281,34 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
     case GAME_PIECE_TYPES.I:
       return [
         {
-          x: centerX - 2,
-          y: centerY - 1
+          x: centerX - 1,
+          y: centerY
         },
         {
-          x: centerX - 1,
-          y: centerY - 1
+          x: centerX,
+          y: centerY
         },
         {
           x: centerX + 1,
-          y: centerY - 1
+          y: centerY
         },
         {
           x: centerX + 2,
-          y: centerY - 1
+          y: centerY
         }
       ];
     case GAME_PIECE_TYPES.BLOCK:
       return [
         {
-          x: centerX - 1,
-          y: centerY - 1
+          x: centerX,
+          y: centerY 
         },
         {
           x: centerX + 1,
-          y: centerY - 1
+          y: centerY
         },
         {
-          x: centerX - 1,
+          x: centerX,
           y: centerY + 1
         },
         {
@@ -327,7 +327,51 @@ const getNextRotation = ({ coordinates, origo }) => {
   // Keep track of origo and use relative positioning of all the pieces.
   // For each rotation: x2 = y1 * -1, y2 = x1
 
-  return coordinates.map(coordinate => {
+  // determine if longest side has an even or odd amount of blocks
+  let minX = Number.MAX_SAFE_INTEGER;
+  let minY = Number.MAX_SAFE_INTEGER;
+  let maxX = Number.MIN_SAFE_INTEGER;
+  let maxY = Number.MIN_SAFE_INTEGER;
+  coordinates.forEach(coordinate => {
+    const { x, y } = coordinate;
+    if (x > maxX) {
+      maxX = x;
+    }
+    if (x < minX) {
+      minX = x;
+    }
+    if (y > maxY) {
+      maxY = y;
+    }
+    if (y < minY) {
+      minY = y;
+    }
+  });
+  const xDistance = maxX - minX + 1;
+  const yDistance = maxY - minY + 1;
+  const longestDistance = xDistance > yDistance ? xDistance : yDistance;
+  const isLongestDistanceEven = longestDistance % 2 === 0;
+
+  // TODO don't change value of parameters..
+  if (isLongestDistanceEven) {
+    coordinates = coordinates.map(coordinate => {
+      if (coordinate.x <= origo.x && coordinate.y <= origo.y) {
+        return coordinate;
+      }
+      return {
+        x: coordinate.x > origo.x ? coordinate.x + 1 : coordinate.x,
+        y: coordinate.y > origo.y ? coordinate.y + 1 : coordinate.y
+      }
+    });
+
+    origo = {
+      x: origo.x + 1,
+      y: origo.y + 1,
+    };
+  }
+  
+  let rotadedCoordinates = coordinates
+    .map(coordinate => {
     const dx1 = coordinate.x - origo.x;
     const dy1 = coordinate.y - origo.y;
 
@@ -342,4 +386,26 @@ const getNextRotation = ({ coordinates, origo }) => {
       y: y2
     };
   });
+
+  // delete origo cross
+  if (isLongestDistanceEven) {
+    // TODO DON'T do this..
+    // use a temp variable instead
+    origo = {
+      x: origo.x - 1,
+      y: origo.y - 1,
+    };
+
+    rotadedCoordinates = rotadedCoordinates.map(coordinate => {
+      if (coordinate.x <= origo.x && coordinate.y <= origo.y) {
+        return coordinate;
+      }
+      return {
+        x: coordinate.x > origo.x ? coordinate.x - 1 : coordinate.x,
+        y: coordinate.y > origo.y ? coordinate.y - 1 : coordinate.y
+      }
+      });
+  }
+
+  return rotadedCoordinates;
 };

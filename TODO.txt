@@ -1,6 +1,7 @@
 ✅ function for randomizing next pieces
 ✅ give pieces different chars
 ✅ gamePieces should only have one piece (the active one).
+- clean up rotation logic
 - make pieces fall automatically
 - show next piece in UI
 - gameBoard should hide its internal structure
