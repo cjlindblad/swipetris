@@ -1,6 +1,6 @@
-import { INPUT_TYPES } from './inputHandling.mjs';
-import { createGamePiece, getNextPieceType } from './gamePiece.mjs';
-import { COLUMNS, ROWS, EMPTY_SPACE_CHAR } from './config.mjs';
+import { INPUT_TYPES } from "./inputHandling.mjs";
+import { createGamePiece, getNextPieceType } from "./gamePiece.mjs";
+import { COLUMNS, ROWS, EMPTY_SPACE_CHAR } from "./config.mjs";
 export const initializeGameState = () => {
   // TODO need to handle initial coordinates in a better way
   const initialPiece = createGamePiece({
@@ -59,7 +59,8 @@ export const initializeGameState = () => {
       case INPUT_TYPES.INPUT_RIGHT:
       case INPUT_TYPES.INPUT_UP:
       case INPUT_TYPES.INPUT_DOWN:
-      case INPUT_TYPES.INPUT_MAIN_ACTION: {
+      case INPUT_TYPES.ROTATE:
+      case INPUT_TYPES.ROTATE_REVERSE: {
         const nextState = activePiece.getNextState(input);
         const validMove = isValidMove(nextState.coordinates);
         if (validMove) {
@@ -167,12 +168,12 @@ export const initializeGameState = () => {
     });
 
     // generate string representation
-    let renderString = '';
+    let renderString = "";
     for (let y = 0; y < ROWS; y++) {
       for (let x = 0; x < COLUMNS; x++) {
         renderString += gameBoardBuffer[y][x];
       }
-      renderString += '\n';
+      renderString += "\n";
     }
 
     // not sure if we should just use a big string, or split the "UI" up

@@ -1,17 +1,17 @@
-import { INPUT_TYPES } from './inputHandling.mjs';
+import { INPUT_TYPES } from "./inputHandling.mjs";
 
 export const GAME_PIECE_TYPES = {
-  T: 'T',
-  L: 'L',
-  L_INVERTED: 'L_INVERTED',
-  S: 'S',
-  S_INVERTED: 'S_INVERTED',
-  I: 'I',
-  BLOCK: 'BLOCK'
+  T: "T",
+  L: "L",
+  L_INVERTED: "L_INVERTED",
+  S: "S",
+  S_INVERTED: "S_INVERTED",
+  I: "I",
+  BLOCK: "BLOCK"
 };
 
 export const getNextPieceType = () => {
-  const pieceTypes = Object.keys(GAME_PIECE_TYPES)
+  const pieceTypes = Object.keys(GAME_PIECE_TYPES);
   const nextTypeIndex =
     Math.floor(Math.random() * pieceTypes.length) % pieceTypes.length; // better safe than sorry..
   return GAME_PIECE_TYPES[pieceTypes[nextTypeIndex]];
@@ -100,15 +100,26 @@ export const createGamePiece = initialState => {
             y: origo.y + 1
           }
         };
-      case INPUT_TYPES.INPUT_MAIN_ACTION:
+      case INPUT_TYPES.ROTATE: {
         const nextRotationCoordinates = getNextRotation({
           coordinates,
-          origo
+          origo,
+          reverse: false
         });
         return {
-          coordinates: nextRotationCoordinates,
-          rotation: (rotation + 1) % 4
+          coordinates: nextRotationCoordinates
         };
+      }
+      case INPUT_TYPES.ROTATE_REVERSE: {
+        const nextRotationCoordinates = getNextRotation({
+          coordinates,
+          origo,
+          reverse: true
+        });
+        return {
+          coordinates: nextRotationCoordinates
+        };
+      }
       case INPUT_TYPES.GRAVITY_DROP:
         // same as input down, but I think we're gonna rebuild this
         return {
@@ -153,19 +164,19 @@ export const createGamePiece = initialState => {
 const getPieceChar = pieceType => {
   switch (pieceType) {
     case GAME_PIECE_TYPES.L:
-      return '😁';
+      return "😁";
     case GAME_PIECE_TYPES.L_INVERTED:
-      return '😫';
+      return "😫";
     case GAME_PIECE_TYPES.S:
-      return '😜';
+      return "😜";
     case GAME_PIECE_TYPES.S_INVERTED:
-      return '🤗';
+      return "🤗";
     case GAME_PIECE_TYPES.T:
-      return '😮';
+      return "😮";
     case GAME_PIECE_TYPES.I:
-      return '😎';
+      return "😎";
     case GAME_PIECE_TYPES.BLOCK:
-      return '😅';
+      return "😅";
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
@@ -301,7 +312,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
       return [
         {
           x: centerX,
-          y: centerY 
+          y: centerY
         },
         {
           x: centerX + 1,
@@ -322,7 +333,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
 };
 
 // TODO will have to handle reverse rotation as well
-const getNextRotation = ({ coordinates, origo }) => {
+const getNextRotation = ({ coordinates, origo, reverse }) => {
   // General rotation algorithm:
   // Keep track of origo and use relative positioning of all the pieces.
   // For each rotation: x2 = y1 * -1, y2 = x1
@@ -361,22 +372,29 @@ const getNextRotation = ({ coordinates, origo }) => {
       return {
         x: coordinate.x > origo.x ? coordinate.x + 1 : coordinate.x,
         y: coordinate.y > origo.y ? coordinate.y + 1 : coordinate.y
-      }
+      };
     });
 
     origo = {
       x: origo.x + 1,
-      y: origo.y + 1,
+      y: origo.y + 1
     };
   }
-  
-  let rotadedCoordinates = coordinates
-    .map(coordinate => {
+
+  let rotadedCoordinates = coordinates.map(coordinate => {
     const dx1 = coordinate.x - origo.x;
     const dy1 = coordinate.y - origo.y;
 
-    const dx2 = dy1 * -1;
-    const dy2 = dx1;
+    let dx2;
+    let dy2;
+
+    if (!reverse) {
+      dx2 = dy1 * -1;
+      dy2 = dx1;
+    } else {
+      dx2 = dy1;
+      dy2 = dx1 * -1;
+    }
 
     const x2 = origo.x + dx2;
     const y2 = origo.y + dy2;
@@ -393,7 +411,7 @@ const getNextRotation = ({ coordinates, origo }) => {
     // use a temp variable instead
     origo = {
       x: origo.x - 1,
-      y: origo.y - 1,
+      y: origo.y - 1
     };
 
     rotadedCoordinates = rotadedCoordinates.map(coordinate => {
@@ -403,8 +421,8 @@ const getNextRotation = ({ coordinates, origo }) => {
       return {
         x: coordinate.x > origo.x ? coordinate.x - 1 : coordinate.x,
         y: coordinate.y > origo.y ? coordinate.y - 1 : coordinate.y
-      }
-      });
+      };
+    });
   }
 
   return rotadedCoordinates;
