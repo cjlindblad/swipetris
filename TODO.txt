@@ -2,8 +2,8 @@
 ✅ give pieces different chars
 ✅ gamePieces should only have one piece (the active one).
 ✅ rotate pieces in both directionss
+✅ listen for taps on right and left side of phone screen
 - clean up rotation logic
-- listen for taps on right and left side of phone screen
 - make pieces fall automatically
 - show next piece in UI
 - gameBoard should hide its internal structure

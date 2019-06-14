@@ -74,16 +74,21 @@ export const setupInputListeners = (element, handleInput) => {
     const dx = lastTouch.pageX - initialTouch.pageX;
     const dy = lastTouch.pageY - initialTouch.pageY;
 
-    const inputType = getInputType(dx, dy);
+    const inputType = getInputType(dx, dy, lastTouch.clientX);
     handleInput(inputType);
 
     touches = [];
   }
 
-  function getInputType(dx, dy) {
+  function getInputType(dx, dy, clientX) {
     if (dx === 0 && dy === 0) {
       // tap
-      return INPUT_TYPES.ROTATE;
+      // determine position on screen
+      if (clientX > window.innerWidth / 2) {
+        return INPUT_TYPES.ROTATE;
+      } else {
+        return INPUT_TYPES.ROTATE_REVERSE;
+      }
     }
 
     const isHorizontal = Math.abs(dx) > Math.abs(dy);
