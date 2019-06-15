@@ -1,12 +1,12 @@
 // input types
 export const INPUT_TYPES = {
-  INPUT_LEFT: "INPUT_LEFT",
-  INPUT_RIGHT: "INPUT_RIGHT",
-  INPUT_UP: "INPUT_UP",
-  INPUT_DOWN: "INPUT_DOWN",
-  ROTATE: "ROTATE",
-  ROTATE_REVERSE: "ROTATE_REVERSE",
-  GRAVITY_DROP: "GRAVITY_DROP"
+  INPUT_LEFT: 'INPUT_LEFT',
+  INPUT_RIGHT: 'INPUT_RIGHT',
+  INPUT_UP: 'INPUT_UP',
+  INPUT_DOWN: 'INPUT_DOWN',
+  ROTATE: 'ROTATE',
+  ROTATE_REVERSE: 'ROTATE_REVERSE',
+  GRAVITY_DROP: 'GRAVITY_DROP'
 };
 
 export const setupInputListeners = (element, handleInput) => {
@@ -14,13 +14,13 @@ export const setupInputListeners = (element, handleInput) => {
   let touches = [];
 
   // swipe listeners
-  element.addEventListener("touchstart", handleTouchStart, false);
-  element.addEventListener("touchend", handleTouchEnd, false);
-  element.addEventListener("touchcancel", handleTouchCancel, false);
-  element.addEventListener("touchmove", handleTouchMove, false);
+  element.addEventListener('touchstart', handleTouchStart, false);
+  element.addEventListener('touchend', handleTouchEnd, false);
+  element.addEventListener('touchcancel', handleTouchCancel, false);
+  element.addEventListener('touchmove', handleTouchMove, false);
 
   // why not key listeners as well?
-  element.addEventListener("keydown", handleKeyDown, false);
+  element.addEventListener('keydown', handleKeyDown, false);
 
   function handleKeyDown(event) {
     // some key codes
@@ -91,8 +91,8 @@ export const setupInputListeners = (element, handleInput) => {
       }
     }
 
-    const isHorizontal = Math.abs(dx) > Math.abs(dy);
-    if (isHorizontal) {
+    const horizontalSwipe = Math.abs(dx) > Math.abs(dy);
+    if (horizontalSwipe) {
       if (dx > 0) {
         return INPUT_TYPES.INPUT_RIGHT;
       } else {

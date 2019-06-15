@@ -1,19 +1,19 @@
-import { INPUT_TYPES } from "./inputHandling.mjs";
+import { INPUT_TYPES } from '../inputHandling.mjs';
+import { isLongestSideEven } from './utils.mjs';
 
 export const GAME_PIECE_TYPES = {
-  T: "T",
-  L: "L",
-  L_INVERTED: "L_INVERTED",
-  S: "S",
-  S_INVERTED: "S_INVERTED",
-  I: "I",
-  BLOCK: "BLOCK"
+  T: 'T',
+  L: 'L',
+  L_INVERTED: 'L_INVERTED',
+  S: 'S',
+  S_INVERTED: 'S_INVERTED',
+  I: 'I',
+  BLOCK: 'BLOCK'
 };
 
 export const getNextPieceType = () => {
   const pieceTypes = Object.keys(GAME_PIECE_TYPES);
-  const nextTypeIndex =
-    Math.floor(Math.random() * pieceTypes.length) % pieceTypes.length; // better safe than sorry..
+  const nextTypeIndex = Math.floor(Math.random() * pieceTypes.length);
   return GAME_PIECE_TYPES[pieceTypes[nextTypeIndex]];
 };
 
@@ -42,13 +42,11 @@ export const createGamePiece = initialState => {
   };
 
   // initial values
-  let rotation = 0;
   let char = getPieceChar(pieceType);
 
   const getState = () => {
     const state = {
       coordinates,
-      rotation,
       origo
     };
     return state;
@@ -101,23 +99,25 @@ export const createGamePiece = initialState => {
           }
         };
       case INPUT_TYPES.ROTATE: {
-        const nextRotationCoordinates = getNextRotation({
+        const nextRotation = getNextRotation({
           coordinates,
           origo,
           reverse: false
         });
         return {
-          coordinates: nextRotationCoordinates
+          coordinates: nextRotation.coordinates,
+          origo: nextRotation.origo
         };
       }
       case INPUT_TYPES.ROTATE_REVERSE: {
-        const nextRotationCoordinates = getNextRotation({
+        const nextRotation = getNextRotation({
           coordinates,
           origo,
           reverse: true
         });
         return {
-          coordinates: nextRotationCoordinates
+          coordinates: nextRotation.coordinates,
+          origo: nextRotation.origo
         };
       }
       case INPUT_TYPES.GRAVITY_DROP:
@@ -144,9 +144,6 @@ export const createGamePiece = initialState => {
     if (nextState.coordinates !== null && nextState.coordinates !== undefined) {
       coordinates = nextState.coordinates;
     }
-    if (nextState.rotation !== null && nextState.rotation !== undefined) {
-      rotation = nextState.rotation;
-    }
     if (nextState.origo !== null && nextState.origo !== undefined) {
       origo = nextState.origo;
     }
@@ -164,19 +161,19 @@ export const createGamePiece = initialState => {
 const getPieceChar = pieceType => {
   switch (pieceType) {
     case GAME_PIECE_TYPES.L:
-      return "😁";
+      return '😁';
     case GAME_PIECE_TYPES.L_INVERTED:
-      return "😫";
+      return '😫';
     case GAME_PIECE_TYPES.S:
-      return "😜";
+      return '😜';
     case GAME_PIECE_TYPES.S_INVERTED:
-      return "🤗";
+      return '🤗';
     case GAME_PIECE_TYPES.T:
-      return "😮";
+      return '😮';
     case GAME_PIECE_TYPES.I:
-      return "😎";
+      return '😎';
     case GAME_PIECE_TYPES.BLOCK:
-      return "😅";
+      return '😅';
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
@@ -332,58 +329,44 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
   }
 };
 
-// TODO will have to handle reverse rotation as well
 const getNextRotation = ({ coordinates, origo, reverse }) => {
   // General rotation algorithm:
   // Keep track of origo and use relative positioning of all the pieces.
   // For each rotation: x2 = y1 * -1, y2 = x1
 
-  // determine if longest side has an even or odd amount of blocks
-  let minX = Number.MAX_SAFE_INTEGER;
-  let minY = Number.MAX_SAFE_INTEGER;
-  let maxX = Number.MIN_SAFE_INTEGER;
-  let maxY = Number.MIN_SAFE_INTEGER;
-  coordinates.forEach(coordinate => {
-    const { x, y } = coordinate;
-    if (x > maxX) {
-      maxX = x;
-    }
-    if (x < minX) {
-      minX = x;
-    }
-    if (y > maxY) {
-      maxY = y;
-    }
-    if (y < minY) {
-      minY = y;
-    }
-  });
-  const xDistance = maxX - minX + 1;
-  const yDistance = maxY - minY + 1;
-  const longestDistance = xDistance > yDistance ? xDistance : yDistance;
-  const isLongestDistanceEven = longestDistance % 2 === 0;
+  let nextOrigo = {
+    x: origo.x,
+    y: origo.y
+  };
 
-  // TODO don't change value of parameters..
-  if (isLongestDistanceEven) {
-    coordinates = coordinates.map(coordinate => {
-      if (coordinate.x <= origo.x && coordinate.y <= origo.y) {
-        return coordinate;
-      }
+  const needsTemporaryOrigoCross = isLongestSideEven(coordinates);
+
+  let nextCoordinates = coordinates.map(coordinate => {
+    const inTopLeftQuadrant =
+      coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y;
+    if (!needsTemporaryOrigoCross || inTopLeftQuadrant) {
       return {
-        x: coordinate.x > origo.x ? coordinate.x + 1 : coordinate.x,
-        y: coordinate.y > origo.y ? coordinate.y + 1 : coordinate.y
+        x: coordinate.x,
+        y: coordinate.y
       };
-    });
+    }
 
-    origo = {
-      x: origo.x + 1,
-      y: origo.y + 1
+    return {
+      x: coordinate.x > nextOrigo.x ? coordinate.x + 1 : coordinate.x,
+      y: coordinate.y > nextOrigo.y ? coordinate.y + 1 : coordinate.y
+    };
+  });
+
+  if (needsTemporaryOrigoCross) {
+    nextOrigo = {
+      x: nextOrigo.x + 1,
+      y: nextOrigo.y + 1
     };
   }
 
-  let rotadedCoordinates = coordinates.map(coordinate => {
-    const dx1 = coordinate.x - origo.x;
-    const dy1 = coordinate.y - origo.y;
+  nextCoordinates = nextCoordinates.map(coordinate => {
+    const dx1 = coordinate.x - nextOrigo.x;
+    const dy1 = coordinate.y - nextOrigo.y;
 
     let dx2;
     let dy2;
@@ -396,8 +379,8 @@ const getNextRotation = ({ coordinates, origo, reverse }) => {
       dy2 = dx1 * -1;
     }
 
-    const x2 = origo.x + dx2;
-    const y2 = origo.y + dy2;
+    const x2 = nextOrigo.x + dx2;
+    const y2 = nextOrigo.y + dy2;
 
     return {
       x: x2,
@@ -406,24 +389,22 @@ const getNextRotation = ({ coordinates, origo, reverse }) => {
   });
 
   // delete origo cross
-  if (isLongestDistanceEven) {
-    // TODO DON'T do this..
-    // use a temp variable instead
-    origo = {
-      x: origo.x - 1,
-      y: origo.y - 1
+  if (needsTemporaryOrigoCross) {
+    nextOrigo = {
+      x: nextOrigo.x - 1,
+      y: nextOrigo.y - 1
     };
 
-    rotadedCoordinates = rotadedCoordinates.map(coordinate => {
-      if (coordinate.x <= origo.x && coordinate.y <= origo.y) {
+    nextCoordinates = nextCoordinates.map(coordinate => {
+      if (coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y) {
         return coordinate;
       }
       return {
-        x: coordinate.x > origo.x ? coordinate.x - 1 : coordinate.x,
-        y: coordinate.y > origo.y ? coordinate.y - 1 : coordinate.y
+        x: coordinate.x > nextOrigo.x ? coordinate.x - 1 : coordinate.x,
+        y: coordinate.y > nextOrigo.y ? coordinate.y - 1 : coordinate.y
       };
     });
   }
 
-  return rotadedCoordinates;
+  return { coordinates: nextCoordinates, origo: nextOrigo };
 };
