@@ -20,6 +20,7 @@ function main() {
 
   const html = document.getElementById('wrapper');
   setupInputListeners(html, handleInput);
+  gameState.setGravityInterval(800, render);
 
   render(gameState.getRepresentation());
 }

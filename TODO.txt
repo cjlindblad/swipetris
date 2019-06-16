@@ -10,5 +10,8 @@
 - remove rotation member from gamePiece if dynamic rotation algorithm is used
 - add text document with piece shapes(?)
 - wall kicks
+- don't handle render in multiple places
+- scoring
+- game over
 
 🐛 gravity shouldn't pull existing pieces as far down as possible, only the number of lines removed under it

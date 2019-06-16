@@ -184,8 +184,24 @@ export const initializeGameState = () => {
     };
   };
 
+  // TODO we really shouldn't pass a render callback here..
+  let gravityInterval = null;
+  const setGravityInterval = (interval, render) => {
+    if (gravityInterval !== null) {
+      clearInterval(gravityInterval);
+    }
+
+    const triggerGravityDrop = () => {
+      handleInput(INPUT_TYPES.GRAVITY_DROP);
+      render(getRepresentation());
+    };
+
+    gravityInterval = setInterval(triggerGravityDrop, interval);
+  };
+
   return {
     getRepresentation,
-    handleInput
+    handleInput,
+    setGravityInterval
   };
 };
