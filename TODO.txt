@@ -3,6 +3,7 @@
 ✅ gamePieces should only have one piece (the active one).
 ✅ rotate pieces in both directionss
 ✅ listen for taps on right and left side of phone screen
+✅ gravity shouldn't pull existing pieces as far down as possible, only the number of lines removed under it
 - clean up rotation logic
 - make pieces fall automatically
 - show next piece in UI
@@ -13,5 +14,3 @@
 - don't handle render in multiple places
 - scoring
 - game over
-
-🐛 gravity shouldn't pull existing pieces as far down as possible, only the number of lines removed under it

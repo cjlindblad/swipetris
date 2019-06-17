@@ -113,9 +113,12 @@ export const initializeGameState = () => {
                 if (gameBoard[y][x] !== EMPTY_SPACE_CHAR) {
                   const pieceChar = gameBoard[y][x];
 
+                  // only move max the number of lines cleared
+                  const CLEARED_LINES = solidRows.filter(e => e > y).length;
+
                   let nextY = y;
                   let freeSpaceDownwards = true;
-                  while (freeSpaceDownwards && nextY < ROWS - 1) {
+                  while (freeSpaceDownwards && nextY < y + CLEARED_LINES) {
                     if (gameBoard[nextY + 1][x] === EMPTY_SPACE_CHAR) {
                       nextY++;
                     } else {
