@@ -1,7 +1,7 @@
 import { INPUT_TYPES } from './inputHandling.mjs';
 import { createGamePiece, getNextPieceType } from './gamePiece/index.mjs';
 import { COLUMNS, ROWS, EMPTY_SPACE_CHAR } from './config.mjs';
-export const initializeGameState = () => {
+export const initializeGameState = render => {
   // TODO need to handle initial coordinates in a better way
   const initialPiece = createGamePiece({
     centerX: 2,
@@ -150,6 +150,8 @@ export const initializeGameState = () => {
       default:
         throw new Error(`Unknown input - ${input}`);
     }
+
+    render(getRepresentation());
   };
 
   const getRepresentation = () => {
@@ -189,7 +191,7 @@ export const initializeGameState = () => {
 
   // TODO we really shouldn't pass a render callback here..
   let gravityInterval = null;
-  const setGravityInterval = (interval, render) => {
+  const setGravityInterval = interval => {
     if (gravityInterval !== null) {
       clearInterval(gravityInterval);
     }
@@ -202,9 +204,14 @@ export const initializeGameState = () => {
     gravityInterval = setInterval(triggerGravityDrop, interval);
   };
 
+  // initial gravity
+  setGravityInterval(800);
+
+  // initial render
+  render(getRepresentation());
+
   return {
     getRepresentation,
-    handleInput,
-    setGravityInterval
+    handleInput
   };
 };

@@ -1,5 +1,4 @@
 import { setupInputListeners } from './inputHandling.mjs';
-
 import { initializeGameState } from './gameState.mjs';
 
 function render({ renderString, nextPieceChar }) {
@@ -10,19 +9,15 @@ function render({ renderString, nextPieceChar }) {
 }
 
 function main() {
-  const gameState = initializeGameState();
+  const gameState = initializeGameState(render);
 
   // "controller" that forwards input to game logic
   const handleInput = input => {
     gameState.handleInput(input);
-    render(gameState.getRepresentation());
   };
 
   const html = document.getElementById('wrapper');
   setupInputListeners(html, handleInput);
-  gameState.setGravityInterval(800, render);
-
-  render(gameState.getRepresentation());
 }
 
 // startup
