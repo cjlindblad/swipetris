@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const open = require('open');
 const app = express();
 
 // TODO look into using nodemon
@@ -12,4 +13,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.listen(8080, () => console.log('Listening on port 8080!'));
+app.listen(8080, () => {
+  console.log('Listening on port 8080!');
+  open('http://localhost:8080');
+});
