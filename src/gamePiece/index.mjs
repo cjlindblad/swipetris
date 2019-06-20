@@ -1,4 +1,4 @@
-import { INPUT_TYPES } from '../inputHandling.mjs';
+import { INPUT_TYPES } from '../input/constants.mjs';
 import { isLongestSideEven } from './utils.mjs';
 
 export const GAME_PIECE_TYPES = {

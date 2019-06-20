@@ -1,15 +1,6 @@
-// input types
-export const INPUT_TYPES = {
-  INPUT_LEFT: 'INPUT_LEFT',
-  INPUT_RIGHT: 'INPUT_RIGHT',
-  INPUT_UP: 'INPUT_UP',
-  INPUT_DOWN: 'INPUT_DOWN',
-  ROTATE: 'ROTATE',
-  ROTATE_REVERSE: 'ROTATE_REVERSE',
-  GRAVITY_DROP: 'GRAVITY_DROP'
-};
+import { INPUT_TYPES } from './constants.mjs';
 
-export const setupInputListeners = (element, handleInput) => {
+export const setupInputListeners = ({ element, handleInput }) => {
   // will probably break with multi touch.
   let touches = [];
 

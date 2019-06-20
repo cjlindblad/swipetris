@@ -1,4 +1,4 @@
-import { setupInputListeners } from './inputHandling.mjs';
+import { setupInputListeners } from './input/web.mjs';
 import { initializeGameState } from './gameState.mjs';
 
 function render({ renderString, nextPieceChar }) {
@@ -17,7 +17,7 @@ function main() {
   };
 
   const html = document.getElementById('wrapper');
-  setupInputListeners(html, handleInput);
+  setupInputListeners({ element: html, handleInput });
 }
 
 // startup

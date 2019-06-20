@@ -6,6 +6,7 @@
 ✅ gravity shouldn't pull existing pieces as far down as possible, only the number of lines removed under it
 ✅ remove rotation member from gamePiece if dynamic rotation algorithm is used
 ✅ make pieces fall automatically
+- make input handling and rendering setup modular and inject them based on environment
 - clean up rotation logic
 - show next piece in UI
 - gameBoard should hide its internal structure
