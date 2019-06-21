@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "terminal": "node --experimental-modules ./src/node.mjs",
+    "terminal": "node --experimental-modules ./src/terminal.mjs",
     "web": "node server.js"
   },
   "repository": {
