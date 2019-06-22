@@ -2,7 +2,7 @@ import readline from 'readline';
 
 import { INPUT_TYPES } from './constants.mjs';
 
-export const setupInputListeners = ({ handleInput }) => {
+const setupInputListeners = ({ handleInput }) => {
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
   process.stdin.on('keypress', (str, key) => {
@@ -32,3 +32,5 @@ export const setupInputListeners = ({ handleInput }) => {
     }
   });
 };
+
+export default setupInputListeners;

@@ -1,6 +1,6 @@
 import { INPUT_TYPES } from './constants.mjs';
 
-export const setupInputListeners = ({ element, handleInput }) => {
+const setupInputListeners = ({ element, handleInput }) => {
   // will probably break with multi touch.
   let touches = [];
 
@@ -103,3 +103,5 @@ export const setupInputListeners = ({ element, handleInput }) => {
     handleTouchEnd(event);
   }
 };
+
+export default setupInputListeners;
