@@ -1,6 +1,8 @@
 import { initializeGameState } from './gameState.mjs';
+import dependencyContainer from './dependencyContainer.mjs';
 
 export const main = async GAME_ENV => {
+  dependencyContainer.doStuff();
   let setupInputListeners;
   let render;
 

@@ -1,6 +1,7 @@
 import { INPUT_TYPES } from './input/constants.mjs';
 import { createGamePiece, getNextPieceType } from './gamePiece/index.mjs';
 import { COLUMNS, ROWS, EMPTY_SPACE_CHAR } from './config.mjs';
+
 export const initializeGameState = render => {
   // TODO need to handle initial coordinates in a better way
   const initialPiece = createGamePiece({
