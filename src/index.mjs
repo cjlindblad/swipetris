@@ -1,26 +1,36 @@
 import { initializeGameState } from './gameState.mjs';
-import dependencyContainer from './dependencyContainer.mjs';
+import DependencyContainer from './dependencyContainer.mjs';
 
 export const main = async GAME_ENV => {
-  dependencyContainer.doStuff();
-  let setupInputListeners;
-  let render;
+  const dependencyContainer = new DependencyContainer();
 
   // some crude sort of dependency injection
   switch (GAME_ENV) {
     case 'web':
-      setupInputListeners = (await import('./input/web.mjs')).default;
-      render = (await import('./render/web.mjs')).default;
+      dependencyContainer.register(
+        'render',
+        (await import('./render/web.mjs')).default
+      );
+      dependencyContainer.register(
+        'setupInputListeners',
+        (await import('./input/web.mjs')).default
+      );
       break;
     case 'terminal':
-      setupInputListeners = (await import('./input/terminal.mjs')).default;
-      render = (await import('./render/terminal.mjs')).default;
+      dependencyContainer.register(
+        'render',
+        (await import('./render/terminal.mjs')).default
+      );
+      dependencyContainer.register(
+        'setupInputListeners',
+        (await import('./input/terminal.mjs')).default
+      );
       break;
     default:
       throw new Error(`Unknown game environment - ${GAME_ENV}`);
   }
 
-  const gameState = initializeGameState(render);
+  const gameState = initializeGameState(dependencyContainer.resolve('render'));
 
   // "controller" that forwards input to game logic
   const handleInput = input => {
@@ -35,5 +45,5 @@ export const main = async GAME_ENV => {
     inputListenerOptions.element = html;
   }
 
-  setupInputListeners(inputListenerOptions);
+  dependencyContainer.resolve('setupInputListeners')(inputListenerOptions);
 };

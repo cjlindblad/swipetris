@@ -1,11 +1,23 @@
-const initializeDependencies = env => {
-  const date = new Date();
-
-  return {
-    doStuff: () => {
-      console.log(date);
+class DependencyContainer {
+  constructor() {
+    if (!!DependencyContainer.instance) {
+      return DependencyContainer.instance;
     }
-  };
-};
 
-export default initializeDependencies('web');
+    DependencyContainer.instance = this;
+
+    this.dependencies = {};
+
+    return this;
+  }
+
+  register(dependency, implementation) {
+    this.dependencies[dependency] = implementation;
+  }
+
+  resolve(dependency) {
+    return this.dependencies[dependency];
+  }
+}
+
+export default DependencyContainer;
