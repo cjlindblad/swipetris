@@ -1,18 +1,25 @@
 class DependencyContainer {
-  constructor() {
+  constructor(dependencies) {
     if (!!DependencyContainer.instance) {
       return DependencyContainer.instance;
     }
 
+    if (!dependencies) {
+      throw new Error('No dependencies supplied');
+    }
+
+    Object.keys(dependencies).forEach(key => {
+      const implementation = dependencies[key];
+      if (!(implementation instanceof Function)) {
+        throw new Error(`Implementation supplied for ${key} is not a function`);
+      }
+    });
+
     DependencyContainer.instance = this;
 
-    this.dependencies = {};
+    this.dependencies = dependencies;
 
     return this;
-  }
-
-  register(dependency, implementation) {
-    this.dependencies[dependency] = implementation;
   }
 
   resolve(dependency) {

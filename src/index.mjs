@@ -2,33 +2,25 @@ import { initializeGameState } from './gameState.mjs';
 import DependencyContainer from './dependencyContainer.mjs';
 
 export const main = async GAME_ENV => {
-  const dependencyContainer = new DependencyContainer();
-
-  // some crude sort of dependency injection
+  // dependency injection
+  let dependencies = {};
   switch (GAME_ENV) {
     case 'web':
-      dependencyContainer.register(
-        'render',
-        (await import('./render/web.mjs')).default
-      );
-      dependencyContainer.register(
-        'setupInputListeners',
-        (await import('./input/web.mjs')).default
-      );
+      dependencies['render'] = (await import('./render/web.mjs')).default;
+      dependencies['setupInputListeners'] = (await import(
+        './input/web.mjs'
+      )).default;
       break;
     case 'terminal':
-      dependencyContainer.register(
-        'render',
-        (await import('./render/terminal.mjs')).default
-      );
-      dependencyContainer.register(
-        'setupInputListeners',
-        (await import('./input/terminal.mjs')).default
-      );
+      dependencies['render'] = (await import('./render/terminal.mjs')).default;
+      dependencies['setupInputListeners'] = (await import(
+        './input/terminal.mjs'
+      )).default;
       break;
     default:
       throw new Error(`Unknown game environment - ${GAME_ENV}`);
   }
+  const dependencyContainer = new DependencyContainer(dependencies);
 
   const gameState = initializeGameState(dependencyContainer.resolve('render'));
 
