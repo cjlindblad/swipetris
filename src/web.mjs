@@ -1,3 +1,4 @@
 import { main } from './index.mjs';
+import { WEB_ENV } from './config.mjs';
 
-main('web');
+main(WEB_ENV);

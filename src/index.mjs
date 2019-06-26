@@ -1,17 +1,18 @@
 import { initializeGameState } from './gameState.mjs';
 import DependencyContainer from './dependencyContainer.mjs';
+import { WEB_ENV, TERMINAL_ENV } from './config.mjs';
 
 export const main = async GAME_ENV => {
   // dependency injection
   let dependencies = {};
   switch (GAME_ENV) {
-    case 'web':
+    case WEB_ENV:
       dependencies['render'] = (await import('./render/web.mjs')).default;
       dependencies['setupInputListeners'] = (await import(
         './input/web.mjs'
       )).default;
       break;
-    case 'terminal':
+    case TERMINAL_ENV:
       dependencies['render'] = (await import('./render/terminal.mjs')).default;
       dependencies['setupInputListeners'] = (await import(
         './input/terminal.mjs'
@@ -32,7 +33,7 @@ export const main = async GAME_ENV => {
   const inputListenerOptions = {
     handleInput
   };
-  if (GAME_ENV === 'web') {
+  if (GAME_ENV === WEB_ENV) {
     const html = document.getElementById('wrapper');
     inputListenerOptions.element = html;
   }

@@ -17,6 +17,7 @@ class DependencyContainer {
 
     DependencyContainer.instance = this;
 
+    // TODO hide this
     this.dependencies = dependencies;
 
     return this;
