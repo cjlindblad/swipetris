@@ -1,6 +1,6 @@
 import { initializeGameState } from './gameState.mjs';
 import DependencyContainer from './dependencyContainer.mjs';
-import { WEB_ENV, TERMINAL_ENV } from './config.mjs';
+import { WEB_ENV, TERMINAL_ENV, createGameCharSelector } from './config.mjs';
 
 export const main = async GAME_ENV => {
   // dependency injection
@@ -11,12 +11,14 @@ export const main = async GAME_ENV => {
       dependencies['setupInputListeners'] = (await import(
         './input/web.mjs'
       )).default;
+      dependencies['gameCharSelector'] = createGameCharSelector(WEB_ENV);
       break;
     case TERMINAL_ENV:
       dependencies['render'] = (await import('./render/terminal.mjs')).default;
       dependencies['setupInputListeners'] = (await import(
         './input/terminal.mjs'
       )).default;
+      dependencies['gameCharSelector'] = createGameCharSelector(TERMINAL_ENV);
       break;
     default:
       throw new Error(`Unknown game environment - ${GAME_ENV}`);

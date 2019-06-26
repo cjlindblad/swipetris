@@ -1,8 +1,18 @@
 import { INPUT_TYPES } from './input/constants.mjs';
-import { createGamePiece, getNextPieceType } from './gamePiece/index.mjs';
-import { COLUMNS, ROWS, EMPTY_SPACE_CHAR } from './config.mjs';
+import {
+  createGamePiece,
+  getNextPieceType,
+  GAME_PIECE_TYPES
+} from './gamePiece/index.mjs';
+import { COLUMNS, ROWS } from './config.mjs';
+import DependencyContainer from './dependencyContainer.mjs';
 
 export const initializeGameState = render => {
+  // TODO maybe inject these?
+  const dependencyContainer = new DependencyContainer();
+  const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
+  const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPES.EMPTY_SPACE);
+
   // TODO need to handle initial coordinates in a better way
   const initialPiece = createGamePiece({
     centerX: 2,

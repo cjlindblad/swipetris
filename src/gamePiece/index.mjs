@@ -1,5 +1,6 @@
 import { INPUT_TYPES } from '../input/constants.mjs';
 import { isLongestSideEven } from './utils.mjs';
+import DependencyContainer from '../dependencyContainer.mjs';
 
 export const GAME_PIECE_TYPES = {
   T: 'T',
@@ -8,11 +9,15 @@ export const GAME_PIECE_TYPES = {
   S: 'S',
   S_INVERTED: 'S_INVERTED',
   I: 'I',
-  BLOCK: 'BLOCK'
+  BLOCK: 'BLOCK',
+  EMPTY_SPACE: 'EMPTY_SPACE'
 };
 
 export const getNextPieceType = () => {
-  const pieceTypes = Object.keys(GAME_PIECE_TYPES);
+  // TODO clean this up..
+  const pieceTypes = Object.keys(GAME_PIECE_TYPES).filter(
+    e => e !== GAME_PIECE_TYPES.EMPTY_SPACE
+  );
   const nextTypeIndex = Math.floor(Math.random() * pieceTypes.length);
   return GAME_PIECE_TYPES[pieceTypes[nextTypeIndex]];
 };
@@ -159,21 +164,19 @@ export const createGamePiece = initialState => {
 };
 
 const getPieceChar = pieceType => {
+  // TODO maybe inject these?
+  const dependencyContainer = new DependencyContainer();
+  const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
+
   switch (pieceType) {
     case GAME_PIECE_TYPES.L:
-      return '😁';
     case GAME_PIECE_TYPES.L_INVERTED:
-      return '😫';
     case GAME_PIECE_TYPES.S:
-      return '😜';
     case GAME_PIECE_TYPES.S_INVERTED:
-      return '🤗';
     case GAME_PIECE_TYPES.T:
-      return '😮';
     case GAME_PIECE_TYPES.I:
-      return '😎';
     case GAME_PIECE_TYPES.BLOCK:
-      return '😅';
+      return gameCharSelector(pieceType);
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
