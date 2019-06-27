@@ -18,14 +18,14 @@ const GAME_CHARS = {
     [GAME_PIECE_TYPES.EMPTY_SPACE]: '️️️️️️️〰️'
   },
   [TERMINAL_ENV]: {
-    [GAME_PIECE_TYPES.L]: 'x',
-    [GAME_PIECE_TYPES.L_INVERTED]: 'x',
-    [GAME_PIECE_TYPES.S]: 'x',
-    [GAME_PIECE_TYPES.S_INVERTED]: 'x',
-    [GAME_PIECE_TYPES.T]: 'x',
-    [GAME_PIECE_TYPES.I]: 'x',
-    [GAME_PIECE_TYPES.BLOCK]: 'x',
-    [GAME_PIECE_TYPES.EMPTY_SPACE]: '️️️️️️️ '
+    [GAME_PIECE_TYPES.L]: 'l',
+    [GAME_PIECE_TYPES.L_INVERTED]: 'l',
+    [GAME_PIECE_TYPES.S]: 's',
+    [GAME_PIECE_TYPES.S_INVERTED]: 's',
+    [GAME_PIECE_TYPES.T]: 't',
+    [GAME_PIECE_TYPES.I]: 'i',
+    [GAME_PIECE_TYPES.BLOCK]: 'o',
+    [GAME_PIECE_TYPES.EMPTY_SPACE]: ' '
   }
 };
 

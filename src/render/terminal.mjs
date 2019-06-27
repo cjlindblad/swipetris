@@ -1,10 +1,14 @@
 const render = ({ renderString, nextPieceChar }) => {
+  let output = '';
   for (let i = 0; i < 14; i++) {
-    console.log('\r\n');
+    output += '\r\n';
   }
-  console.log('next: ' + nextPieceChar);
-  console.log();
-  console.log(renderString);
+
+  output += 'next: ' + nextPieceChar;
+  output += '\n\n';
+  output += renderString;
+
+  console.log(output);
 };
 
 export default render;
