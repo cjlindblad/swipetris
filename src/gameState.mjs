@@ -4,10 +4,12 @@ import {
   getNextPieceType,
   GAME_PIECE_TYPES
 } from './gamePiece/index.mjs';
-import { COLUMNS, ROWS } from './config.mjs';
+import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from './config.mjs';
 import DependencyContainer from './dependencyContainer.mjs';
 
 export const initializeGameState = render => {
+  let activeGravityDelay = BASE_GRAVITY_DELAY;
+
   // TODO maybe inject these?
   const dependencyContainer = new DependencyContainer();
   const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
@@ -66,10 +68,10 @@ export const initializeGameState = render => {
   // this will grow and should probably be moved out
   const handleInput = input => {
     switch (input) {
+      case INPUT_TYPES.INPUT_UP:
+        break;
       case INPUT_TYPES.INPUT_LEFT:
       case INPUT_TYPES.INPUT_RIGHT:
-      case INPUT_TYPES.INPUT_UP:
-      case INPUT_TYPES.INPUT_DOWN:
       case INPUT_TYPES.ROTATE:
       case INPUT_TYPES.ROTATE_REVERSE: {
         const nextState = activePiece.getNextState(input);
@@ -79,7 +81,10 @@ export const initializeGameState = render => {
         }
         break;
       }
+      case INPUT_TYPES.INPUT_DOWN:
       case INPUT_TYPES.GRAVITY_DROP: {
+        setGravityInterval(activeGravityDelay);
+
         const nextState = activePiece.getNextState(input);
         const validMove = isValidMove(nextState.coordinates);
         if (validMove) {
@@ -200,7 +205,6 @@ export const initializeGameState = render => {
     };
   };
 
-  // TODO we really shouldn't pass a render callback here..
   let gravityInterval = null;
   const setGravityInterval = interval => {
     if (gravityInterval !== null) {
@@ -216,7 +220,7 @@ export const initializeGameState = render => {
   };
 
   // initial gravity
-  setGravityInterval(800);
+  setGravityInterval(BASE_GRAVITY_DELAY);
 
   // initial render
   render(getRepresentation());

@@ -6,6 +6,8 @@ export const TERMINAL_ENV = 'TERMINAL_ENV';
 export const COLUMNS = 8;
 export const ROWS = 12;
 
+export const BASE_GRAVITY_DELAY = 800;
+
 const GAME_CHARS = {
   [WEB_ENV]: {
     [GAME_PIECE_TYPES.L]: '😁',
