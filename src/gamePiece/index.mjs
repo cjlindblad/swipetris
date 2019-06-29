@@ -154,12 +154,16 @@ export const createGamePiece = initialState => {
     }
   };
 
+  const getPreview = () =>
+    getInitialCoordinates({ pieceType, centerX: 0, centerY: 0 });
+
   // public API
   return {
     getNextState,
     setState,
     getState,
-    getChar
+    getChar,
+    getPreview
   };
 };
 

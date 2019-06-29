@@ -199,9 +199,46 @@ export const initializeGameState = render => {
 
     // not sure if we should just use a big string, or split the "UI" up
 
+    const nextPiecePreview = nextPiece.getPreview();
+    // this could be a method. and cleaned up..
+    let minX = Number.MAX_SAFE_INTEGER;
+    let maxX = Number.MIN_SAFE_INTEGER;
+    let minY = Number.MAX_SAFE_INTEGER;
+    let maxY = Number.MIN_SAFE_INTEGER;
+    let pieceCoordinates = [];
+    nextPiecePreview.forEach(coordinate => {
+      if (coordinate.x < minX) {
+        minX = coordinate.x;
+      }
+      if (coordinate.x > maxX) {
+        maxX = coordinate.x;
+      }
+      if (coordinate.y < minY) {
+        minY = coordinate.y;
+      }
+      if (coordinate.y > maxY) {
+        maxY = coordinate.y;
+      }
+
+      if (!pieceCoordinates[coordinate.y]) {
+        pieceCoordinates[coordinate.y] = [];
+      }
+      pieceCoordinates[coordinate.y][coordinate.x] = nextPiece.getChar();
+    });
+
+    let previewString = '';
+    for (let y = minY; y <= maxY; y++) {
+      for (let x = minX; x <= maxX; x++) {
+        previewString += pieceCoordinates[y][x] || EMPTY_SPACE_CHAR;
+      }
+      if (y < maxY) {
+        previewString += '\n';
+      }
+    }
+
     return {
       renderString,
-      nextPieceChar: nextPiece.getChar()
+      nextPiece: previewString
     };
   };
 

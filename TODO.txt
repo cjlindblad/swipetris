@@ -7,11 +7,13 @@
 ✅ remove rotation member from gamePiece if dynamic rotation algorithm is used
 ✅ make pieces fall automatically
 ✅ make input handling and rendering setup modular and inject them based on environment
-- dependency injection
+✅ dependency injection
+✅ terminal rendering
+✅ show next piece in UI
+- mobile styling
 - game over
-- terminal rendering
 - clean up rotation logic
-- show next piece in UI
+- clean up render logic
 - gameBoard should hide its internal structure
 - add text document with piece shapes(?)
 - wall kicks
