@@ -3,8 +3,8 @@ import { GAME_PIECE_TYPES } from './gamePiece/index.mjs';
 export const WEB_ENV = 'WEB_ENV';
 export const TERMINAL_ENV = 'TERMINAL_ENV';
 
-export const COLUMNS = 8;
-export const ROWS = 12;
+export const COLUMNS = 10;
+export const ROWS = 16;
 
 export const BASE_GRAVITY_DELAY = 800;
 
@@ -17,7 +17,7 @@ const GAME_CHARS = {
     [GAME_PIECE_TYPES.T]: '😮',
     [GAME_PIECE_TYPES.I]: '😎',
     [GAME_PIECE_TYPES.BLOCK]: '😅',
-    [GAME_PIECE_TYPES.EMPTY_SPACE]: '️️️️️️️〰️'
+    [GAME_PIECE_TYPES.EMPTY_SPACE]: '〰️'
   },
   [TERMINAL_ENV]: {
     [GAME_PIECE_TYPES.L]: 'l',

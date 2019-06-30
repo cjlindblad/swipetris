@@ -10,7 +10,7 @@
 ✅ dependency injection
 ✅ terminal rendering
 ✅ show next piece in UI
-- mobile styling
+- flexible mobile styling
 - game over
 - clean up rotation logic
 - clean up render logic
@@ -19,3 +19,5 @@
 - wall kicks
 - don't handle render in multiple places
 - scoring
+
+🐛 all pieces doesn't start at the top (for example "I"-piece)
