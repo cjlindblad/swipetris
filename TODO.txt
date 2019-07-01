@@ -21,3 +21,5 @@
 - scoring
 
 🐛 all pieces doesn't start at the top (for example "I"-piece)
+ ✅ create method for determining min and max coordinates
+ - create "transpose" function for piece

@@ -4,6 +4,7 @@ import {
   getNextPieceType,
   GAME_PIECE_TYPES
 } from './gamePiece/index.mjs';
+import { getMinMaxCoordinates } from './gamePiece/utils.mjs';
 import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from './config.mjs';
 import DependencyContainer from './dependencyContainer.mjs';
 
@@ -200,26 +201,8 @@ export const initializeGameState = render => {
     // not sure if we should just use a big string, or split the "UI" up
 
     const nextPiecePreview = nextPiece.getPreview();
-    // this could be a method. and cleaned up..
-    let minX = Number.MAX_SAFE_INTEGER;
-    let maxX = Number.MIN_SAFE_INTEGER;
-    let minY = Number.MAX_SAFE_INTEGER;
-    let maxY = Number.MIN_SAFE_INTEGER;
     let pieceCoordinates = [];
     nextPiecePreview.forEach(coordinate => {
-      if (coordinate.x < minX) {
-        minX = coordinate.x;
-      }
-      if (coordinate.x > maxX) {
-        maxX = coordinate.x;
-      }
-      if (coordinate.y < minY) {
-        minY = coordinate.y;
-      }
-      if (coordinate.y > maxY) {
-        maxY = coordinate.y;
-      }
-
       if (!pieceCoordinates[coordinate.y]) {
         pieceCoordinates[coordinate.y] = [];
       }
@@ -227,6 +210,7 @@ export const initializeGameState = render => {
     });
 
     let previewString = '';
+    const { minX, minY, maxX, maxY } = getMinMaxCoordinates(nextPiecePreview);
     for (let y = minY; y <= maxY; y++) {
       for (let x = minX; x <= maxX; x++) {
         previewString += pieceCoordinates[y][x] || EMPTY_SPACE_CHAR;
