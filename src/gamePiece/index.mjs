@@ -1,5 +1,5 @@
 import { INPUT_TYPES } from '../input/constants.mjs';
-import { isLongestSideEven } from './utils.mjs';
+import { isLongestSideEven, getMinMaxCoordinates } from './utils.mjs';
 import DependencyContainer from '../dependencyContainer.mjs';
 
 export const GAME_PIECE_TYPES = {
@@ -46,6 +46,12 @@ export const createGamePiece = initialState => {
     y: centerY
   };
 
+  // make sure piece starts from the top
+  const { minY } = getMinMaxCoordinates(coordinates);
+  for (let y = minY; y > 0; y--) {
+    coordinates = transpose({ coordinates, origo, dx: 0, dy: -1 }).coordinates;
+  }
+
   // initial values
   let char = getPieceChar(pieceType);
 
@@ -57,52 +63,49 @@ export const createGamePiece = initialState => {
     return state;
   };
 
+  function transpose({ coordinates, origo, dx, dy }) {
+    return {
+      coordinates: coordinates.map(coordinate => ({
+        x: coordinate.x + dx,
+        y: coordinate.y + dy
+      })),
+      origo: {
+        x: origo.x + dx,
+        y: origo.y + dy
+      }
+    };
+  }
+
   const getNextState = input => {
     switch (input) {
       case INPUT_TYPES.INPUT_LEFT:
-        return {
-          coordinates: coordinates.map(coordinate => ({
-            x: coordinate.x - 1,
-            y: coordinate.y
-          })),
-          origo: {
-            x: origo.x - 1,
-            y: origo.y
-          }
-        };
+        return transpose({
+          coordinates,
+          origo,
+          dx: -1,
+          dy: 0
+        });
       case INPUT_TYPES.INPUT_RIGHT:
-        return {
-          coordinates: coordinates.map(coordinate => ({
-            x: coordinate.x + 1,
-            y: coordinate.y
-          })),
-          origo: {
-            x: origo.x + 1,
-            y: origo.y
-          }
-        };
+        return transpose({
+          coordinates,
+          origo,
+          dx: 1,
+          dy: 0
+        });
       case INPUT_TYPES.INPUT_UP:
-        return {
-          coordinates: coordinates.map(coordinate => ({
-            x: coordinate.x,
-            y: coordinate.y - 1
-          })),
-          origo: {
-            x: origo.x,
-            y: origo.y - 1
-          }
-        };
+        return transpose({
+          coordinates,
+          origo,
+          dx: 0,
+          dy: -1
+        });
       case INPUT_TYPES.INPUT_DOWN:
-        return {
-          coordinates: coordinates.map(coordinate => ({
-            x: coordinate.x,
-            y: coordinate.y + 1
-          })),
-          origo: {
-            x: origo.x,
-            y: origo.y + 1
-          }
-        };
+        return transpose({
+          coordinates,
+          origo,
+          dx: 0,
+          dy: 1
+        });
       case INPUT_TYPES.ROTATE: {
         const nextRotation = getNextRotation({
           coordinates,
@@ -127,16 +130,12 @@ export const createGamePiece = initialState => {
       }
       case INPUT_TYPES.GRAVITY_DROP:
         // same as input down, but I think we're gonna rebuild this
-        return {
-          coordinates: coordinates.map(coordinate => ({
-            x: coordinate.x,
-            y: coordinate.y + 1
-          })),
-          origo: {
-            x: origo.x,
-            y: origo.y + 1
-          }
-        };
+        return transpose({
+          coordinates,
+          origo,
+          dx: 0,
+          dy: 1
+        });
       default:
         throw new Error(`Unknown input - ${input}`);
     }
