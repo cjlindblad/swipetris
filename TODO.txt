@@ -11,6 +11,7 @@
 ✅ terminal rendering
 ✅ show next piece in UI
 ✅ all pieces doesn't start at the top (for example "I"-piece)
+✅ I piece rotation is weird
 - flexible mobile styling
 - game over
 - clean up rotation logic

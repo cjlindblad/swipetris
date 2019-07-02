@@ -49,7 +49,9 @@ export const createGamePiece = initialState => {
   // make sure piece starts from the top
   const { minY } = getMinMaxCoordinates(coordinates);
   for (let y = minY; y > 0; y--) {
-    coordinates = transpose({ coordinates, origo, dx: 0, dy: -1 }).coordinates;
+    const transposition = transpose({ coordinates, origo, dx: 0, dy: -1 });
+    coordinates = transposition.coordinates;
+    origo = transposition.origo;
   }
 
   // initial values
