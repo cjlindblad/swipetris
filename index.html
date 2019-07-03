@@ -39,6 +39,12 @@
         justify-content: space-between;
       }
 
+      .top-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
       .next-wrapper {
         display: flex;
         flex-direction: row;
@@ -50,9 +56,12 @@
       }
     </style>
     <div class="game-wrapper">
-      <div class="next-wrapper">
-        <h1>Next:</h1>
-        <h1 id="next"></h1>
+      <div class="top-wrapper">
+        <h1>Score: <span id="score"></span></h1>
+        <div class="next-wrapper">
+          <h1>Next:</h1>
+          <h1 id="next"></h1>
+        </div>
       </div>
       <h1 id="input">Listening for input..</h1>
     </div>

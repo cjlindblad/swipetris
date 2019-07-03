@@ -32,6 +32,8 @@ export const initializeGameState = render => {
   let activePiece = initialPiece;
   let nextPiece = next;
 
+  let clearedLines = 0;
+
   // setup game board
   const gameBoard = [];
   for (let y = 0; y < ROWS; y++) {
@@ -153,6 +155,9 @@ export const initializeGameState = render => {
             }
           }
 
+          // register cleared lines to score
+          clearedLines += solidRows.length;
+
           // add new active piece
           const newPiece = createGamePiece({
             centerX: 2,
@@ -222,7 +227,8 @@ export const initializeGameState = render => {
 
     return {
       renderString,
-      nextPiece: previewString
+      nextPiece: previewString,
+      score: clearedLines
     };
   };
 
