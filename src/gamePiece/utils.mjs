@@ -38,3 +38,16 @@ export const getMinMaxCoordinates = coordinates => {
     maxY
   };
 };
+
+export const transpose = ({ coordinates, origo, dx, dy }) => {
+  return {
+    coordinates: coordinates.map(coordinate => ({
+      x: coordinate.x + dx,
+      y: coordinate.y + dy
+    })),
+    origo: {
+      x: origo.x + dx,
+      y: origo.y + dy
+    }
+  };
+};

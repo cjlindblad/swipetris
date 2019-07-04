@@ -12,12 +12,12 @@
 ✅ show next piece in UI
 ✅ all pieces doesn't start at the top (for example "I"-piece)
 ✅ I piece rotation is weird
+✅ wall kicks
 - flexible mobile styling
 - game over
 - clean up rotation logic
 - clean up render logic
 - gameBoard should hide its internal structure
 - add text document with piece shapes(?)
-- wall kicks
 - don't handle render in multiple places
 - scoring

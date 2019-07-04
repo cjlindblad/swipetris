@@ -1,5 +1,9 @@
 import { INPUT_TYPES } from '../input/constants.mjs';
-import { isLongestSideEven, getMinMaxCoordinates } from './utils.mjs';
+import {
+  isLongestSideEven,
+  getMinMaxCoordinates,
+  transpose
+} from './utils.mjs';
 import DependencyContainer from '../dependencyContainer.mjs';
 
 export const GAME_PIECE_TYPES = {
@@ -64,19 +68,6 @@ export const createGamePiece = initialState => {
     };
     return state;
   };
-
-  function transpose({ coordinates, origo, dx, dy }) {
-    return {
-      coordinates: coordinates.map(coordinate => ({
-        x: coordinate.x + dx,
-        y: coordinate.y + dy
-      })),
-      origo: {
-        x: origo.x + dx,
-        y: origo.y + dy
-      }
-    };
-  }
 
   const getNextState = input => {
     switch (input) {

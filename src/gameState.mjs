@@ -4,7 +4,7 @@ import {
   getNextPieceType,
   GAME_PIECE_TYPES
 } from './gamePiece/index.mjs';
-import { getMinMaxCoordinates } from './gamePiece/utils.mjs';
+import { getMinMaxCoordinates, transpose } from './gamePiece/utils.mjs';
 import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from './config.mjs';
 import DependencyContainer from './dependencyContainer.mjs';
 
@@ -79,9 +79,33 @@ export const initializeGameState = render => {
       case INPUT_TYPES.ROTATE_REVERSE: {
         const nextState = activePiece.getNextState(input);
         const validMove = isValidMove(nextState.coordinates);
+
         if (validMove) {
           activePiece.setState(nextState);
+          break;
         }
+
+        // try to wall kick if possible
+        if (
+          input === INPUT_TYPES.ROTATE ||
+          input === INPUT_TYPES.ROTATE_REVERSE
+        ) {
+          const wallKickOffsets = [1, 2, -1, -2];
+          for (let i = 0; i < wallKickOffsets.length; i++) {
+            const offset = wallKickOffsets[i];
+            const transposition = transpose({
+              coordinates: nextState.coordinates,
+              origo: nextState.origo,
+              dx: offset,
+              dy: 0
+            });
+            if (isValidMove(transposition.coordinates)) {
+              activePiece.setState(transposition);
+              break;
+            }
+          }
+        }
+
         break;
       }
       case INPUT_TYPES.INPUT_DOWN:
