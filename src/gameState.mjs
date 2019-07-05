@@ -115,8 +115,12 @@ export const initializeGameState = render => {
         const nextState = activePiece.getNextState(input);
         const validMove = isValidMove(nextState.coordinates);
         if (validMove) {
-          activePiece.setState(nextState);
+          activePiece.setState({ ...nextState, moves: nextState.moves + 1 });
         } else {
+          if (nextState.moves === 0) {
+            // TODO
+            // alert('GAME OVER!!11!1!!!');
+          }
           // this is where a piece lands
           // lots of stuff happening. maybe break it out to separate functions for clarity.
 

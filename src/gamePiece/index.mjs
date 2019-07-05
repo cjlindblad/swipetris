@@ -60,16 +60,23 @@ export const createGamePiece = initialState => {
 
   // initial values
   let char = getPieceChar(pieceType);
+  let moves = 0;
 
   const getState = () => {
     const state = {
       coordinates,
-      origo
+      origo,
+      moves
     };
     return state;
   };
 
   const getNextState = input => {
+    const transposition = getNextTransposition(input);
+    return { ...transposition, moves };
+  };
+
+  const getNextTransposition = input => {
     switch (input) {
       case INPUT_TYPES.INPUT_LEFT:
         return transpose({
@@ -143,6 +150,9 @@ export const createGamePiece = initialState => {
     }
     if (nextState.origo !== null && nextState.origo !== undefined) {
       origo = nextState.origo;
+    }
+    if (nextState.moves !== null && nextState.moves !== undefined) {
+      moves = nextState.moves;
     }
   };
 
