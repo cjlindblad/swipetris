@@ -1,4 +1,4 @@
-import { INPUT_TYPES } from './constants.mjs';
+import { INPUT_TYPES } from './constants';
 
 const setupInputListeners = ({ element, handleInput }) => {
   // will probably break with multi touch.
@@ -98,9 +98,9 @@ const setupInputListeners = ({ element, handleInput }) => {
     }
   }
 
-  function handleTouchCancel(event) {
+  function handleTouchCancel() {
     // not really sure when this is triggered. delegate it to touch end handler for now.
-    handleTouchEnd(event);
+    handleTouchEnd();
   }
 };
 

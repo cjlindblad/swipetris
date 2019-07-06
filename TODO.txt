@@ -13,6 +13,7 @@
 ✅ all pieces doesn't start at the top (for example "I"-piece)
 ✅ I piece rotation is weird
 ✅ wall kicks
+- run terminal version (ran into some issues with ts/parcel)
 - flexible mobile styling
 - game over
 - clean up rotation logic

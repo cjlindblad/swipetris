@@ -1,5 +1,8 @@
 class DependencyContainer {
-  constructor(dependencies) {
+  static instance = null;
+  dependencies = [];
+
+  constructor(dependencies?) {
     if (!!DependencyContainer.instance) {
       return DependencyContainer.instance;
     }

@@ -1,4 +1,4 @@
-import { GAME_PIECE_TYPES } from './gamePiece/index.mjs';
+import { GAME_PIECE_TYPES } from './gamePiece/index';
 
 export const WEB_ENV = 'WEB_ENV';
 export const TERMINAL_ENV = 'TERMINAL_ENV';

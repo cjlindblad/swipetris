@@ -1,6 +1,6 @@
-import readline from 'readline';
+const readline = require('readline');
 
-import { INPUT_TYPES } from './constants.mjs';
+import { INPUT_TYPES } from './constants';
 
 const setupInputListeners = ({ handleInput }) => {
   readline.emitKeypressEvents(process.stdin);

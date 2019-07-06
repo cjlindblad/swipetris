@@ -1,10 +1,6 @@
-import { INPUT_TYPES } from '../input/constants.mjs';
-import {
-  isLongestSideEven,
-  getMinMaxCoordinates,
-  transpose
-} from './utils.mjs';
-import DependencyContainer from '../dependencyContainer.mjs';
+import { INPUT_TYPES } from '../input/constants';
+import { isLongestSideEven, getMinMaxCoordinates, transpose } from './utils';
+import DependencyContainer from '../dependencyContainer';
 
 export const GAME_PIECE_TYPES = {
   T: 'T',

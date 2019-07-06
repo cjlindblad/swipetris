@@ -4,9 +4,8 @@
   "description": "Never wrote tetris, so let's write it! 👾",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "terminal": "node --experimental-modules ./src/terminal.mjs",
-    "web": "node server.js"
+    "test": "jest",
+    "web": "parcel index.html --open"
   },
   "repository": {
     "type": "git",
@@ -19,7 +18,12 @@
   },
   "homepage": "https://github.com/cjlindblad/swipetris#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "open": "^6.3.0"
-  }
+    "@types/node": "^12.0.12"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  },
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
 }
