@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "web": "parcel index.html --open"
+    "web": "tsc -w & parcel index.html --open",
+    "terminal": "tsc & node ./out/terminal.js"
   },
   "repository": {
     "type": "git",
