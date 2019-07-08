@@ -4,7 +4,7 @@
   "description": "Never wrote tetris, so let's write it! 👾",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "tsc && jest",
     "web": "tsc && parcel index.html --open & tsc -w",
     "terminal": "tsc && node ./out/terminal.js"
   },
