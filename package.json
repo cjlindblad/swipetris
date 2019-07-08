@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "web": "tsc -w & parcel index.html --open",
-    "terminal": "tsc & node ./out/terminal.js"
+    "terminal": "tsc && node ./out/terminal.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,8 @@
     "@types/node": "^12.0.12"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "jest": "^24.8.0",
     "typescript": "^3.5.2"
   },
   "browserslist": [

@@ -1,16 +1,18 @@
 // determines if longest side in piece has an odd (like a "T"-piece)
 // or even (like a "I"-piece) amount of blocks
-export const isLongestSideEven = coordinates => {
-  const { minX, minY, maxX, maxY } = getMinMaxCoordinates(coordinates);
-  const xDistance = maxX - minX + 1;
-  const yDistance = maxY - minY + 1;
+export const isLongestSideEven = (coordinates: Array<Coordinate>): boolean => {
+  const [min, max] = getMinMaxCoordinates(coordinates);
+  const xDistance = max.x - min.x + 1;
+  const yDistance = max.y - min.y + 1;
   const longestDistance = xDistance > yDistance ? xDistance : yDistance;
   const isLongestDistanceEven = longestDistance % 2 === 0;
 
   return isLongestDistanceEven;
 };
 
-export const getMinMaxCoordinates = coordinates => {
+export const getMinMaxCoordinates = (
+  coordinates: Array<Coordinate>
+): [Coordinate, Coordinate] => {
   let minX = Number.MAX_SAFE_INTEGER;
   let minY = Number.MAX_SAFE_INTEGER;
   let maxX = Number.MIN_SAFE_INTEGER;
@@ -31,15 +33,24 @@ export const getMinMaxCoordinates = coordinates => {
     }
   });
 
-  return {
-    minX,
-    minY,
-    maxX,
-    maxY
-  };
+  return [
+    {
+      x: minX,
+      y: minY
+    },
+    {
+      x: maxX,
+      y: maxY
+    }
+  ];
 };
 
-export const transpose = ({ coordinates, origo, dx, dy }) => {
+export const transpose = (
+  coordinates: Array<Coordinate>,
+  origo: Coordinate,
+  dx: number,
+  dy: number
+) => {
   return {
     coordinates: coordinates.map(coordinate => ({
       x: coordinate.x + dx,

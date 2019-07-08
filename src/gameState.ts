@@ -93,12 +93,12 @@ export const initializeGameState = render => {
           const wallKickOffsets = [1, 2, -1, -2];
           for (let i = 0; i < wallKickOffsets.length; i++) {
             const offset = wallKickOffsets[i];
-            const transposition = transpose({
-              coordinates: nextState.coordinates,
-              origo: nextState.origo,
-              dx: offset,
-              dy: 0
-            });
+            const transposition = transpose(
+              nextState.coordinates,
+              nextState.origo,
+              offset,
+              0
+            );
             if (isValidMove(transposition.coordinates)) {
               activePiece.setState(transposition);
               break;
@@ -243,12 +243,12 @@ export const initializeGameState = render => {
     });
 
     let previewString = '';
-    const { minX, minY, maxX, maxY } = getMinMaxCoordinates(nextPiecePreview);
-    for (let y = minY; y <= maxY; y++) {
-      for (let x = minX; x <= maxX; x++) {
+    const [min, max] = getMinMaxCoordinates(nextPiecePreview);
+    for (let y = min.y; y <= max.y; y++) {
+      for (let x = min.x; x <= max.x; x++) {
         previewString += pieceCoordinates[y][x] || EMPTY_SPACE_CHAR;
       }
-      if (y < maxY) {
+      if (y < max.y) {
         previewString += '\n';
       }
     }

@@ -47,9 +47,9 @@ export const createGamePiece = initialState => {
   };
 
   // make sure piece starts from the top
-  const { minY } = getMinMaxCoordinates(coordinates);
-  for (let y = minY; y > 0; y--) {
-    const transposition = transpose({ coordinates, origo, dx: 0, dy: -1 });
+  const [min, _] = getMinMaxCoordinates(coordinates);
+  for (let y = min.y; y > 0; y--) {
+    const transposition = transpose(coordinates, origo, 0, -1);
     coordinates = transposition.coordinates;
     origo = transposition.origo;
   }
@@ -75,33 +75,13 @@ export const createGamePiece = initialState => {
   const getNextTransposition = input => {
     switch (input) {
       case INPUT_TYPES.INPUT_LEFT:
-        return transpose({
-          coordinates,
-          origo,
-          dx: -1,
-          dy: 0
-        });
+        return transpose(coordinates, origo, -1, 0);
       case INPUT_TYPES.INPUT_RIGHT:
-        return transpose({
-          coordinates,
-          origo,
-          dx: 1,
-          dy: 0
-        });
+        return transpose(coordinates, origo, 1, 0);
       case INPUT_TYPES.INPUT_UP:
-        return transpose({
-          coordinates,
-          origo,
-          dx: 0,
-          dy: -1
-        });
+        return transpose(coordinates, origo, 0, -1);
       case INPUT_TYPES.INPUT_DOWN:
-        return transpose({
-          coordinates,
-          origo,
-          dx: 0,
-          dy: 1
-        });
+        return transpose(coordinates, origo, 0, 1);
       case INPUT_TYPES.ROTATE: {
         const nextRotation = getNextRotation({
           coordinates,
@@ -126,12 +106,7 @@ export const createGamePiece = initialState => {
       }
       case INPUT_TYPES.GRAVITY_DROP:
         // same as input down, but I think we're gonna rebuild this
-        return transpose({
-          coordinates,
-          origo,
-          dx: 0,
-          dy: 1
-        });
+        return transpose(coordinates, origo, 0, 1);
       default:
         throw new Error(`Unknown input - ${input}`);
     }
