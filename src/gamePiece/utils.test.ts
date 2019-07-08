@@ -1,4 +1,4 @@
-import { getMinMaxCoordinates } from './utils';
+import { getMinMaxCoordinates, isLongestSideEven } from './utils';
 
 describe('getMinMaxCoordinates', () => {
   it('works when all coordinates are negative', () => {
@@ -71,5 +71,64 @@ describe('getMinMaxCoordinates', () => {
     expect(min.y).toBe(-6);
     expect(max.x).toBe(5);
     expect(max.y).toBe(-2);
+  });
+});
+
+describe('isLongestSideEven', () => {
+  it('returns true when both sides are equally long and even', () => {
+    const coordinates: Array<Coordinate> = [
+      {
+        x: 1,
+        y: 11
+      },
+      {
+        x: 4,
+        y: 14
+      },
+      {
+        x: 6,
+        y: 16
+      }
+    ];
+
+    expect(isLongestSideEven(coordinates)).toBe(true);
+  });
+
+  it('returns false when longest side is odd and shortest side is even', () => {
+    const coordinates: Array<Coordinate> = [
+      {
+        x: 1,
+        y: 11
+      },
+      {
+        x: 4,
+        y: 14
+      },
+      {
+        x: 7,
+        y: 16
+      }
+    ];
+
+    expect(isLongestSideEven(coordinates)).toBe(false);
+  });
+
+  it('returns true when longest side is even and shortest side is odd', () => {
+    const coordinates: Array<Coordinate> = [
+      {
+        x: 1,
+        y: 11
+      },
+      {
+        x: 4,
+        y: 14
+      },
+      {
+        x: 6,
+        y: 15
+      }
+    ];
+
+    expect(isLongestSideEven(coordinates)).toBe(true);
   });
 });
