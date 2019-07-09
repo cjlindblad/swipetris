@@ -2,24 +2,31 @@ import { INPUT_TYPES } from '../input/constants';
 import { isLongestSideEven, getMinMaxCoordinates, transpose } from './utils';
 import DependencyContainer from '../dependencyContainer';
 
-export const GAME_PIECE_TYPES = {
-  T: 'T',
-  L: 'L',
-  L_INVERTED: 'L_INVERTED',
-  S: 'S',
-  S_INVERTED: 'S_INVERTED',
-  I: 'I',
-  BLOCK: 'BLOCK',
-  EMPTY_SPACE: 'EMPTY_SPACE'
-};
+export enum GAME_PIECE_TYPE {
+  T = 1,
+  L,
+  L_INVERTED,
+  S,
+  S_INVERTED,
+  I,
+  BLOCK,
+  EMPTY_SPACE
+}
 
-export const getNextPieceType = () => {
-  // TODO clean this up..
-  const pieceTypes = Object.keys(GAME_PIECE_TYPES).filter(
-    e => e !== GAME_PIECE_TYPES.EMPTY_SPACE
-  );
+export const getNextPieceType = (): GAME_PIECE_TYPE => {
+  // might be a cleaner way to write this
+  // (we want to filter out GAME_PIECE_TYPE.EMPTY_SPACE)
+  const pieceTypes = [
+    GAME_PIECE_TYPE.T,
+    GAME_PIECE_TYPE.L,
+    GAME_PIECE_TYPE.L_INVERTED,
+    GAME_PIECE_TYPE.S,
+    GAME_PIECE_TYPE.S_INVERTED,
+    GAME_PIECE_TYPE.I,
+    GAME_PIECE_TYPE.BLOCK
+  ];
   const nextTypeIndex = Math.floor(Math.random() * pieceTypes.length);
-  return GAME_PIECE_TYPES[pieceTypes[nextTypeIndex]];
+  return pieceTypes[nextTypeIndex];
 };
 
 // Borrowing some React wording here.
@@ -140,19 +147,19 @@ export const createGamePiece = initialState => {
   };
 };
 
-const getPieceChar = pieceType => {
+const getPieceChar = (pieceType: GAME_PIECE_TYPE) => {
   // TODO maybe inject these?
   const dependencyContainer = new DependencyContainer();
   const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
 
   switch (pieceType) {
-    case GAME_PIECE_TYPES.L:
-    case GAME_PIECE_TYPES.L_INVERTED:
-    case GAME_PIECE_TYPES.S:
-    case GAME_PIECE_TYPES.S_INVERTED:
-    case GAME_PIECE_TYPES.T:
-    case GAME_PIECE_TYPES.I:
-    case GAME_PIECE_TYPES.BLOCK:
+    case GAME_PIECE_TYPE.L:
+    case GAME_PIECE_TYPE.L_INVERTED:
+    case GAME_PIECE_TYPE.S:
+    case GAME_PIECE_TYPE.S_INVERTED:
+    case GAME_PIECE_TYPE.T:
+    case GAME_PIECE_TYPE.I:
+    case GAME_PIECE_TYPE.BLOCK:
       return gameCharSelector(pieceType);
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
@@ -161,7 +168,7 @@ const getPieceChar = pieceType => {
 
 const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
   switch (pieceType) {
-    case GAME_PIECE_TYPES.T:
+    case GAME_PIECE_TYPE.T:
       //  x
       // xxx
       return [
@@ -182,7 +189,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
-    case GAME_PIECE_TYPES.L:
+    case GAME_PIECE_TYPE.L:
       //   x
       // xxx
       return [
@@ -203,7 +210,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
-    case GAME_PIECE_TYPES.L_INVERTED:
+    case GAME_PIECE_TYPE.L_INVERTED:
       // x
       // xxx
       return [
@@ -224,7 +231,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
-    case GAME_PIECE_TYPES.S:
+    case GAME_PIECE_TYPE.S:
       //  xx
       // xx
       return [
@@ -245,7 +252,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
-    case GAME_PIECE_TYPES.S_INVERTED:
+    case GAME_PIECE_TYPE.S_INVERTED:
       // xx
       //  xx
       return [
@@ -266,7 +273,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
-    case GAME_PIECE_TYPES.I:
+    case GAME_PIECE_TYPE.I:
       return [
         {
           x: centerX - 1,
@@ -285,7 +292,7 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
           y: centerY
         }
       ];
-    case GAME_PIECE_TYPES.BLOCK:
+    case GAME_PIECE_TYPE.BLOCK:
       return [
         {
           x: centerX,

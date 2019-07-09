@@ -9,8 +9,6 @@ const render = ({ renderString, nextPiece, score }) => {
   output += nextPiece + '\n';
   output += '\n\n';
   output += renderString;
-
-  console.log(output);
 };
 
 export default render;

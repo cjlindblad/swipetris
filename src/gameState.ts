@@ -2,7 +2,7 @@ import { INPUT_TYPES } from './input/constants';
 import {
   createGamePiece,
   getNextPieceType,
-  GAME_PIECE_TYPES
+  GAME_PIECE_TYPE
 } from './gamePiece/index';
 import { getMinMaxCoordinates, transpose } from './gamePiece/utils';
 import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from './config';
@@ -14,7 +14,7 @@ export const initializeGameState = render => {
   // TODO maybe inject these?
   const dependencyContainer = new DependencyContainer();
   const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
-  const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPES.EMPTY_SPACE);
+  const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
 
   // TODO need to handle initial coordinates in a better way
   const initialPiece = createGamePiece({
