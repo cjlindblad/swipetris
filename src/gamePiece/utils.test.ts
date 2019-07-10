@@ -76,7 +76,7 @@ describe('getMinMaxCoordinates', () => {
 
 describe('isLongestSideEven', () => {
   it('returns true when both sides are equally long and even', () => {
-    const coordinates: Array<Coordinate> = [
+    const coordinates: Coordinate[] = [
       {
         x: 1,
         y: 11
@@ -95,7 +95,7 @@ describe('isLongestSideEven', () => {
   });
 
   it('returns false when longest side is odd and shortest side is even', () => {
-    const coordinates: Array<Coordinate> = [
+    const coordinates: Coordinate[] = [
       {
         x: 1,
         y: 11
@@ -130,5 +130,11 @@ describe('isLongestSideEven', () => {
     ];
 
     expect(isLongestSideEven(coordinates)).toBe(true);
+  });
+});
+
+describe('getNextRotation', () => {
+  it('rotates I piece clockwise correctly', () => {
+    // todo
   });
 });

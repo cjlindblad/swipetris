@@ -1,5 +1,5 @@
 import { INPUT_TYPES } from '../input/constants';
-import { isLongestSideEven, getMinMaxCoordinates, transpose } from './utils';
+import { getMinMaxCoordinates, transpose, getNextRotation } from './utils';
 import DependencyContainer from '../dependencyContainer';
 
 export enum GAME_PIECE_TYPE {
@@ -90,22 +90,14 @@ export const createGamePiece = initialState => {
       case INPUT_TYPES.INPUT_DOWN:
         return transpose(coordinates, origo, 0, 1);
       case INPUT_TYPES.ROTATE: {
-        const nextRotation = getNextRotation({
-          coordinates,
-          origo,
-          reverse: false
-        });
+        const nextRotation = getNextRotation(coordinates, origo, false);
         return {
           coordinates: nextRotation.coordinates,
           origo: nextRotation.origo
         };
       }
       case INPUT_TYPES.ROTATE_REVERSE: {
-        const nextRotation = getNextRotation({
-          coordinates,
-          origo,
-          reverse: true
-        });
+        const nextRotation = getNextRotation(coordinates, origo, true);
         return {
           coordinates: nextRotation.coordinates,
           origo: nextRotation.origo
@@ -314,84 +306,4 @@ const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
     default:
       throw new Error(`Unknown piece type - ${pieceType}`);
   }
-};
-
-const getNextRotation = ({ coordinates, origo, reverse }) => {
-  // General rotation algorithm:
-  // Keep track of origo and use relative positioning of all the pieces.
-  // For each rotation: x2 = y1 * -1, y2 = x1
-
-  let nextOrigo = {
-    x: origo.x,
-    y: origo.y
-  };
-
-  const needsTemporaryOrigoCross = isLongestSideEven(coordinates);
-
-  let nextCoordinates = coordinates.map(coordinate => {
-    const inTopLeftQuadrant =
-      coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y;
-    if (!needsTemporaryOrigoCross || inTopLeftQuadrant) {
-      return {
-        x: coordinate.x,
-        y: coordinate.y
-      };
-    }
-
-    return {
-      x: coordinate.x > nextOrigo.x ? coordinate.x + 1 : coordinate.x,
-      y: coordinate.y > nextOrigo.y ? coordinate.y + 1 : coordinate.y
-    };
-  });
-
-  if (needsTemporaryOrigoCross) {
-    nextOrigo = {
-      x: nextOrigo.x + 1,
-      y: nextOrigo.y + 1
-    };
-  }
-
-  nextCoordinates = nextCoordinates.map(coordinate => {
-    const dx1 = coordinate.x - nextOrigo.x;
-    const dy1 = coordinate.y - nextOrigo.y;
-
-    let dx2;
-    let dy2;
-
-    if (!reverse) {
-      dx2 = dy1 * -1;
-      dy2 = dx1;
-    } else {
-      dx2 = dy1;
-      dy2 = dx1 * -1;
-    }
-
-    const x2 = nextOrigo.x + dx2;
-    const y2 = nextOrigo.y + dy2;
-
-    return {
-      x: x2,
-      y: y2
-    };
-  });
-
-  // delete origo cross
-  if (needsTemporaryOrigoCross) {
-    nextOrigo = {
-      x: nextOrigo.x - 1,
-      y: nextOrigo.y - 1
-    };
-
-    nextCoordinates = nextCoordinates.map(coordinate => {
-      if (coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y) {
-        return coordinate;
-      }
-      return {
-        x: coordinate.x > nextOrigo.x ? coordinate.x - 1 : coordinate.x,
-        y: coordinate.y > nextOrigo.y ? coordinate.y - 1 : coordinate.y
-      };
-    });
-  }
-
-  return { coordinates: nextCoordinates, origo: nextOrigo };
 };
