@@ -1,4 +1,8 @@
-import { getMinMaxCoordinates, isLongestSideEven } from './utils';
+import {
+  getMinMaxCoordinates,
+  isLongestSideEven,
+  getNextRotation
+} from './utils';
 
 describe('getMinMaxCoordinates', () => {
   it('works when all coordinates are negative', () => {
@@ -134,7 +138,193 @@ describe('isLongestSideEven', () => {
 });
 
 describe('getNextRotation', () => {
+  const I_PIECE: RotationData = {
+    coordinates: [
+      {
+        x: 1,
+        y: 2
+      },
+      {
+        x: 2,
+        y: 2
+      },
+      {
+        x: 3,
+        y: 2
+      },
+      {
+        x: 4,
+        y: 2
+      }
+    ],
+    origo: {
+      x: 2,
+      y: 2
+    }
+  };
+
+  const S_PIECE: RotationData = {
+    coordinates: [
+      {
+        x: 1,
+        y: 2
+      },
+      {
+        x: 2,
+        y: 2
+      },
+      {
+        x: 2,
+        y: 1
+      },
+      {
+        x: 3,
+        y: 1
+      }
+    ],
+    origo: {
+      x: 2,
+      y: 2
+    }
+  };
+
   it('rotates I piece clockwise correctly', () => {
-    // todo
+    const rotation = getNextRotation({
+      coordinates: I_PIECE.coordinates,
+      origo: I_PIECE.origo,
+      reverse: false
+    });
+
+    const expectedRotation: RotationData = {
+      coordinates: [
+        {
+          x: 3,
+          y: 1
+        },
+        {
+          x: 3,
+          y: 2
+        },
+        {
+          x: 3,
+          y: 3
+        },
+        {
+          x: 3,
+          y: 4
+        }
+      ],
+      origo: {
+        x: 2,
+        y: 2
+      }
+    };
+
+    expect(JSON.stringify(rotation)).toEqual(JSON.stringify(expectedRotation));
+  });
+
+  it('rotates I piece counter clockwise correctly', () => {
+    const rotation = getNextRotation({
+      coordinates: I_PIECE.coordinates,
+      origo: I_PIECE.origo,
+      reverse: true
+    });
+
+    const expectedRotation: RotationData = {
+      coordinates: [
+        {
+          x: 2,
+          y: 4
+        },
+        {
+          x: 2,
+          y: 3
+        },
+        {
+          x: 2,
+          y: 2
+        },
+        {
+          x: 2,
+          y: 1
+        }
+      ],
+      origo: {
+        x: 2,
+        y: 2
+      }
+    };
+
+    expect(JSON.stringify(rotation)).toEqual(JSON.stringify(expectedRotation));
+  });
+
+  it('rotates S piece clockwise correctly', () => {
+    const rotation = getNextRotation({
+      coordinates: S_PIECE.coordinates,
+      origo: S_PIECE.origo,
+      reverse: false
+    });
+
+    const expectedRotation: RotationData = {
+      coordinates: [
+        {
+          x: 2,
+          y: 1
+        },
+        {
+          x: 2,
+          y: 2
+        },
+        {
+          x: 3,
+          y: 2
+        },
+        {
+          x: 3,
+          y: 3
+        }
+      ],
+      origo: {
+        x: 2,
+        y: 2
+      }
+    };
+
+    expect(JSON.stringify(rotation)).toEqual(JSON.stringify(expectedRotation));
+  });
+
+  it('rotates S piece counter clockwise correctly', () => {
+    const rotation = getNextRotation({
+      coordinates: S_PIECE.coordinates,
+      origo: S_PIECE.origo,
+      reverse: true
+    });
+
+    const expectedRotation = {
+      coordinates: [
+        {
+          x: 2,
+          y: 3
+        },
+        {
+          x: 2,
+          y: 2
+        },
+        {
+          x: 1,
+          y: 2
+        },
+        {
+          x: 1,
+          y: 1
+        }
+      ],
+      origo: {
+        x: 2,
+        y: 2
+      }
+    };
+
+    expect(JSON.stringify(rotation)).toEqual(JSON.stringify(expectedRotation));
   });
 });

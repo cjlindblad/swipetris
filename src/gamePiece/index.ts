@@ -90,14 +90,22 @@ export const createGamePiece = initialState => {
       case INPUT_TYPES.INPUT_DOWN:
         return transpose(coordinates, origo, 0, 1);
       case INPUT_TYPES.ROTATE: {
-        const nextRotation = getNextRotation(coordinates, origo, false);
+        const nextRotation = getNextRotation({
+          coordinates,
+          origo,
+          reverse: false
+        });
         return {
           coordinates: nextRotation.coordinates,
           origo: nextRotation.origo
         };
       }
       case INPUT_TYPES.ROTATE_REVERSE: {
-        const nextRotation = getNextRotation(coordinates, origo, true);
+        const nextRotation = getNextRotation({
+          coordinates,
+          origo,
+          reverse: true
+        });
         return {
           coordinates: nextRotation.coordinates,
           origo: nextRotation.origo
