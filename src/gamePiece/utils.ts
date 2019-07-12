@@ -1,6 +1,9 @@
+import { GAME_PIECE_TYPE } from './enums';
+import DependencyContainer from '../dependencyContainer';
+
 // determines if longest side in piece has an odd (like a "T"-piece)
 // or even (like a "I"-piece) amount of blocks
-export const isLongestSideEven = (coordinates: Array<Coordinate>): boolean => {
+export const isLongestSideEven = (coordinates: Coordinate[]): boolean => {
   const [min, max] = getMinMaxCoordinates(coordinates);
   const xDistance = max.x - min.x + 1;
   const yDistance = max.y - min.y + 1;
@@ -45,6 +48,194 @@ export const getMinMaxCoordinates = (
   ];
 };
 
+export const getNextPieceType = (): GAME_PIECE_TYPE => {
+  // might be a cleaner way to write this
+  // (we want to filter out GAME_PIECE_TYPE.EMPTY_SPACE)
+  const pieceTypes = [
+    GAME_PIECE_TYPE.T,
+    GAME_PIECE_TYPE.L,
+    GAME_PIECE_TYPE.L_INVERTED,
+    GAME_PIECE_TYPE.S,
+    GAME_PIECE_TYPE.S_INVERTED,
+    GAME_PIECE_TYPE.I,
+    GAME_PIECE_TYPE.BLOCK
+  ];
+  const nextTypeIndex = Math.floor(Math.random() * pieceTypes.length);
+  return pieceTypes[nextTypeIndex];
+};
+
+export const getPieceChar = (pieceType: GAME_PIECE_TYPE) => {
+  // TODO maybe inject these?
+  const dependencyContainer = new DependencyContainer();
+  const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
+
+  switch (pieceType) {
+    case GAME_PIECE_TYPE.L:
+    case GAME_PIECE_TYPE.L_INVERTED:
+    case GAME_PIECE_TYPE.S:
+    case GAME_PIECE_TYPE.S_INVERTED:
+    case GAME_PIECE_TYPE.T:
+    case GAME_PIECE_TYPE.I:
+    case GAME_PIECE_TYPE.BLOCK:
+      return gameCharSelector(pieceType);
+    default:
+      throw new Error(`Unknown piece type - ${pieceType}`);
+  }
+};
+
+export const getInitialCoordinates = (
+  pieceType: GAME_PIECE_TYPE,
+  center: Coordinate
+) => {
+  switch (pieceType) {
+    case GAME_PIECE_TYPE.T:
+      //  x
+      // xxx
+      return [
+        {
+          x: center.x,
+          y: center.y - 1
+        },
+        {
+          x: center.x - 1,
+          y: center.y
+        },
+        {
+          x: center.x,
+          y: center.y
+        },
+        {
+          x: center.x + 1,
+          y: center.y
+        }
+      ];
+    case GAME_PIECE_TYPE.L:
+      //   x
+      // xxx
+      return [
+        {
+          x: center.x + 1,
+          y: center.y - 1
+        },
+        {
+          x: center.x - 1,
+          y: center.y
+        },
+        {
+          x: center.x,
+          y: center.y
+        },
+        {
+          x: center.x + 1,
+          y: center.y
+        }
+      ];
+    case GAME_PIECE_TYPE.L_INVERTED:
+      // x
+      // xxx
+      return [
+        {
+          x: center.x - 1,
+          y: center.y - 1
+        },
+        {
+          x: center.x - 1,
+          y: center.y
+        },
+        {
+          x: center.x,
+          y: center.y
+        },
+        {
+          x: center.x + 1,
+          y: center.y
+        }
+      ];
+    case GAME_PIECE_TYPE.S:
+      //  xx
+      // xx
+      return [
+        {
+          x: center.x,
+          y: center.y - 1
+        },
+        {
+          x: center.x + 1,
+          y: center.y - 1
+        },
+        {
+          x: center.x - 1,
+          y: center.y
+        },
+        {
+          x: center.x,
+          y: center.y
+        }
+      ];
+    case GAME_PIECE_TYPE.S_INVERTED:
+      // xx
+      //  xx
+      return [
+        {
+          x: center.x - 1,
+          y: center.y - 1
+        },
+        {
+          x: center.x,
+          y: center.y - 1
+        },
+        {
+          x: center.x,
+          y: center.y
+        },
+        {
+          x: center.x + 1,
+          y: center.y
+        }
+      ];
+    case GAME_PIECE_TYPE.I:
+      return [
+        {
+          x: center.x - 1,
+          y: center.y
+        },
+        {
+          x: center.x,
+          y: center.y
+        },
+        {
+          x: center.x + 1,
+          y: center.y
+        },
+        {
+          x: center.x + 2,
+          y: center.y
+        }
+      ];
+    case GAME_PIECE_TYPE.BLOCK:
+      return [
+        {
+          x: center.x,
+          y: center.y
+        },
+        {
+          x: center.x + 1,
+          y: center.y
+        },
+        {
+          x: center.x,
+          y: center.y + 1
+        },
+        {
+          x: center.x + 1,
+          y: center.y + 1
+        }
+      ];
+    default:
+      throw new Error(`Unknown piece type - ${pieceType}`);
+  }
+};
+
 export const transpose = (
   coordinates: Array<Coordinate>,
   origo: Coordinate,
@@ -63,10 +254,10 @@ export const transpose = (
   };
 };
 
-// TODO setup unit test and refactor
+// TODO refactor
 export const getNextRotation = (
-  args: RotationData & RotationOptions
-): RotationData => {
+  args: CoordinateData & RotationOptions
+): CoordinateData => {
   const { coordinates, origo, reverse } = args;
   // General rotation algorithm:
   // Keep track of origo and use relative positioning of all the pieces.

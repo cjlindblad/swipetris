@@ -138,7 +138,7 @@ describe('isLongestSideEven', () => {
 });
 
 describe('getNextRotation', () => {
-  const I_PIECE: RotationData = {
+  const I_PIECE: CoordinateData = {
     coordinates: [
       {
         x: 1,
@@ -163,7 +163,7 @@ describe('getNextRotation', () => {
     }
   };
 
-  const S_PIECE: RotationData = {
+  const S_PIECE: CoordinateData = {
     coordinates: [
       {
         x: 1,
@@ -195,7 +195,7 @@ describe('getNextRotation', () => {
       reverse: false
     });
 
-    const expectedRotation: RotationData = {
+    const expectedRotation: CoordinateData = {
       coordinates: [
         {
           x: 3,
@@ -230,7 +230,7 @@ describe('getNextRotation', () => {
       reverse: true
     });
 
-    const expectedRotation: RotationData = {
+    const expectedRotation: CoordinateData = {
       coordinates: [
         {
           x: 2,
@@ -265,7 +265,7 @@ describe('getNextRotation', () => {
       reverse: false
     });
 
-    const expectedRotation: RotationData = {
+    const expectedRotation: CoordinateData = {
       coordinates: [
         {
           x: 2,

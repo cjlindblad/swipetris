@@ -1,10 +1,11 @@
-import { INPUT_TYPES } from './input/constants';
+import { INPUT_TYPE } from './input/constants';
+import { createGamePiece } from './gamePiece/index';
+import { GAME_PIECE_TYPE } from './gamePiece/enums';
 import {
-  createGamePiece,
-  getNextPieceType,
-  GAME_PIECE_TYPE
-} from './gamePiece/index';
-import { getMinMaxCoordinates, transpose } from './gamePiece/utils';
+  getMinMaxCoordinates,
+  transpose,
+  getNextPieceType
+} from './gamePiece/utils';
 import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from './config';
 import DependencyContainer from './dependencyContainer';
 
@@ -17,16 +18,14 @@ export const initializeGameState = render => {
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
 
   // TODO need to handle initial coordinates in a better way
-  const initialPiece = createGamePiece({
-    centerX: 2,
-    centerY: 1,
-    pieceType: getNextPieceType()
+  const initialPiece = createGamePiece(getNextPieceType(), {
+    x: 2,
+    y: 1
   });
 
-  const next = createGamePiece({
-    centerX: 2,
-    centerY: 1,
-    pieceType: getNextPieceType()
+  const next = createGamePiece(getNextPieceType(), {
+    x: 2,
+    y: 1
   });
 
   let activePiece = initialPiece;
@@ -71,12 +70,12 @@ export const initializeGameState = render => {
   // this will grow and should probably be moved out
   const handleInput = input => {
     switch (input) {
-      case INPUT_TYPES.INPUT_UP:
+      case INPUT_TYPE.INPUT_UP:
         break;
-      case INPUT_TYPES.INPUT_LEFT:
-      case INPUT_TYPES.INPUT_RIGHT:
-      case INPUT_TYPES.ROTATE:
-      case INPUT_TYPES.ROTATE_REVERSE: {
+      case INPUT_TYPE.INPUT_LEFT:
+      case INPUT_TYPE.INPUT_RIGHT:
+      case INPUT_TYPE.ROTATE:
+      case INPUT_TYPE.ROTATE_REVERSE: {
         const nextState = activePiece.getNextState(input);
         const validMove = isValidMove(nextState.coordinates);
 
@@ -87,8 +86,8 @@ export const initializeGameState = render => {
 
         // try to wall kick if possible
         if (
-          input === INPUT_TYPES.ROTATE ||
-          input === INPUT_TYPES.ROTATE_REVERSE
+          input === INPUT_TYPE.ROTATE ||
+          input === INPUT_TYPE.ROTATE_REVERSE
         ) {
           const wallKickOffsets = [1, 2, -1, -2];
           for (let i = 0; i < wallKickOffsets.length; i++) {
@@ -108,8 +107,8 @@ export const initializeGameState = render => {
 
         break;
       }
-      case INPUT_TYPES.INPUT_DOWN:
-      case INPUT_TYPES.GRAVITY_DROP: {
+      case INPUT_TYPE.INPUT_DOWN:
+      case INPUT_TYPE.GRAVITY_DROP: {
         setGravityInterval(activeGravityDelay);
 
         const nextState = activePiece.getNextState(input);
@@ -187,10 +186,9 @@ export const initializeGameState = render => {
           clearedLines += solidRows.length;
 
           // add new active piece
-          const newPiece = createGamePiece({
-            centerX: 2,
-            centerY: 1,
-            pieceType: getNextPieceType()
+          const newPiece = createGamePiece(getNextPieceType(), {
+            x: 2,
+            y: 1
           });
           activePiece = nextPiece;
           nextPiece = newPiece;
@@ -267,7 +265,7 @@ export const initializeGameState = render => {
     }
 
     const triggerGravityDrop = () => {
-      handleInput(INPUT_TYPES.GRAVITY_DROP);
+      handleInput(INPUT_TYPE.GRAVITY_DROP);
       render(getRepresentation());
     };
 

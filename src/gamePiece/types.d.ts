@@ -3,7 +3,7 @@ interface Coordinate {
   y: number;
 }
 
-interface RotationData {
+interface CoordinateData {
   coordinates: Coordinate[];
   origo: Coordinate;
 }

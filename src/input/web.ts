@@ -1,4 +1,4 @@
-import { INPUT_TYPES } from './constants';
+import { INPUT_TYPE } from './constants';
 
 const setupInputListeners = ({ element, handleInput }) => {
   // will probably break with multi touch.
@@ -28,25 +28,25 @@ const setupInputListeners = ({ element, handleInput }) => {
     const SPACE = 32;
 
     if (event.keyCode === LEFT) {
-      handleInput(INPUT_TYPES.INPUT_LEFT);
+      handleInput(INPUT_TYPE.INPUT_LEFT);
     }
     if (event.keyCode === RIGHT) {
-      handleInput(INPUT_TYPES.INPUT_RIGHT);
+      handleInput(INPUT_TYPE.INPUT_RIGHT);
     }
     if (event.keyCode === UP) {
-      handleInput(INPUT_TYPES.INPUT_UP);
+      handleInput(INPUT_TYPE.INPUT_UP);
     }
     if (event.keyCode === DOWN) {
-      handleInput(INPUT_TYPES.INPUT_DOWN);
+      handleInput(INPUT_TYPE.INPUT_DOWN);
     }
     if (event.keyCode === E) {
-      handleInput(INPUT_TYPES.ROTATE);
+      handleInput(INPUT_TYPE.ROTATE);
     }
     if (event.keyCode === Q) {
-      handleInput(INPUT_TYPES.ROTATE_REVERSE);
+      handleInput(INPUT_TYPE.ROTATE_REVERSE);
     }
     if (event.keyCode === SPACE) {
-      handleInput(INPUT_TYPES.GRAVITY_DROP);
+      handleInput(INPUT_TYPE.GRAVITY_DROP);
     }
   }
 
@@ -76,24 +76,24 @@ const setupInputListeners = ({ element, handleInput }) => {
       // tap
       // determine position on screen
       if (clientX > window.innerWidth / 2) {
-        return INPUT_TYPES.ROTATE;
+        return INPUT_TYPE.ROTATE;
       } else {
-        return INPUT_TYPES.ROTATE_REVERSE;
+        return INPUT_TYPE.ROTATE_REVERSE;
       }
     }
 
     const horizontalSwipe = Math.abs(dx) > Math.abs(dy);
     if (horizontalSwipe) {
       if (dx > 0) {
-        return INPUT_TYPES.INPUT_RIGHT;
+        return INPUT_TYPE.INPUT_RIGHT;
       } else {
-        return INPUT_TYPES.INPUT_LEFT;
+        return INPUT_TYPE.INPUT_LEFT;
       }
     } else {
       if (dy > 0) {
-        return INPUT_TYPES.INPUT_DOWN;
+        return INPUT_TYPE.INPUT_DOWN;
       } else {
-        return INPUT_TYPES.INPUT_UP;
+        return INPUT_TYPE.INPUT_UP;
       }
     }
   }

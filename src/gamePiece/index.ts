@@ -1,33 +1,27 @@
-import { INPUT_TYPES } from '../input/constants';
-import { getMinMaxCoordinates, transpose, getNextRotation } from './utils';
-import DependencyContainer from '../dependencyContainer';
+import { INPUT_TYPE } from '../input/constants';
+import {
+  getMinMaxCoordinates,
+  transpose,
+  getNextRotation,
+  getInitialCoordinates,
+  getPieceChar
+} from './utils';
+import { GAME_PIECE_TYPE } from './enums';
 
-export enum GAME_PIECE_TYPE {
-  T = 1,
-  L,
-  L_INVERTED,
-  S,
-  S_INVERTED,
-  I,
-  BLOCK,
-  EMPTY_SPACE
+interface GamePieceState {
+  coordinates: Coordinate[];
+  origo: Coordinate;
+  moves?: number;
 }
 
-export const getNextPieceType = (): GAME_PIECE_TYPE => {
-  // might be a cleaner way to write this
-  // (we want to filter out GAME_PIECE_TYPE.EMPTY_SPACE)
-  const pieceTypes = [
-    GAME_PIECE_TYPE.T,
-    GAME_PIECE_TYPE.L,
-    GAME_PIECE_TYPE.L_INVERTED,
-    GAME_PIECE_TYPE.S,
-    GAME_PIECE_TYPE.S_INVERTED,
-    GAME_PIECE_TYPE.I,
-    GAME_PIECE_TYPE.BLOCK
-  ];
-  const nextTypeIndex = Math.floor(Math.random() * pieceTypes.length);
-  return pieceTypes[nextTypeIndex];
-};
+// TODO duplicate type definitions
+interface GamePiece {
+  getNextState: (input: INPUT_TYPE) => GamePieceState;
+  setState: (nextState: GamePieceState) => void;
+  getState: () => GamePieceState;
+  getChar: () => string;
+  getPreview: () => Coordinate[];
+}
 
 // Borrowing some React wording here.
 //
@@ -38,19 +32,15 @@ export const getNextPieceType = (): GAME_PIECE_TYPE => {
 //
 // So state updates will happen separately
 // from input handling.
-export const createGamePiece = initialState => {
-  // this will probably be generalized
-  const { centerX, centerY, pieceType } = initialState;
-
-  let coordinates = getInitialCoordinates({
-    pieceType,
-    centerX,
-    centerY
-  });
+export const createGamePiece = (
+  pieceType: GAME_PIECE_TYPE,
+  center: Coordinate
+): GamePiece => {
+  let coordinates = getInitialCoordinates(pieceType, center);
 
   let origo = {
-    x: centerX,
-    y: centerY
+    x: center.x,
+    y: center.y
   };
 
   // make sure piece starts from the top
@@ -65,7 +55,7 @@ export const createGamePiece = initialState => {
   let char = getPieceChar(pieceType);
   let moves = 0;
 
-  const getState = () => {
+  const getState = (): GamePieceState => {
     const state = {
       coordinates,
       origo,
@@ -74,22 +64,22 @@ export const createGamePiece = initialState => {
     return state;
   };
 
-  const getNextState = input => {
+  const getNextState = (input: INPUT_TYPE): GamePieceState => {
     const transposition = getNextTransposition(input);
     return { ...transposition, moves };
   };
 
-  const getNextTransposition = input => {
+  const getNextTransposition = (input: INPUT_TYPE): CoordinateData => {
     switch (input) {
-      case INPUT_TYPES.INPUT_LEFT:
+      case INPUT_TYPE.INPUT_LEFT:
         return transpose(coordinates, origo, -1, 0);
-      case INPUT_TYPES.INPUT_RIGHT:
+      case INPUT_TYPE.INPUT_RIGHT:
         return transpose(coordinates, origo, 1, 0);
-      case INPUT_TYPES.INPUT_UP:
+      case INPUT_TYPE.INPUT_UP:
         return transpose(coordinates, origo, 0, -1);
-      case INPUT_TYPES.INPUT_DOWN:
+      case INPUT_TYPE.INPUT_DOWN:
         return transpose(coordinates, origo, 0, 1);
-      case INPUT_TYPES.ROTATE: {
+      case INPUT_TYPE.ROTATE: {
         const nextRotation = getNextRotation({
           coordinates,
           origo,
@@ -100,7 +90,7 @@ export const createGamePiece = initialState => {
           origo: nextRotation.origo
         };
       }
-      case INPUT_TYPES.ROTATE_REVERSE: {
+      case INPUT_TYPE.ROTATE_REVERSE: {
         const nextRotation = getNextRotation({
           coordinates,
           origo,
@@ -111,7 +101,7 @@ export const createGamePiece = initialState => {
           origo: nextRotation.origo
         };
       }
-      case INPUT_TYPES.GRAVITY_DROP:
+      case INPUT_TYPE.GRAVITY_DROP:
         // same as input down, but I think we're gonna rebuild this
         return transpose(coordinates, origo, 0, 1);
       default:
@@ -119,9 +109,9 @@ export const createGamePiece = initialState => {
     }
   };
 
-  const getChar = () => char;
+  const getChar = (): string => char;
 
-  const setState = nextState => {
+  const setState = (nextState: GamePieceState): void => {
     // TODO generalize and clean up this..
     if (nextState.coordinates !== null && nextState.coordinates !== undefined) {
       coordinates = nextState.coordinates;
@@ -134,8 +124,8 @@ export const createGamePiece = initialState => {
     }
   };
 
-  const getPreview = () =>
-    getInitialCoordinates({ pieceType, centerX: 0, centerY: 0 });
+  const getPreview = (): Coordinate[] =>
+    getInitialCoordinates(pieceType, { x: 0, y: 0 });
 
   // public API
   return {
@@ -145,173 +135,4 @@ export const createGamePiece = initialState => {
     getChar,
     getPreview
   };
-};
-
-const getPieceChar = (pieceType: GAME_PIECE_TYPE) => {
-  // TODO maybe inject these?
-  const dependencyContainer = new DependencyContainer();
-  const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
-
-  switch (pieceType) {
-    case GAME_PIECE_TYPE.L:
-    case GAME_PIECE_TYPE.L_INVERTED:
-    case GAME_PIECE_TYPE.S:
-    case GAME_PIECE_TYPE.S_INVERTED:
-    case GAME_PIECE_TYPE.T:
-    case GAME_PIECE_TYPE.I:
-    case GAME_PIECE_TYPE.BLOCK:
-      return gameCharSelector(pieceType);
-    default:
-      throw new Error(`Unknown piece type - ${pieceType}`);
-  }
-};
-
-const getInitialCoordinates = ({ pieceType, centerX, centerY }) => {
-  switch (pieceType) {
-    case GAME_PIECE_TYPE.T:
-      //  x
-      // xxx
-      return [
-        {
-          x: centerX,
-          y: centerY - 1
-        },
-        {
-          x: centerX - 1,
-          y: centerY
-        },
-        {
-          x: centerX,
-          y: centerY
-        },
-        {
-          x: centerX + 1,
-          y: centerY
-        }
-      ];
-    case GAME_PIECE_TYPE.L:
-      //   x
-      // xxx
-      return [
-        {
-          x: centerX + 1,
-          y: centerY - 1
-        },
-        {
-          x: centerX - 1,
-          y: centerY
-        },
-        {
-          x: centerX,
-          y: centerY
-        },
-        {
-          x: centerX + 1,
-          y: centerY
-        }
-      ];
-    case GAME_PIECE_TYPE.L_INVERTED:
-      // x
-      // xxx
-      return [
-        {
-          x: centerX - 1,
-          y: centerY - 1
-        },
-        {
-          x: centerX - 1,
-          y: centerY
-        },
-        {
-          x: centerX,
-          y: centerY
-        },
-        {
-          x: centerX + 1,
-          y: centerY
-        }
-      ];
-    case GAME_PIECE_TYPE.S:
-      //  xx
-      // xx
-      return [
-        {
-          x: centerX,
-          y: centerY - 1
-        },
-        {
-          x: centerX + 1,
-          y: centerY - 1
-        },
-        {
-          x: centerX - 1,
-          y: centerY
-        },
-        {
-          x: centerX,
-          y: centerY
-        }
-      ];
-    case GAME_PIECE_TYPE.S_INVERTED:
-      // xx
-      //  xx
-      return [
-        {
-          x: centerX - 1,
-          y: centerY - 1
-        },
-        {
-          x: centerX,
-          y: centerY - 1
-        },
-        {
-          x: centerX,
-          y: centerY
-        },
-        {
-          x: centerX + 1,
-          y: centerY
-        }
-      ];
-    case GAME_PIECE_TYPE.I:
-      return [
-        {
-          x: centerX - 1,
-          y: centerY
-        },
-        {
-          x: centerX,
-          y: centerY
-        },
-        {
-          x: centerX + 1,
-          y: centerY
-        },
-        {
-          x: centerX + 2,
-          y: centerY
-        }
-      ];
-    case GAME_PIECE_TYPE.BLOCK:
-      return [
-        {
-          x: centerX,
-          y: centerY
-        },
-        {
-          x: centerX + 1,
-          y: centerY
-        },
-        {
-          x: centerX,
-          y: centerY + 1
-        },
-        {
-          x: centerX + 1,
-          y: centerY + 1
-        }
-      ];
-    default:
-      throw new Error(`Unknown piece type - ${pieceType}`);
-  }
 };

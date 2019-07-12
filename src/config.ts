@@ -1,4 +1,4 @@
-import { GAME_PIECE_TYPE } from './gamePiece/index';
+import { GAME_PIECE_TYPE } from './gamePiece/enums';
 
 export const WEB_ENV = 'WEB_ENV';
 export const TERMINAL_ENV = 'TERMINAL_ENV';

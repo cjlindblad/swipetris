@@ -1,6 +1,6 @@
 const readline = require('readline');
 
-import { INPUT_TYPES } from './constants';
+import { INPUT_TYPE } from './constants';
 
 const setupInputListeners = ({ handleInput }) => {
   readline.emitKeypressEvents(process.stdin);
@@ -11,22 +11,22 @@ const setupInputListeners = ({ handleInput }) => {
     } else {
       switch (key.name) {
         case 'left':
-          handleInput(INPUT_TYPES.INPUT_LEFT);
+          handleInput(INPUT_TYPE.INPUT_LEFT);
           break;
         case 'right':
-          handleInput(INPUT_TYPES.INPUT_RIGHT);
+          handleInput(INPUT_TYPE.INPUT_RIGHT);
           break;
         case 'up':
-          handleInput(INPUT_TYPES.INPUT_UP);
+          handleInput(INPUT_TYPE.INPUT_UP);
           break;
         case 'down':
-          handleInput(INPUT_TYPES.INPUT_DOWN);
+          handleInput(INPUT_TYPE.INPUT_DOWN);
           break;
         case 'q':
-          handleInput(INPUT_TYPES.ROTATE_REVERSE);
+          handleInput(INPUT_TYPE.ROTATE_REVERSE);
           break;
         case 'e':
-          handleInput(INPUT_TYPES.ROTATE);
+          handleInput(INPUT_TYPE.ROTATE);
           break;
       }
     }
