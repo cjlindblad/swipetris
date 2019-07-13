@@ -1,13 +1,13 @@
-import { INPUT_TYPE } from './input/constants';
-import { createGamePiece } from './gamePiece/index';
-import { GAME_PIECE_TYPE } from './gamePiece/enums';
+import { INPUT_TYPE } from '../input/constants';
+import { createGamePiece } from '../gamePiece/index';
+import { GAME_PIECE_TYPE } from '../gamePiece/enums';
 import {
   getMinMaxCoordinates,
   transpose,
   getNextPieceType
-} from './gamePiece/utils';
-import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from './config';
-import DependencyContainer from './dependencyContainer';
+} from '../gamePiece/utils';
+import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../config';
+import DependencyContainer from '../dependencyContainer';
 
 export const initializeGameState = render => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
