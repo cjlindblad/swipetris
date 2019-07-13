@@ -4,7 +4,7 @@ import { WEB_ENV, TERMINAL_ENV, createGameCharSelector } from './config';
 
 export const main = async GAME_ENV => {
   // dependency injection
-  let dependencies = {};
+  const dependencies = {};
   switch (GAME_ENV) {
     case WEB_ENV:
       dependencies['render'] = (await import('./render/web')).default;
