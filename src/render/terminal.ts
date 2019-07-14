@@ -1,4 +1,6 @@
-const render = ({ renderString, nextPiece, score }) => {
+const render = (param: IRenderParam) => {
+  const { renderString, nextPiece, score } = param;
+
   let output = '';
   for (let i = 0; i < 14; i++) {
     output += '\r\n';

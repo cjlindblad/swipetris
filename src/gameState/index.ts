@@ -9,7 +9,7 @@ import {
 import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../config';
 import DependencyContainer from '../dependencyContainer';
 
-export const initializeGameState = render => {
+export const initializeGameState = (render: IRender) => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
 
   // TODO maybe inject these?
