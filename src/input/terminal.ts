@@ -1,11 +1,13 @@
 const readline = require('readline');
 
-import { INPUT_TYPE } from './constants';
+import { INPUT_TYPE } from './enums';
+import { ISetupInputListenersParam } from './types';
 
-const setupInputListeners = ({ handleInput }) => {
+const setupInputListeners = (param: ISetupInputListenersParam) => {
+  const { handleInput } = param;
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
-  process.stdin.on('keypress', (str, key) => {
+  process.stdin.on('keypress', (_, key) => {
     if (key.ctrl && key.name === 'c') {
       process.exit();
     } else {

@@ -1,5 +1,5 @@
 interface IRender {
-  (arg: IRenderParam): void;
+  (param: IRenderParam): void;
 }
 
 interface IRenderParam {

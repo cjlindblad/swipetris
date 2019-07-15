@@ -1,6 +1,9 @@
-import { INPUT_TYPE } from './constants';
+import { INPUT_TYPE } from './enums';
+import { ISetupInputListenersParam } from './types';
 
-const setupInputListeners = ({ element, handleInput }) => {
+const setupInputListeners = (param: ISetupInputListenersParam) => {
+  const { element, handleInput } = param;
+
   // will probably break with multi touch.
   let touches = [];
 
@@ -71,7 +74,7 @@ const setupInputListeners = ({ element, handleInput }) => {
     touches = [];
   }
 
-  function getInputType(dx, dy, clientX) {
+  function getInputType(dx: number, dy: number, clientX: number): INPUT_TYPE {
     if (dx === 0 && dy === 0) {
       // tap
       // determine position on screen

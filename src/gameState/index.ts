@@ -1,4 +1,4 @@
-import { INPUT_TYPE } from '../input/constants';
+import { INPUT_TYPE } from '../input/enums';
 import { createGamePiece } from '../gamePiece/index';
 import { GAME_PIECE_TYPE } from '../gamePiece/enums';
 import {

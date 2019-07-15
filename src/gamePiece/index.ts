@@ -1,4 +1,4 @@
-import { INPUT_TYPE } from '../input/constants';
+import { INPUT_TYPE } from '../input/enums';
 import {
   getMinMaxCoordinates,
   transpose,
