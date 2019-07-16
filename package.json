@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/cjlindblad/swipetris#readme",
   "dependencies": {
-    "@types/node": "^12.6.2"
+    "@types/node": "^12.6.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
