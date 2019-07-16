@@ -3,7 +3,7 @@ const readline = require('readline');
 import { INPUT_TYPE } from './enums';
 import { ISetupInputListenersParam } from './types';
 
-const setupInputListeners = (param: ISetupInputListenersParam) => {
+const setupInputListeners = (param: ISetupInputListenersParam): void => {
   const { handleInput } = param;
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);

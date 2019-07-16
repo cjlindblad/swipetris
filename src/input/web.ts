@@ -1,11 +1,11 @@
 import { INPUT_TYPE } from './enums';
 import { ISetupInputListenersParam } from './types';
 
-const setupInputListeners = (param: ISetupInputListenersParam) => {
+const setupInputListeners = (param: ISetupInputListenersParam): void => {
   const { element, handleInput } = param;
 
   // will probably break with multi touch.
-  let touches = [];
+  let touches: Touch[] = [];
 
   // swipe listeners
   element.addEventListener('touchstart', handleTouchStart, false);
@@ -16,7 +16,7 @@ const setupInputListeners = (param: ISetupInputListenersParam) => {
   // why not key listeners as well?
   element.addEventListener('keydown', handleKeyDown, false);
 
-  function handleKeyDown(event) {
+  function handleKeyDown(event: KeyboardEvent): void {
     // some key codes
     const LEFT = 37;
     const RIGHT = 39;
@@ -53,15 +53,15 @@ const setupInputListeners = (param: ISetupInputListenersParam) => {
     }
   }
 
-  function handleTouchStart(event) {
+  function handleTouchStart(event: TouchEvent): void {
     touches.push(event.touches[0]);
   }
 
-  function handleTouchMove(event) {
+  function handleTouchMove(event: TouchEvent): void {
     touches.push(event.touches[0]);
   }
 
-  function handleTouchEnd() {
+  function handleTouchEnd(): void {
     const initialTouch = touches[0];
     const lastTouch = touches[touches.length - 1];
 
@@ -101,7 +101,7 @@ const setupInputListeners = (param: ISetupInputListenersParam) => {
     }
   }
 
-  function handleTouchCancel() {
+  function handleTouchCancel(): void {
     // not really sure when this is triggered. delegate it to touch end handler for now.
     handleTouchEnd();
   }
