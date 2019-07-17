@@ -1,5 +1,6 @@
 import { GAME_PIECE_TYPE } from './enums';
 import DependencyContainer from '../dependencyContainer';
+import { IGameCharSelector } from '../config/types';
 
 // determines if longest side in piece has an odd (like a "T"-piece)
 // or even (like a "I"-piece) amount of blocks
@@ -67,7 +68,9 @@ export const getNextPieceType = (): GAME_PIECE_TYPE => {
 export const getPieceChar = (pieceType: GAME_PIECE_TYPE) => {
   // TODO maybe inject these?
   const dependencyContainer = new DependencyContainer();
-  const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
+  const gameCharSelector = dependencyContainer.resolve(
+    'gameCharSelector'
+  ) as IGameCharSelector; // TODO should be automatic
 
   switch (pieceType) {
     case GAME_PIECE_TYPE.L:

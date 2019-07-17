@@ -8,13 +8,16 @@ import {
 } from '../gamePiece/utils';
 import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../config';
 import DependencyContainer from '../dependencyContainer';
+import { IGameCharSelector } from '../config/types';
 
 export const initializeGameState = (render: IRender) => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
 
   // TODO maybe inject these?
   const dependencyContainer = new DependencyContainer();
-  const gameCharSelector = dependencyContainer.resolve('gameCharSelector');
+  const gameCharSelector = dependencyContainer.resolve(
+    'gameCharSelector'
+  ) as IGameCharSelector; // TODO should be automatic
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
 
   // TODO need to handle initial coordinates in a better way
@@ -34,7 +37,7 @@ export const initializeGameState = (render: IRender) => {
   let clearedLines = 0;
 
   // setup game board
-  const gameBoard = [];
+  const gameBoard: string[][] = [];
   for (let y = 0; y < ROWS; y++) {
     gameBoard[y] = [];
     for (let x = 0; x < COLUMNS; x++) {
@@ -42,7 +45,7 @@ export const initializeGameState = (render: IRender) => {
     }
   }
 
-  const isValidMove = coordinates => {
+  const isValidMove = (coordinates: Coordinate[]): boolean => {
     let validMove = true;
 
     for (let i = 0; i < coordinates.length; i++) {
@@ -68,7 +71,7 @@ export const initializeGameState = (render: IRender) => {
   };
 
   // this will grow and should probably be moved out
-  const handleInput = input => {
+  const handleInput = (input: INPUT_TYPE): void => {
     switch (input) {
       case INPUT_TYPE.INPUT_UP:
         break;
@@ -130,7 +133,7 @@ export const initializeGameState = (render: IRender) => {
           });
 
           // check for solid lines
-          const solidRows = [];
+          const solidRows: number[] = [];
           for (let y = ROWS - 1; y >= 0; y--) {
             let solid = true;
             for (let x = 0; x < COLUMNS; x++) {
@@ -202,11 +205,11 @@ export const initializeGameState = (render: IRender) => {
     render(getRepresentation());
   };
 
-  const getRepresentation = () => {
+  const getRepresentation = (): GameStateRepresentation => {
     // this might be a weird way to do it, but it's a start!
 
     // create buffer of game state board
-    const gameBoardBuffer = [];
+    const gameBoardBuffer: string[][] = [];
     for (let y = 0; y < ROWS; y++) {
       gameBoardBuffer[y] = [];
       for (let x = 0; x < COLUMNS; x++) {
@@ -232,7 +235,7 @@ export const initializeGameState = (render: IRender) => {
     // not sure if we should just use a big string, or split the "UI" up
 
     const nextPiecePreview = nextPiece.getPreview();
-    let pieceCoordinates = [];
+    let pieceCoordinates: string[][] = [];
     nextPiecePreview.forEach(coordinate => {
       if (!pieceCoordinates[coordinate.y]) {
         pieceCoordinates[coordinate.y] = [];
@@ -258,8 +261,8 @@ export const initializeGameState = (render: IRender) => {
     };
   };
 
-  let gravityInterval = null;
-  const setGravityInterval = interval => {
+  let gravityInterval: NodeJS.Timeout = null;
+  const setGravityInterval = (interval: number): void => {
     if (gravityInterval !== null) {
       clearInterval(gravityInterval);
     }

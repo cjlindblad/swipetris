@@ -1,13 +1,14 @@
-import { GAME_PIECE_TYPE } from './gamePiece/enums';
+import { GAME_PIECE_TYPE } from '../gamePiece/enums';
+import { IGameCharSelector } from './types';
 
-export const WEB_ENV = 'WEB_ENV';
-export const TERMINAL_ENV = 'TERMINAL_ENV';
-export const TEST_ENV = 'TEST_ENV';
+export const WEB_ENV: string = 'WEB_ENV';
+export const TERMINAL_ENV: string = 'TERMINAL_ENV';
+export const TEST_ENV: string = 'TEST_ENV';
 
-export const COLUMNS = 10;
-export const ROWS = 16;
+export const COLUMNS: number = 10;
+export const ROWS: number = 16;
 
-export const BASE_GRAVITY_DELAY = 800;
+export const BASE_GRAVITY_DELAY: number = 800;
 
 const GAME_CHARS = {
   [WEB_ENV]: {
@@ -42,7 +43,7 @@ const GAME_CHARS = {
   }
 };
 
-export const createGameCharSelector = env => {
+export const createGameCharSelector = (env: string): IGameCharSelector => {
   const chars = GAME_CHARS[env];
-  return char => chars[char];
+  return (char: GAME_PIECE_TYPE) => chars[char];
 };

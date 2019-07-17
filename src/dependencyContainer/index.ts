@@ -1,8 +1,10 @@
-class DependencyContainer {
-  static instance = null;
-  dependencies = [];
+import { Dependencies } from './types';
 
-  constructor(dependencies?) {
+class DependencyContainer {
+  static instance: DependencyContainer = null;
+  dependencies: Dependencies = null;
+
+  constructor(dependencies?: Dependencies) {
     if (!!DependencyContainer.instance) {
       return DependencyContainer.instance;
     }
@@ -10,13 +12,6 @@ class DependencyContainer {
     if (!dependencies) {
       throw new Error('No dependencies supplied');
     }
-
-    Object.keys(dependencies).forEach(key => {
-      const implementation = dependencies[key];
-      if (!(implementation instanceof Function)) {
-        throw new Error(`Implementation supplied for ${key} is not a function`);
-      }
-    });
 
     DependencyContainer.instance = this;
 
@@ -26,8 +21,8 @@ class DependencyContainer {
     return this;
   }
 
-  resolve(dependency) {
-    return this.dependencies[dependency];
+  resolve(dependencyName: keyof Dependencies) {
+    return this.dependencies[dependencyName];
   }
 }
 
