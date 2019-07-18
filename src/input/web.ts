@@ -8,13 +8,13 @@ const setupInputListeners = (param: ISetupInputListenersParam): void => {
   let touches: Touch[] = [];
 
   // swipe listeners
-  element.addEventListener('touchstart', handleTouchStart, false);
-  element.addEventListener('touchend', handleTouchEnd, false);
-  element.addEventListener('touchcancel', handleTouchCancel, false);
-  element.addEventListener('touchmove', handleTouchMove, false);
+  element!.addEventListener('touchstart', handleTouchStart, false);
+  element!.addEventListener('touchend', handleTouchEnd, false);
+  element!.addEventListener('touchcancel', handleTouchCancel, false);
+  element!.addEventListener('touchmove', handleTouchMove, false);
 
   // why not key listeners as well?
-  element.addEventListener('keydown', handleKeyDown, false);
+  element!.addEventListener('keydown', handleKeyDown, false);
 
   function handleKeyDown(event: KeyboardEvent): void {
     // some key codes

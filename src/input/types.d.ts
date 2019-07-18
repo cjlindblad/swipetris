@@ -6,5 +6,5 @@ interface ISetupInputListeners {
 
 interface ISetupInputListenersParam {
   handleInput(inputType: INPUT_TYPE): void;
-  element?: HTMLElement;
+  element?: HTMLElement | null;
 }

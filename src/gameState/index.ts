@@ -117,7 +117,7 @@ export const initializeGameState = (render: IRender) => {
         const nextState = activePiece.getNextState(input);
         const validMove = isValidMove(nextState.coordinates);
         if (validMove) {
-          activePiece.setState({ ...nextState, moves: nextState.moves + 1 });
+          activePiece.setState({ ...nextState, moves: nextState.moves! + 1 });
         } else {
           if (nextState.moves === 0) {
             // TODO
@@ -261,7 +261,7 @@ export const initializeGameState = (render: IRender) => {
     };
   };
 
-  let gravityInterval: NodeJS.Timeout = null;
+  let gravityInterval: NodeJS.Timeout | null = null;
   const setGravityInterval = (interval: number): void => {
     if (gravityInterval !== null) {
       clearInterval(gravityInterval);

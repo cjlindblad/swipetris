@@ -2,10 +2,15 @@ export const render = (param: IRenderParam) => {
   const { renderString, nextPiece, score } = param;
 
   const gameboardElement = document.getElementById('input');
-  gameboardElement.innerText = renderString;
   const scoreElement = document.getElementById('score');
-  scoreElement.innerText = String(score);
   const nextElement = document.getElementById('next');
+
+  if (!gameboardElement || !scoreElement || !nextElement) {
+    throw new Error('Could not find game elements');
+  }
+
+  gameboardElement.innerText = renderString;
+  scoreElement.innerText = String(score);
   nextElement.innerText = nextPiece;
 };
 

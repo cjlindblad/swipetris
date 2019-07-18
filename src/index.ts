@@ -38,8 +38,7 @@ export const main = async (GAME_ENV: string) => {
   };
 
   const inputListenerOptions: ISetupInputListenersParam = {
-    handleInput,
-    element: null
+    handleInput
   };
   if (GAME_ENV === WEB_ENV) {
     const html = document.getElementById('wrapper');

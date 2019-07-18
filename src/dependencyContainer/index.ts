@@ -1,8 +1,8 @@
 import { Dependencies } from './types';
 
 class DependencyContainer {
-  static instance: DependencyContainer = null;
-  dependencies: Dependencies = null;
+  static instance: DependencyContainer | null = null;
+  dependencies: Dependencies | null = null;
 
   constructor(dependencies?: Dependencies) {
     if (!!DependencyContainer.instance) {
@@ -22,6 +22,9 @@ class DependencyContainer {
   }
 
   resolve(dependencyName: keyof Dependencies) {
+    if (this.dependencies === null) {
+      throw new Error('No dependencies supplied');
+    }
     return this.dependencies[dependencyName];
   }
 }

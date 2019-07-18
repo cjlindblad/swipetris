@@ -6,7 +6,7 @@ import { ISetupInputListenersParam } from './types';
 const setupInputListeners = (param: ISetupInputListenersParam): void => {
   const { handleInput } = param;
   readline.emitKeypressEvents(process.stdin);
-  process.stdin.setRawMode(true);
+  process.stdin.setRawMode!(true);
   process.stdin.on('keypress', (_, key) => {
     if (key.ctrl && key.name === 'c') {
       process.exit();
