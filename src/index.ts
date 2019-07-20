@@ -1,12 +1,10 @@
-import { initializeGameState } from './gameState';
 import DependencyContainer from './dependencyContainer';
 import { WEB_ENV, TERMINAL_ENV, createGameCharSelector } from './config';
-import { INPUT_TYPE } from './input/enums';
-import { ISetupInputListenersParam, ISetupInputListeners } from './input/types';
 import { Dependencies } from './dependencyContainer/types';
+import initializeGame from './game';
 
 export const main = async (GAME_ENV: string) => {
-  // dependency injection
+  // register dependencies
   let dependencies: Dependencies;
   switch (GAME_ENV) {
     case WEB_ENV:
@@ -26,28 +24,8 @@ export const main = async (GAME_ENV: string) => {
     default:
       throw new Error(`Unknown game environment - ${GAME_ENV}`);
   }
-  const dependencyContainer = new DependencyContainer(dependencies);
+  new DependencyContainer(dependencies);
 
-  const gameState = initializeGameState(dependencyContainer.resolve(
-    'render'
-  ) as IRender); // TODO should be automatic
-
-  // "controller" that forwards input to game logic
-  const handleInput = (input: INPUT_TYPE) => {
-    gameState.handleInput(input);
-  };
-
-  const inputListenerOptions: ISetupInputListenersParam = {
-    handleInput
-  };
-  if (GAME_ENV === WEB_ENV) {
-    const html = document.getElementById('wrapper');
-    inputListenerOptions.element = html;
-  }
-
-  const setupInputListeners = dependencyContainer.resolve(
-    'setupInputListeners'
-  ) as ISetupInputListeners; // TODO should be automatic
-
-  setupInputListeners(inputListenerOptions);
+  // initialize game
+  initializeGame();
 };

@@ -2,7 +2,7 @@ import { Dependencies } from './types';
 
 class DependencyContainer {
   static instance: DependencyContainer | null = null;
-  dependencies: Dependencies | null = null;
+  private dependencies: Dependencies | null = null;
 
   constructor(dependencies?: Dependencies) {
     if (!!DependencyContainer.instance) {
@@ -15,7 +15,6 @@ class DependencyContainer {
 
     DependencyContainer.instance = this;
 
-    // TODO hide this
     this.dependencies = dependencies;
 
     return this;
@@ -25,7 +24,8 @@ class DependencyContainer {
     if (this.dependencies === null) {
       throw new Error('No dependencies supplied');
     }
-    return this.dependencies[dependencyName];
+    const dependency = this.dependencies[dependencyName];
+    return dependency;
   }
 }
 

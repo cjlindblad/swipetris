@@ -14,7 +14,7 @@
 ✅ I piece rotation is weird
 ✅ wall kicks
 ✅ run terminal version (ran into some issues with ts/parcel)
-- Fix jest/ts issues
+✅ Fix jest/ts issues
 - flexible mobile styling
 - game over
 - clean up rotation logic
@@ -23,3 +23,4 @@
 - add text document with piece shapes(?)
 - don't handle render in multiple places
 - scoring
+- show preview of piece landing

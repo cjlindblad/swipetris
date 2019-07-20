@@ -2,10 +2,12 @@ import { INPUT_TYPE } from './enums';
 import { ISetupInputListenersParam } from './types';
 
 const setupInputListeners = (param: ISetupInputListenersParam): void => {
-  const { element, handleInput } = param;
+  const { handleInput } = param;
 
   // will probably break with multi touch.
   let touches: Touch[] = [];
+
+  const element = document.getElementById('wrapper');
 
   // swipe listeners
   element!.addEventListener('touchstart', handleTouchStart, false);
