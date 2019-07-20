@@ -11,6 +11,8 @@ const render = (param: IRenderParam) => {
   output += nextPiece + '\n';
   output += '\n\n';
   output += renderString;
+
+  console.log(output);
 };
 
 export default render;
