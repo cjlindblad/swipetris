@@ -1,10 +1,7 @@
 import DependencyContainer from '../dependencyContainer';
 import { initializeGameState } from '../gameState';
-import { INPUT_TYPE } from '../input/enums';
-import {
-  ISetupInputListenersParam,
-  ISetupInputListeners
-} from '../input/types';
+import { ISetupInputListeners } from '../input/types';
+import createInputController from '../input/inputController';
 
 const initializeGame = () => {
   // resolve dependencies
@@ -14,17 +11,15 @@ const initializeGame = () => {
     'setupInputListeners'
   ) as ISetupInputListeners; // TODO should be automatic
 
+  // TODO generalize for different scenes
   // maybe create some general input handler
   const gameState = initializeGameState(render);
-  const handleInput = (input: INPUT_TYPE) => {
-    gameState.handleInput(input);
-  };
-  const inputListenerOptions: ISetupInputListenersParam = {
-    handleInput
-  };
-  setupInputListeners(inputListenerOptions);
 
-  // TODO generalize for different scenes
+  // setup input controller
+  const inputController = createInputController();
+  inputController.register(gameState);
+
+  setupInputListeners({ handleInput: inputController.handleInput });
 };
 
 export default initializeGame;
