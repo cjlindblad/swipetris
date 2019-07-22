@@ -67,8 +67,7 @@ export const getNextPieceType = (): GAME_PIECE_TYPE => {
 
 export const getPieceChar = (pieceType: GAME_PIECE_TYPE) => {
   // TODO maybe inject these?
-  const dependencyContainer = new DependencyContainer();
-  const gameCharSelector = dependencyContainer.resolve(
+  const gameCharSelector = DependencyContainer.resolve(
     'gameCharSelector'
   ) as IGameCharSelector; // TODO should be automatic
 

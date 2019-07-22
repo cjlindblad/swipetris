@@ -24,7 +24,7 @@ export const main = async (GAME_ENV: string) => {
     default:
       throw new Error(`Unknown game environment - ${GAME_ENV}`);
   }
-  new DependencyContainer(dependencies);
+  DependencyContainer.initialize(dependencies);
 
   // initialize game
   initializeGame();

@@ -14,8 +14,7 @@ export const initializeGameState = (render: IRender) => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
 
   // TODO maybe inject these?
-  const dependencyContainer = new DependencyContainer();
-  const gameCharSelector = dependencyContainer.resolve(
+  const gameCharSelector = DependencyContainer.resolve(
     'gameCharSelector'
   ) as IGameCharSelector; // TODO should be automatic
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);

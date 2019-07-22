@@ -8,7 +8,7 @@ beforeAll(() => {
   const dependencies = {
     gameCharSelector: createGameCharSelector(TEST_ENV)
   };
-  new DependencyContainer(dependencies);
+  DependencyContainer.initialize(dependencies);
 });
 
 describe('createGamePiece', () => {

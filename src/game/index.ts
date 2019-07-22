@@ -5,14 +5,12 @@ import createInputController from '../input/inputController';
 
 const initializeGame = () => {
   // resolve dependencies
-  const dependencyContainer = new DependencyContainer();
-  const render = dependencyContainer.resolve('render') as IRender; // TODO should be automatic
-  const setupInputListeners = dependencyContainer.resolve(
+  const render = DependencyContainer.resolve('render') as IRender; // TODO should be automatic
+  const setupInputListeners = DependencyContainer.resolve(
     'setupInputListeners'
   ) as ISetupInputListeners; // TODO should be automatic
 
   // TODO generalize for different scenes
-  // maybe create some general input handler
   const gameState = initializeGameState(render);
 
   // setup input controller

@@ -1,30 +1,24 @@
 import { Dependencies } from './types';
+import { isEmptyObject } from '../underdash';
 
 class DependencyContainer {
-  static instance: DependencyContainer | null = null;
-  private dependencies: Dependencies | null = null;
+  private constructor() {}
 
-  constructor(dependencies?: Dependencies) {
-    if (!!DependencyContainer.instance) {
-      return DependencyContainer.instance;
-    }
+  private static dependencies: Dependencies | null = null;
 
-    if (!dependencies) {
+  static initialize(dependencies: Dependencies) {
+    if (!dependencies || isEmptyObject(dependencies)) {
       throw new Error('No dependencies supplied');
     }
 
-    DependencyContainer.instance = this;
-
-    this.dependencies = dependencies;
-
-    return this;
+    DependencyContainer.dependencies = dependencies;
   }
 
-  resolve(dependencyName: keyof Dependencies) {
-    if (this.dependencies === null) {
-      throw new Error('No dependencies supplied');
+  static resolve(dependencyName: keyof Dependencies) {
+    if (DependencyContainer.dependencies === null) {
+      throw new Error('Dependency container is not initialized');
     }
-    const dependency = this.dependencies[dependencyName];
+    const dependency = DependencyContainer.dependencies[dependencyName];
     return dependency;
   }
 }
