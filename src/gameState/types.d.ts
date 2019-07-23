@@ -1,3 +1,7 @@
+interface GetGameStateRepresentation {
+  (): GameStateRepresentation;
+}
+
 interface GameStateRepresentation {
   renderString: string;
   nextPiece: string;
