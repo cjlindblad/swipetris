@@ -30,6 +30,9 @@ const setupInputListeners = (param: ISetupInputListenersParam): void => {
         case 'e':
           handleInput(INPUT_TYPE.ROTATE);
           break;
+        case 'enter':
+          handleInput(INPUT_TYPE.CONFIRMATION);
+          break;
       }
     }
   });

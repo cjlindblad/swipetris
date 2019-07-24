@@ -19,39 +19,32 @@ const setupInputListeners = (param: ISetupInputListenersParam): void => {
   element!.addEventListener('keydown', handleKeyDown, false);
 
   function handleKeyDown(event: KeyboardEvent): void {
-    // some key codes
+    // event key codes
     const LEFT = 37;
     const RIGHT = 39;
     const UP = 38;
     const DOWN = 40;
-
-    // rotation keys
     const Q = 81;
     const E = 69;
-
-    // temp gravity key
     const SPACE = 32;
+    const ENTER = 13;
 
-    if (event.keyCode === LEFT) {
-      handleInput(INPUT_TYPE.INPUT_LEFT);
-    }
-    if (event.keyCode === RIGHT) {
-      handleInput(INPUT_TYPE.INPUT_RIGHT);
-    }
-    if (event.keyCode === UP) {
-      handleInput(INPUT_TYPE.INPUT_UP);
-    }
-    if (event.keyCode === DOWN) {
-      handleInput(INPUT_TYPE.INPUT_DOWN);
-    }
-    if (event.keyCode === E) {
-      handleInput(INPUT_TYPE.ROTATE);
-    }
-    if (event.keyCode === Q) {
-      handleInput(INPUT_TYPE.ROTATE_REVERSE);
-    }
-    if (event.keyCode === SPACE) {
-      handleInput(INPUT_TYPE.GRAVITY_DROP);
+    const inputMapping: {
+      [index: number]: INPUT_TYPE;
+    } = {
+      [LEFT]: INPUT_TYPE.INPUT_LEFT,
+      [RIGHT]: INPUT_TYPE.INPUT_RIGHT,
+      [UP]: INPUT_TYPE.INPUT_UP,
+      [DOWN]: INPUT_TYPE.INPUT_DOWN,
+      [E]: INPUT_TYPE.ROTATE,
+      [Q]: INPUT_TYPE.ROTATE_REVERSE,
+      [SPACE]: INPUT_TYPE.GRAVITY_DROP,
+      [ENTER]: INPUT_TYPE.CONFIRMATION
+    };
+
+    const inputType = inputMapping[event.keyCode];
+    if (inputType !== undefined) {
+      handleInput(inputMapping[event.keyCode]);
     }
   }
 
