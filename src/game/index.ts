@@ -1,9 +1,11 @@
 import DependencyContainer from '../dependencyContainer';
 import { initializeGameState } from '../gameState';
 import initializeMenu from '../menu';
-import { ISetupInputListeners } from '../input/types';
+import { ISetupInputListeners, UnregisterInputHandler } from '../input/types';
 import createInputController from '../input/inputController';
 import { IGameCharSelector } from '../config/types';
+import { IChangeScreen } from './types';
+import { ScreenTransition } from './enums';
 
 const initializeGame = () => {
   // resolve dependencies
@@ -15,15 +17,26 @@ const initializeGame = () => {
     'gameCharSelector'
   ) as IGameCharSelector; // TODO should be automatic
 
-  // TODO generalize for different scenes
-  // const gameState = initializeGameState(render, gameCharSelector);
-  const menu = initializeMenu(render);
+  // TODO generalize this
 
   // setup input controller
   const inputController = createInputController();
-  // inputController.register(gameState);
-  inputController.register(menu);
   setupInputListeners({ handleInput: inputController.handleInput });
+
+  let activeScene;
+  let unregisterPreviousInput: UnregisterInputHandler;
+  const changeScreen: IChangeScreen = (screenTransition: ScreenTransition) => {
+    switch (screenTransition) {
+      case ScreenTransition.StartToGame:
+        // TODO check if active scene is start
+        activeScene = initializeGameState(render, gameCharSelector);
+        unregisterPreviousInput();
+        unregisterPreviousInput = inputController.register(activeScene);
+        break;
+    }
+  };
+  activeScene = initializeMenu(render, changeScreen);
+  unregisterPreviousInput = inputController.register(activeScene);
 };
 
 export default initializeGame;
