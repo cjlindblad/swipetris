@@ -1,8 +1,8 @@
-import { IScene, IChangeScreen } from '../game/types';
-import { HandleInput } from '../input/types';
-import { INPUT_TYPE } from '../input/enums';
-import { wrapModulo } from '../underdash';
-import { ScreenTransition } from '../game/enums';
+import { IScene, IChangeScreen } from '../../game/types';
+import { HandleInput } from '../../input/types';
+import { INPUT_TYPE } from '../../input/enums';
+import { wrapModulo } from '../../underdash';
+import { ScreenTransition } from '../../game/enums';
 
 const initializeMenu = (
   render: IRender,

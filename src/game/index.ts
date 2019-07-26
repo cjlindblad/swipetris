@@ -1,6 +1,6 @@
 import DependencyContainer from '../dependencyContainer';
-import { initializeGameState } from '../gameState';
-import initializeMenu from '../menu';
+import { initializeGameState } from '../scenes/gameState';
+import initializeMenu from '../scenes/menu';
 import { ISetupInputListeners, UnregisterInputHandler } from '../input/types';
 import createInputController from '../input/inputController';
 import { IGameCharSelector } from '../config/types';

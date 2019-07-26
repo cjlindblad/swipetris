@@ -1,14 +1,14 @@
-import { INPUT_TYPE } from '../input/enums';
-import { createGamePiece } from '../gamePiece/index';
-import { GAME_PIECE_TYPE } from '../gamePiece/enums';
+import { INPUT_TYPE } from '../../input/enums';
+import { createGamePiece } from '../../gamePiece/index';
+import { GAME_PIECE_TYPE } from '../../gamePiece/enums';
 import {
   getMinMaxCoordinates,
   transpose,
   getNextPieceType
-} from '../gamePiece/utils';
-import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../config';
-import { IGameCharSelector } from '../config/types';
-import { IScene } from '../game/types';
+} from '../../gamePiece/utils';
+import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../../config';
+import { IGameCharSelector } from '../../config/types';
+import { IScene } from '../../game/types';
 
 export const initializeGameState = (
   render: IRender,
