@@ -10,6 +10,7 @@ import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../../config';
 import { IGameCharSelector } from '../../config/types';
 import { IScene } from '../../game/types';
 
+// TODO use interface
 export const initializeGameState = (
   render: IRender,
   gameCharSelector: IGameCharSelector

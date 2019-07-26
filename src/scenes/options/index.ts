@@ -1,11 +1,13 @@
+import { ScreenInitializer } from '../types';
 import { HandleInput } from '../../input/types';
 import { INPUT_TYPE } from '../../input/enums';
 import { wrapModulo } from '../../underdash';
 import { ScreenTransition } from '../../game/enums';
-import { ScreenInitializer } from '../types';
 
-const initializeMenu: ScreenInitializer = (render, changeScreen) => {
-  const menuItems = ['Start game', 'Options'];
+// TODO lots of similarities with menu code
+
+const initializeOptions: ScreenInitializer = (render, changeScreen) => {
+  const menuItems = ['Nothing to do here yet', 'Back to start screen'];
   let activeMenuIndex = 0;
 
   const handleInput: HandleInput = input => {
@@ -19,14 +21,9 @@ const initializeMenu: ScreenInitializer = (render, changeScreen) => {
         render(getRepresentation());
         break;
       case INPUT_TYPE.CONFIRMATION:
-        if (activeMenuIndex === 0) {
-          changeScreen(ScreenTransition.StartToGame);
-        }
         if (activeMenuIndex === 1) {
-          changeScreen(ScreenTransition.StartToOptions);
+          changeScreen(ScreenTransition.OptionsToStart);
         }
-        break;
-      default:
         break;
     }
   };
@@ -56,4 +53,4 @@ const initializeMenu: ScreenInitializer = (render, changeScreen) => {
   };
 };
 
-export default initializeMenu;
+export default initializeOptions;
