@@ -1,56 +1,19 @@
-import { SceneInitializer } from '../types';
-import { HandleInput } from '../../input/types';
-import { INPUT_TYPE } from '../../input/enums';
-import { wrapModulo } from '../../underdash';
+import { SceneInitializer, MenuItem } from '../types';
 import { SceneTransition } from '../../game/enums';
-
-// TODO lots of similarities with menu code
+import createMenu from '../menuTemplate';
 
 const initializeOptions: SceneInitializer = (render, changeScene) => {
-  const menuItems = ['Nothing to do here yet', 'Back to start screen'];
-  let activeMenuIndex = 0;
-
-  const handleInput: HandleInput = input => {
-    switch (input) {
-      case INPUT_TYPE.INPUT_DOWN:
-        activeMenuIndex = wrapModulo(activeMenuIndex + 1, menuItems.length);
-        render(getRepresentation());
-        break;
-      case INPUT_TYPE.INPUT_UP:
-        activeMenuIndex = wrapModulo(activeMenuIndex - 1, menuItems.length);
-        render(getRepresentation());
-        break;
-      case INPUT_TYPE.CONFIRMATION:
-        if (activeMenuIndex === 1) {
-          changeScene(SceneTransition.OptionsToStart);
-        }
-        break;
+  const menuItems: MenuItem[] = [
+    { text: 'Nothing to do here yet', action: () => {} },
+    {
+      text: 'Back to start screen',
+      action: () => changeScene(SceneTransition.OptionsToStart)
     }
-  };
+  ];
 
-  const getRepresentation = (): GameStateRepresentation => {
-    let representation = '';
-    menuItems.forEach((item, index) => {
-      if (index === activeMenuIndex) {
-        representation += `-> ${item}\n`;
-      } else {
-        representation += `   ${item}\n`;
-      }
-    });
+  const menu = createMenu(render, menuItems);
 
-    return {
-      renderString: representation,
-      nextPiece: '',
-      score: 0
-    };
-  };
-
-  // initial render
-  render(getRepresentation());
-
-  return {
-    handleInput
-  };
+  return menu;
 };
 
 export default initializeOptions;
