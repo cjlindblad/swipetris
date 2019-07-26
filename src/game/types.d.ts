@@ -1,8 +1,8 @@
 import { HandleInput } from '../input/types';
-import { ScreenTransition } from './enums';
+import { SceneTransition } from './enums';
 
-interface IChangeScreen {
-  (screenTransition: ScreenTransition): void;
+interface IChangeScene {
+  (sceneTransition: SceneTransition): void;
 }
 
 interface IScene {

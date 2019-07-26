@@ -1,6 +1,6 @@
 /*
 
-Possible scene transitions
+Possible scene transitions (TODO)
 
 +--------------+         +-------------+
 |              |-------->|             |
@@ -21,11 +21,11 @@ Possible scene transitions
 
 */
 
-export enum ScreenTransition {
+export enum SceneTransition {
   StartToGame,
-  GameToStart,
+  // GameToStart,
   StartToOptions,
-  OptionsToStart,
-  StartToHighScore,
-  HighScoreToStart
+  OptionsToStart
+  // StartToHighScore,
+  // HighScoreToStart
 }

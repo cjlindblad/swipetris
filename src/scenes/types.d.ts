@@ -1,5 +1,5 @@
-import { IChangeScreen, IScene } from '../game/types';
+import { IChangeScene, IScene } from '../game/types';
 
-interface ScreenInitializer {
-  (render: IRender, changeScreen: IChangeScreen): IScene;
+interface SceneInitializer {
+  (render: IRender, changeScene: IChangeScene): IScene;
 }

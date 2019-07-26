@@ -1,12 +1,12 @@
-import { ScreenInitializer } from '../types';
+import { SceneInitializer } from '../types';
 import { HandleInput } from '../../input/types';
 import { INPUT_TYPE } from '../../input/enums';
 import { wrapModulo } from '../../underdash';
-import { ScreenTransition } from '../../game/enums';
+import { SceneTransition } from '../../game/enums';
 
 // TODO lots of similarities with menu code
 
-const initializeOptions: ScreenInitializer = (render, changeScreen) => {
+const initializeOptions: SceneInitializer = (render, changeScene) => {
   const menuItems = ['Nothing to do here yet', 'Back to start screen'];
   let activeMenuIndex = 0;
 
@@ -22,7 +22,7 @@ const initializeOptions: ScreenInitializer = (render, changeScreen) => {
         break;
       case INPUT_TYPE.CONFIRMATION:
         if (activeMenuIndex === 1) {
-          changeScreen(ScreenTransition.OptionsToStart);
+          changeScene(SceneTransition.OptionsToStart);
         }
         break;
     }

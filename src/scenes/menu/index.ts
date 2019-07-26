@@ -1,10 +1,10 @@
 import { HandleInput } from '../../input/types';
 import { INPUT_TYPE } from '../../input/enums';
 import { wrapModulo } from '../../underdash';
-import { ScreenTransition } from '../../game/enums';
-import { ScreenInitializer } from '../types';
+import { SceneTransition } from '../../game/enums';
+import { SceneInitializer } from '../types';
 
-const initializeMenu: ScreenInitializer = (render, changeScreen) => {
+const initializeMenu: SceneInitializer = (render, changeScene) => {
   const menuItems = ['Start game', 'Options'];
   let activeMenuIndex = 0;
 
@@ -20,10 +20,10 @@ const initializeMenu: ScreenInitializer = (render, changeScreen) => {
         break;
       case INPUT_TYPE.CONFIRMATION:
         if (activeMenuIndex === 0) {
-          changeScreen(ScreenTransition.StartToGame);
+          changeScene(SceneTransition.StartToGame);
         }
         if (activeMenuIndex === 1) {
-          changeScreen(ScreenTransition.StartToOptions);
+          changeScene(SceneTransition.StartToOptions);
         }
         break;
       default:

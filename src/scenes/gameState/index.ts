@@ -8,15 +8,15 @@ import {
 } from '../../gamePiece/utils';
 import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../../config';
 import { IGameCharSelector } from '../../config/types';
-import { IScene } from '../../game/types';
+import DependencyContainer from '../../dependencyContainer';
+import { SceneInitializer } from '../types';
 
-// TODO use interface
-export const initializeGameState = (
-  render: IRender,
-  gameCharSelector: IGameCharSelector
-): IScene => {
+export const initializeGameState: SceneInitializer = (render, changeScene) => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
 
+  const gameCharSelector: IGameCharSelector = DependencyContainer.resolve(
+    'gameCharSelector'
+  ) as IGameCharSelector; // TODO should be automatic
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
 
   // TODO need to handle initial coordinates in a better way
