@@ -1,4 +1,9 @@
-import { HandleInput, RegisterInputHandler, InputHandler } from './types';
+import {
+  HandleInput,
+  RegisterInputHandler,
+  InputHandler,
+  InputController
+} from './types';
 
 interface InputObserver {
   id: number;
@@ -9,7 +14,7 @@ interface Unregister {
   (id: number): void;
 }
 
-const createInputController = () => {
+const createInputController = (): InputController => {
   let inputObservers: InputObserver[] = [];
   let observerIndex = 0;
 
