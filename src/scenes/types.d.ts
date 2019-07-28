@@ -1,4 +1,5 @@
 import { IChangeScene, IScene } from '../game/types';
+import { SceneTransition } from '../game/enums';
 
 interface MenuItem {
   text: string;
@@ -7,4 +8,9 @@ interface MenuItem {
 
 interface SceneInitializer {
   (render: IRender, changeScene: IChangeScene): IScene;
+}
+
+interface SceneTransitionMapping {
+  transition: SceneTransition;
+  initializer: SceneInitializer;
 }

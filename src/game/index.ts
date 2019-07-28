@@ -1,8 +1,11 @@
 import DependencyContainer from '../dependencyContainer';
 import initializeMenu from '../scenes/menu';
 import { ISetupInputListeners } from '../input/types';
-import createInputController from '../input/inputController';
 import initializeSceneController from '../scenes/sceneController';
+import { SceneTransitionMapping } from '../scenes/types';
+import { SceneTransition } from './enums';
+import { initializeGameState } from '../scenes/gameState';
+import initializeOptions from '../scenes/options';
 
 const initializeGame = () => {
   // resolve dependencies
@@ -11,11 +14,27 @@ const initializeGame = () => {
     'setupInputListeners'
   ) as ISetupInputListeners; // TODO should be automatic
 
-  // setup input controller
-  const inputController = createInputController();
-  setupInputListeners({ handleInput: inputController.handleInput });
+  const sceneTransitions: SceneTransitionMapping[] = [
+    {
+      transition: SceneTransition.StartToGame,
+      initializer: initializeGameState
+    },
+    {
+      transition: SceneTransition.StartToOptions,
+      initializer: initializeOptions
+    },
+    {
+      transition: SceneTransition.OptionsToStart,
+      initializer: initializeMenu
+    }
+  ];
 
-  initializeSceneController(render, inputController, initializeMenu);
+  const sceneController = initializeSceneController(
+    render,
+    initializeMenu,
+    sceneTransitions
+  );
+  setupInputListeners({ handleInput: sceneController.handleInput });
 };
 
 export default initializeGame;
