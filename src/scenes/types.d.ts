@@ -7,7 +7,7 @@ interface MenuItem {
 }
 
 interface SceneInitializer {
-  (render: IRender, changeScene: IChangeScene): IScene;
+  (changeScene: IChangeScene): IScene;
 }
 
 interface SceneTransitionMapping {

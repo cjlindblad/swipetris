@@ -6,10 +6,6 @@ import { SceneTransition } from '../game/enums';
 
 describe('scene controller', () => {
   it('re-routes input when switching scene', () => {
-    const mockRender: IRender = (param: IRenderParam) => {
-      // does nothing
-    };
-
     const inputs: INPUT_TYPE[] = [];
     const mockInputHandler: HandleInput = input => inputs.push(input);
 
@@ -37,7 +33,6 @@ describe('scene controller', () => {
     ];
 
     const sceneController = initializeSceneController(
-      mockRender,
       firstSceneInitializer,
       sceneTransitions
     );

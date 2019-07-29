@@ -11,12 +11,13 @@ import { IGameCharSelector } from '../../config/types';
 import DependencyContainer from '../../dependencyContainer';
 import { SceneInitializer } from '../types';
 
-export const initializeGameState: SceneInitializer = (render, changeScene) => {
+export const initializeGameState: SceneInitializer = changeScene => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
 
   const gameCharSelector: IGameCharSelector = DependencyContainer.resolve(
     'gameCharSelector'
   ) as IGameCharSelector; // TODO should be automatic
+  const render: IRender = DependencyContainer.resolve('render') as IRender;
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
 
   // TODO need to handle initial coordinates in a better way

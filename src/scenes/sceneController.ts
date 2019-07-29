@@ -4,7 +4,6 @@ import { SceneTransition } from '../game/enums';
 import { SceneInitializer, SceneTransitionMapping } from './types';
 
 const initializeSceneController = (
-  render: IRender,
   startingSceneInitializer: SceneInitializer,
   sceneTransitions: SceneTransitionMapping[]
 ) => {
@@ -21,7 +20,7 @@ const initializeSceneController = (
       throw new Error('No scene initializer found');
     }
 
-    activeScene = sceneTransitionMapping.initializer(render, changeScene);
+    activeScene = sceneTransitionMapping.initializer(changeScene);
   };
 
   const handleInput: HandleInput = input => {
@@ -29,7 +28,7 @@ const initializeSceneController = (
   };
 
   // create first scene
-  activeScene = startingSceneInitializer(render, changeScene);
+  activeScene = startingSceneInitializer(changeScene);
 
   return {
     handleInput,

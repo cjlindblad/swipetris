@@ -30,7 +30,6 @@ const initializeGame = () => {
   ];
 
   const sceneController = initializeSceneController(
-    render,
     initializeMenu,
     sceneTransitions
   );
