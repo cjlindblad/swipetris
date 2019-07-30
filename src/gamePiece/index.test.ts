@@ -4,15 +4,17 @@ import DependencyContainer from '../dependencyContainer';
 import { TEST_ENV, createGameCharSelector } from '../config';
 
 // inject test dependencies
-beforeAll(() => {
-  const dependencies = {
-    gameCharSelector: createGameCharSelector(TEST_ENV)
-  };
-  DependencyContainer.initialize(dependencies);
-});
+beforeAll(
+  (): void => {
+    const dependencies = {
+      gameCharSelector: createGameCharSelector(TEST_ENV)
+    };
+    DependencyContainer.initialize(dependencies);
+  }
+);
 
-describe('createGamePiece', () => {
-  it('creates game piece without error', () => {
+describe('createGamePiece', (): void => {
+  it('creates game piece without error', (): void => {
     const gamePiece = createGamePiece(GAME_PIECE_TYPE.S, {
       x: 0,
       y: 0

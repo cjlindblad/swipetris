@@ -1,41 +1,31 @@
 import { GAME_PIECE_TYPE } from './enums';
 import DependencyContainer from '../dependencyContainer';
-import { IGameCharSelector } from '../config/types';
-
-// determines if longest side in piece has an odd (like a "T"-piece)
-// or even (like a "I"-piece) amount of blocks
-export const isLongestSideEven = (coordinates: Coordinate[]): boolean => {
-  const [min, max] = getMinMaxCoordinates(coordinates);
-  const xDistance = max.x - min.x + 1;
-  const yDistance = max.y - min.y + 1;
-  const longestDistance = xDistance > yDistance ? xDistance : yDistance;
-  const isLongestDistanceEven = longestDistance % 2 === 0;
-
-  return isLongestDistanceEven;
-};
+import { GameCharSelector } from '../config/types';
 
 export const getMinMaxCoordinates = (
-  coordinates: Array<Coordinate>
+  coordinates: Coordinate[]
 ): [Coordinate, Coordinate] => {
   let minX = Number.MAX_SAFE_INTEGER;
   let minY = Number.MAX_SAFE_INTEGER;
   let maxX = Number.MIN_SAFE_INTEGER;
   let maxY = Number.MIN_SAFE_INTEGER;
-  coordinates.forEach(coordinate => {
-    const { x, y } = coordinate;
-    if (x > maxX) {
-      maxX = x;
+  coordinates.forEach(
+    (coordinate): void => {
+      const { x, y } = coordinate;
+      if (x > maxX) {
+        maxX = x;
+      }
+      if (x < minX) {
+        minX = x;
+      }
+      if (y > maxY) {
+        maxY = y;
+      }
+      if (y < minY) {
+        minY = y;
+      }
     }
-    if (x < minX) {
-      minX = x;
-    }
-    if (y > maxY) {
-      maxY = y;
-    }
-    if (y < minY) {
-      minY = y;
-    }
-  });
+  );
 
   return [
     {
@@ -47,6 +37,18 @@ export const getMinMaxCoordinates = (
       y: maxY
     }
   ];
+};
+
+// determines if longest side in piece has an odd (like a "T"-piece)
+// or even (like a "I"-piece) amount of blocks
+export const isLongestSideEven = (coordinates: Coordinate[]): boolean => {
+  const [min, max] = getMinMaxCoordinates(coordinates);
+  const xDistance = max.x - min.x + 1;
+  const yDistance = max.y - min.y + 1;
+  const longestDistance = xDistance > yDistance ? xDistance : yDistance;
+  const isLongestDistanceEven = longestDistance % 2 === 0;
+
+  return isLongestDistanceEven;
 };
 
 export const getNextPieceType = (): GAME_PIECE_TYPE => {
@@ -65,11 +67,11 @@ export const getNextPieceType = (): GAME_PIECE_TYPE => {
   return pieceTypes[nextTypeIndex];
 };
 
-export const getPieceChar = (pieceType: GAME_PIECE_TYPE) => {
+export const getPieceChar = (pieceType: GAME_PIECE_TYPE): string => {
   // TODO maybe inject these?
   const gameCharSelector = DependencyContainer.resolve(
     'gameCharSelector'
-  ) as IGameCharSelector; // TODO should be automatic
+  ) as GameCharSelector; // TODO should be automatic
 
   switch (pieceType) {
     case GAME_PIECE_TYPE.L:
@@ -88,7 +90,7 @@ export const getPieceChar = (pieceType: GAME_PIECE_TYPE) => {
 export const getInitialCoordinates = (
   pieceType: GAME_PIECE_TYPE,
   center: Coordinate
-) => {
+): Coordinate[] => {
   switch (pieceType) {
     case GAME_PIECE_TYPE.T:
       //  x
@@ -239,16 +241,18 @@ export const getInitialCoordinates = (
 };
 
 export const transpose = (
-  coordinates: Array<Coordinate>,
+  coordinates: Coordinate[],
   origo: Coordinate,
   dx: number,
   dy: number
-) => {
+): CoordinateData => {
   return {
-    coordinates: coordinates.map(coordinate => ({
-      x: coordinate.x + dx,
-      y: coordinate.y + dy
-    })),
+    coordinates: coordinates.map(
+      (coordinate): Coordinate => ({
+        x: coordinate.x + dx,
+        y: coordinate.y + dy
+      })
+    ),
     origo: {
       x: origo.x + dx,
       y: origo.y + dy
@@ -272,21 +276,23 @@ export const getNextRotation = (
 
   const needsTemporaryOrigoCross = isLongestSideEven(coordinates);
 
-  let nextCoordinates: Coordinate[] = coordinates.map(coordinate => {
-    const inTopLeftQuadrant =
-      coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y;
-    if (!needsTemporaryOrigoCross || inTopLeftQuadrant) {
+  let nextCoordinates: Coordinate[] = coordinates.map(
+    (coordinate): Coordinate => {
+      const inTopLeftQuadrant =
+        coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y;
+      if (!needsTemporaryOrigoCross || inTopLeftQuadrant) {
+        return {
+          x: coordinate.x,
+          y: coordinate.y
+        };
+      }
+
       return {
-        x: coordinate.x,
-        y: coordinate.y
+        x: coordinate.x > nextOrigo.x ? coordinate.x + 1 : coordinate.x,
+        y: coordinate.y > nextOrigo.y ? coordinate.y + 1 : coordinate.y
       };
     }
-
-    return {
-      x: coordinate.x > nextOrigo.x ? coordinate.x + 1 : coordinate.x,
-      y: coordinate.y > nextOrigo.y ? coordinate.y + 1 : coordinate.y
-    };
-  });
+  );
 
   if (needsTemporaryOrigoCross) {
     nextOrigo = {
@@ -295,29 +301,31 @@ export const getNextRotation = (
     };
   }
 
-  nextCoordinates = nextCoordinates.map(coordinate => {
-    const dx1 = coordinate.x - nextOrigo.x;
-    const dy1 = coordinate.y - nextOrigo.y;
+  nextCoordinates = nextCoordinates.map(
+    (coordinate): Coordinate => {
+      const dx1 = coordinate.x - nextOrigo.x;
+      const dy1 = coordinate.y - nextOrigo.y;
 
-    let dx2: number;
-    let dy2: number;
+      let dx2: number;
+      let dy2: number;
 
-    if (!reverse) {
-      dx2 = dy1 * -1;
-      dy2 = dx1;
-    } else {
-      dx2 = dy1;
-      dy2 = dx1 * -1;
+      if (!reverse) {
+        dx2 = dy1 * -1;
+        dy2 = dx1;
+      } else {
+        dx2 = dy1;
+        dy2 = dx1 * -1;
+      }
+
+      const x2 = nextOrigo.x + dx2;
+      const y2 = nextOrigo.y + dy2;
+
+      return {
+        x: x2,
+        y: y2
+      };
     }
-
-    const x2 = nextOrigo.x + dx2;
-    const y2 = nextOrigo.y + dy2;
-
-    return {
-      x: x2,
-      y: y2
-    };
-  });
+  );
 
   // delete origo cross
   if (needsTemporaryOrigoCross) {
@@ -326,15 +334,17 @@ export const getNextRotation = (
       y: nextOrigo.y - 1
     };
 
-    nextCoordinates = nextCoordinates.map(coordinate => {
-      if (coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y) {
-        return coordinate;
+    nextCoordinates = nextCoordinates.map(
+      (coordinate): Coordinate => {
+        if (coordinate.x <= nextOrigo.x && coordinate.y <= nextOrigo.y) {
+          return coordinate;
+        }
+        return {
+          x: coordinate.x > nextOrigo.x ? coordinate.x - 1 : coordinate.x,
+          y: coordinate.y > nextOrigo.y ? coordinate.y - 1 : coordinate.y
+        };
       }
-      return {
-        x: coordinate.x > nextOrigo.x ? coordinate.x - 1 : coordinate.x,
-        y: coordinate.y > nextOrigo.y ? coordinate.y - 1 : coordinate.y
-      };
-    });
+    );
   }
 
   return { coordinates: nextCoordinates, origo: nextOrigo };

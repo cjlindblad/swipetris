@@ -21,11 +21,11 @@ interface InputHandler {
   handleInput: HandleInput;
 }
 
-interface ISetupInputListeners {
-  (param: ISetupInputListenersParam): void;
+interface SetupInputListeners {
+  (param: SetupInputListenersParam): void;
 }
 
-interface ISetupInputListenersParam {
+interface SetupInputListenersParam {
   handleInput: HandleInput;
   element?: HTMLElement | null;
 }

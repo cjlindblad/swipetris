@@ -3,21 +3,24 @@ import { HandleInput } from '../input/types';
 import { INPUT_TYPE } from '../input/enums';
 import initializeSceneController from './sceneController';
 import { SceneTransition } from '../game/enums';
+import { Scene } from '../game/types';
 
-describe('scene controller', () => {
-  it('re-routes input when switching scene', () => {
+describe('scene controller', (): void => {
+  it('re-routes input when switching scene', (): void => {
     const inputs: INPUT_TYPE[] = [];
-    const mockInputHandler: HandleInput = input => inputs.push(input);
+    const mockInputHandler: HandleInput = (input): void => {
+      inputs.push(input);
+    };
 
-    const firstSceneInitializer: SceneInitializer = () => ({
+    const firstSceneInitializer: SceneInitializer = (): Scene => ({
       handleInput: mockInputHandler
     });
 
-    const secondSceneInitializer: SceneInitializer = () => ({
+    const secondSceneInitializer: SceneInitializer = (): Scene => ({
       handleInput: mockInputHandler
     });
 
-    const finalSceneInitializer: SceneInitializer = () => ({
+    const finalSceneInitializer: SceneInitializer = (): Scene => ({
       handleInput: mockInputHandler
     });
 

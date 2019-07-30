@@ -1,10 +1,10 @@
 import { HandleInput } from '../input/types';
 import { SceneTransition } from './enums';
 
-interface IChangeScene {
+interface ChangeScene {
   (sceneTransition: SceneTransition): void;
 }
 
-interface IScene {
+interface Scene {
   handleInput: HandleInput;
 }

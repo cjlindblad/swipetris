@@ -1,4 +1,4 @@
-export const render = (param: IRenderParam) => {
+export const render = (param: RenderParam): void => {
   const { renderString, nextPiece, score } = param;
 
   const gameboardElement = document.getElementById('input');

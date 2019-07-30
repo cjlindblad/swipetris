@@ -4,9 +4,9 @@ import {
   getNextRotation
 } from './utils';
 
-describe('getMinMaxCoordinates', () => {
-  it('works when all coordinates are negative', () => {
-    const coordinates: Array<Coordinate> = [
+describe('getMinMaxCoordinates', (): void => {
+  it('works when all coordinates are negative', (): void => {
+    const coordinates: Coordinate[] = [
       {
         x: -5,
         y: -4
@@ -29,8 +29,8 @@ describe('getMinMaxCoordinates', () => {
     expect(max.y).toBe(-2);
   });
 
-  it('works when all coordinates are positive', () => {
-    const coordinates: Array<Coordinate> = [
+  it('works when all coordinates are positive', (): void => {
+    const coordinates: Coordinate[] = [
       {
         x: 1,
         y: 4
@@ -53,8 +53,8 @@ describe('getMinMaxCoordinates', () => {
     expect(max.y).toBe(6);
   });
 
-  it('works when coordinates are positive and negative', () => {
-    const coordinates: Array<Coordinate> = [
+  it('works when coordinates are positive and negative', (): void => {
+    const coordinates: Coordinate[] = [
       {
         x: 1,
         y: -4
@@ -78,8 +78,8 @@ describe('getMinMaxCoordinates', () => {
   });
 });
 
-describe('isLongestSideEven', () => {
-  it('returns true when both sides are equally long and even', () => {
+describe('isLongestSideEven', (): void => {
+  it('returns true when both sides are equally long and even', (): void => {
     const coordinates: Coordinate[] = [
       {
         x: 1,
@@ -98,7 +98,7 @@ describe('isLongestSideEven', () => {
     expect(isLongestSideEven(coordinates)).toBe(true);
   });
 
-  it('returns false when longest side is odd and shortest side is even', () => {
+  it('returns false when longest side is odd and shortest side is even', (): void => {
     const coordinates: Coordinate[] = [
       {
         x: 1,
@@ -117,8 +117,8 @@ describe('isLongestSideEven', () => {
     expect(isLongestSideEven(coordinates)).toBe(false);
   });
 
-  it('returns true when longest side is even and shortest side is odd', () => {
-    const coordinates: Array<Coordinate> = [
+  it('returns true when longest side is even and shortest side is odd', (): void => {
+    const coordinates: Coordinate[] = [
       {
         x: 1,
         y: 11
@@ -137,7 +137,7 @@ describe('isLongestSideEven', () => {
   });
 });
 
-describe('getNextRotation', () => {
+describe('getNextRotation', (): void => {
   const I_PIECE: CoordinateData = {
     coordinates: [
       {
@@ -188,7 +188,7 @@ describe('getNextRotation', () => {
     }
   };
 
-  it('rotates I piece clockwise correctly', () => {
+  it('rotates I piece clockwise correctly', (): void => {
     const rotation = getNextRotation({
       coordinates: I_PIECE.coordinates,
       origo: I_PIECE.origo,
@@ -223,7 +223,7 @@ describe('getNextRotation', () => {
     expect(JSON.stringify(rotation)).toEqual(JSON.stringify(expectedRotation));
   });
 
-  it('rotates I piece counter clockwise correctly', () => {
+  it('rotates I piece counter clockwise correctly', (): void => {
     const rotation = getNextRotation({
       coordinates: I_PIECE.coordinates,
       origo: I_PIECE.origo,
@@ -258,7 +258,7 @@ describe('getNextRotation', () => {
     expect(JSON.stringify(rotation)).toEqual(JSON.stringify(expectedRotation));
   });
 
-  it('rotates S piece clockwise correctly', () => {
+  it('rotates S piece clockwise correctly', (): void => {
     const rotation = getNextRotation({
       coordinates: S_PIECE.coordinates,
       origo: S_PIECE.origo,
@@ -293,7 +293,7 @@ describe('getNextRotation', () => {
     expect(JSON.stringify(rotation)).toEqual(JSON.stringify(expectedRotation));
   });
 
-  it('rotates S piece counter clockwise correctly', () => {
+  it('rotates S piece counter clockwise correctly', (): void => {
     const rotation = getNextRotation({
       coordinates: S_PIECE.coordinates,
       origo: S_PIECE.origo,

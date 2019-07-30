@@ -1,16 +1,16 @@
 import { GAME_PIECE_TYPE } from '../gamePiece/enums';
-import { IGameCharSelector } from './types';
+import { GameCharSelector } from './types';
 
-export const WEB_ENV: string = 'WEB_ENV';
-export const TERMINAL_ENV: string = 'TERMINAL_ENV';
-export const TEST_ENV: string = 'TEST_ENV';
+export const WEB_ENV = 'WEB_ENV';
+export const TERMINAL_ENV = 'TERMINAL_ENV';
+export const TEST_ENV = 'TEST_ENV';
 
-export const COLUMNS: number = 10;
-export const ROWS: number = 16;
+export const COLUMNS = 10;
+export const ROWS = 16;
 
-export const BASE_GRAVITY_DELAY: number = 800;
+export const BASE_GRAVITY_DELAY = 800;
 
-const GAME_CHARS = {
+const GAME_CHARS: Record<string, Record<string, string>> = {
   [WEB_ENV]: {
     [GAME_PIECE_TYPE.L]: '😁',
     [GAME_PIECE_TYPE.L_INVERTED]: '😫',
@@ -43,7 +43,7 @@ const GAME_CHARS = {
   }
 };
 
-export const createGameCharSelector = (env: string): IGameCharSelector => {
+export const createGameCharSelector = (env: string): GameCharSelector => {
   const chars = GAME_CHARS[env];
-  return (char: GAME_PIECE_TYPE) => chars[char];
+  return (char: GAME_PIECE_TYPE): string => chars[char];
 };

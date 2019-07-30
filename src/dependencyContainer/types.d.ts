@@ -1,8 +1,8 @@
-import { ISetupInputListeners } from '../input/types';
-import { IGameCharSelector } from '../config/types';
+import { SetupInputListeners } from '../input/types';
+import { GameCharSelector } from '../config/types';
 
 interface Dependencies {
-  render?: IRender;
-  setupInputListeners?: ISetupInputListeners;
-  gameCharSelector?: IGameCharSelector;
+  render?: Render;
+  setupInputListeners?: SetupInputListeners;
+  gameCharSelector?: GameCharSelector;
 }

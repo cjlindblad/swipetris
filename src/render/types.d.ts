@@ -1,8 +1,8 @@
-interface IRender {
-  (param: IRenderParam): void;
+interface Render {
+  (param: RenderParam): void;
 }
 
-interface IRenderParam {
+interface RenderParam {
   renderString: string;
   nextPiece: string;
   score: number;

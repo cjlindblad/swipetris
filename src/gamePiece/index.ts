@@ -44,7 +44,7 @@ export const createGamePiece = (
   };
 
   // make sure piece starts from the top
-  const [min, _] = getMinMaxCoordinates(coordinates);
+  const [min] = getMinMaxCoordinates(coordinates);
   for (let y = min.y; y > 0; y--) {
     const transposition = transpose(coordinates, origo, 0, -1);
     coordinates = transposition.coordinates;
@@ -62,11 +62,6 @@ export const createGamePiece = (
       moves
     };
     return state;
-  };
-
-  const getNextState = (input: INPUT_TYPE): GamePieceState => {
-    const transposition = getNextTransposition(input);
-    return { ...transposition, moves };
   };
 
   const getNextTransposition = (input: INPUT_TYPE): CoordinateData => {
@@ -107,6 +102,11 @@ export const createGamePiece = (
       default:
         throw new Error(`Unknown input - ${input}`);
     }
+  };
+
+  const getNextState = (input: INPUT_TYPE): GamePieceState => {
+    const transposition = getNextTransposition(input);
+    return { ...transposition, moves };
   };
 
   const getChar = (): string => char;

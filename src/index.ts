@@ -3,7 +3,7 @@ import { WEB_ENV, TERMINAL_ENV, createGameCharSelector } from './config';
 import { Dependencies } from './dependencyContainer/types';
 import initializeGame from './game';
 
-export const main = async (GAME_ENV: string) => {
+export const main = async (GAME_ENV: string): Promise<void> => {
   // register dependencies
   let dependencies: Dependencies;
   switch (GAME_ENV) {

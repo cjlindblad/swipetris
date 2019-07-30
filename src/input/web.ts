@@ -1,22 +1,38 @@
 import { INPUT_TYPE } from './enums';
-import { ISetupInputListenersParam } from './types';
+import { SetupInputListenersParam } from './types';
 
-const setupInputListeners = (param: ISetupInputListenersParam): void => {
+const setupInputListeners = (param: SetupInputListenersParam): void => {
   const { handleInput } = param;
 
   // will probably break with multi touch.
   let touches: Touch[] = [];
 
-  const element = document.getElementById('wrapper');
+  function getInputType(dx: number, dy: number, clientX: number): INPUT_TYPE {
+    if (dx === 0 && dy === 0) {
+      // tap
+      // determine position on screen
+      if (clientX > window.innerWidth / 2) {
+        return INPUT_TYPE.ROTATE;
+      } else {
+        return INPUT_TYPE.ROTATE_REVERSE;
+      }
+    }
 
-  // swipe listeners
-  element!.addEventListener('touchstart', handleTouchStart, false);
-  element!.addEventListener('touchend', handleTouchEnd, false);
-  element!.addEventListener('touchcancel', handleTouchCancel, false);
-  element!.addEventListener('touchmove', handleTouchMove, false);
-
-  // why not key listeners as well?
-  element!.addEventListener('keydown', handleKeyDown, false);
+    const horizontalSwipe = Math.abs(dx) > Math.abs(dy);
+    if (horizontalSwipe) {
+      if (dx > 0) {
+        return INPUT_TYPE.INPUT_RIGHT;
+      } else {
+        return INPUT_TYPE.INPUT_LEFT;
+      }
+    } else {
+      if (dy > 0) {
+        return INPUT_TYPE.INPUT_DOWN;
+      } else {
+        return INPUT_TYPE.INPUT_UP;
+      }
+    }
+  }
 
   function handleKeyDown(event: KeyboardEvent): void {
     // event key codes
@@ -69,37 +85,25 @@ const setupInputListeners = (param: ISetupInputListenersParam): void => {
     touches = [];
   }
 
-  function getInputType(dx: number, dy: number, clientX: number): INPUT_TYPE {
-    if (dx === 0 && dy === 0) {
-      // tap
-      // determine position on screen
-      if (clientX > window.innerWidth / 2) {
-        return INPUT_TYPE.ROTATE;
-      } else {
-        return INPUT_TYPE.ROTATE_REVERSE;
-      }
-    }
-
-    const horizontalSwipe = Math.abs(dx) > Math.abs(dy);
-    if (horizontalSwipe) {
-      if (dx > 0) {
-        return INPUT_TYPE.INPUT_RIGHT;
-      } else {
-        return INPUT_TYPE.INPUT_LEFT;
-      }
-    } else {
-      if (dy > 0) {
-        return INPUT_TYPE.INPUT_DOWN;
-      } else {
-        return INPUT_TYPE.INPUT_UP;
-      }
-    }
-  }
-
   function handleTouchCancel(): void {
     // not really sure when this is triggered. delegate it to touch end handler for now.
     handleTouchEnd();
   }
+
+  const element = document.getElementById('wrapper');
+
+  if (!element) {
+    throw new Error('Element did not exist');
+  }
+
+  // swipe listeners
+  element.addEventListener('touchstart', handleTouchStart, false);
+  element.addEventListener('touchend', handleTouchEnd, false);
+  element.addEventListener('touchcancel', handleTouchCancel, false);
+  element.addEventListener('touchmove', handleTouchMove, false);
+
+  // why not key listeners as well?
+  element.addEventListener('keydown', handleKeyDown, false);
 };
 
 export default setupInputListeners;
