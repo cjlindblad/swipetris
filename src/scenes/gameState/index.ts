@@ -140,8 +140,8 @@ export const initializeGameState: SceneInitializer = (changeScene): Scene => {
     }
 
     const triggerGravityDrop = (): void => {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       // TODO handle this with some refactoring
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       handleInput(INPUT_TYPE.GRAVITY_DROP);
       render(getRepresentation());
     };
