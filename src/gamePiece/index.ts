@@ -7,21 +7,16 @@ import {
   getPieceChar
 } from './utils';
 import { GAME_PIECE_TYPE } from './enums';
-
-interface GamePieceState {
-  coordinates: Coordinate[];
-  origo: Coordinate;
-  moves?: number;
-}
-
-// TODO duplicate type definitions
-interface GamePiece {
-  getNextState: (input: INPUT_TYPE) => GamePieceState;
-  setState: (nextState: GamePieceState) => void;
-  getState: () => GamePieceState;
-  getChar: () => string;
-  getPreview: () => Coordinate[];
-}
+import {
+  Coordinate,
+  GamePiece,
+  CoordinateData,
+  SetState,
+  GetPreview,
+  GetChar,
+  GetNextState,
+  GetState
+} from './types';
 
 // Borrowing some React wording here.
 //
@@ -55,7 +50,7 @@ export const createGamePiece = (
   let char = getPieceChar(pieceType);
   let moves = 0;
 
-  const getState = (): GamePieceState => {
+  const getState: GetState = () => {
     const state = {
       coordinates,
       origo,
@@ -104,14 +99,14 @@ export const createGamePiece = (
     }
   };
 
-  const getNextState = (input: INPUT_TYPE): GamePieceState => {
+  const getNextState: GetNextState = input => {
     const transposition = getNextTransposition(input);
     return { ...transposition, moves };
   };
 
-  const getChar = (): string => char;
+  const getChar: GetChar = () => char;
 
-  const setState = (nextState: GamePieceState): void => {
+  const setState: SetState = nextState => {
     // TODO generalize and clean up this..
     if (nextState.coordinates !== null && nextState.coordinates !== undefined) {
       coordinates = nextState.coordinates;
@@ -124,7 +119,7 @@ export const createGamePiece = (
     }
   };
 
-  const getPreview = (): Coordinate[] =>
+  const getPreview: GetPreview = () =>
     getInitialCoordinates(pieceType, { x: 0, y: 0 });
 
   // public API

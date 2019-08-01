@@ -2,9 +2,8 @@ import { SceneTransition } from '../../game/enums';
 import { SceneInitializer, MenuItem } from '../types';
 import createMenu from '../menuTemplate';
 import DependencyContainer from '../../dependencyContainer';
-import { Scene } from '../../game/types';
 
-const initializeMenu: SceneInitializer = (changeScene): Scene => {
+const initializeMenu: SceneInitializer = changeScene => {
   const render: Render = DependencyContainer.resolve('render') as Render;
 
   const menuItems: MenuItem[] = [

@@ -21,6 +21,5 @@ describe('createGamePiece', (): void => {
     });
     expect(gamePiece).toBeDefined();
   });
-
   // TODO test game piece api
 });

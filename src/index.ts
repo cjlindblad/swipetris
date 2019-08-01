@@ -26,6 +26,5 @@ export const main = async (GAME_ENV: string): Promise<void> => {
   }
   DependencyContainer.initialize(dependencies);
 
-  // initialize game
   initializeGame();
 };

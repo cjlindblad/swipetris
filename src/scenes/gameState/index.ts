@@ -10,11 +10,11 @@ import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../../config';
 import { GameCharSelector } from '../../config/types';
 import DependencyContainer from '../../dependencyContainer';
 import { SceneInitializer } from '../types';
-import { Scene } from '../../game/types';
+import { Coordinate } from '../../gamePiece/types';
 
 // TODO give this whole file some love
 
-export const initializeGameState: SceneInitializer = (changeScene): Scene => {
+export const initializeGameState: SceneInitializer = changeScene => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
 
   const gameCharSelector: GameCharSelector = DependencyContainer.resolve(

@@ -1,6 +1,7 @@
 import { GAME_PIECE_TYPE } from './enums';
 import DependencyContainer from '../dependencyContainer';
 import { GameCharSelector } from '../config/types';
+import { Coordinate, CoordinateData, RotationOptions } from './types';
 
 export const getMinMaxCoordinates = (
   coordinates: Coordinate[]

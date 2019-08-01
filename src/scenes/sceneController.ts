@@ -1,6 +1,5 @@
 import { Scene, ChangeScene } from '../game/types';
 import { HandleInput } from '../input/types';
-import { SceneTransition } from '../game/enums';
 import {
   SceneInitializer,
   SceneTransitionMapping,
@@ -13,7 +12,7 @@ const initializeSceneController = (
 ): SceneController => {
   let activeScene: Scene;
 
-  const changeScene: ChangeScene = (sceneTransition: SceneTransition): void => {
+  const changeScene: ChangeScene = sceneTransition => {
     const sceneTransitionMapping:
       | SceneTransitionMapping
       | undefined = sceneTransitions.find(
@@ -27,7 +26,7 @@ const initializeSceneController = (
     activeScene = sceneTransitionMapping.initializer(changeScene);
   };
 
-  const handleInput: HandleInput = (input): void => {
+  const handleInput: HandleInput = input => {
     activeScene.handleInput(input);
   };
 

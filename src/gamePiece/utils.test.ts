@@ -3,6 +3,7 @@ import {
   isLongestSideEven,
   getNextRotation
 } from './utils';
+import { Coordinate, CoordinateData } from './types';
 
 describe('getMinMaxCoordinates', (): void => {
   it('works when all coordinates are negative', (): void => {

@@ -26,7 +26,7 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
     };
   };
 
-  const handleInput: HandleInput = (input): void => {
+  const handleInput: HandleInput = input => {
     switch (input) {
       case INPUT_TYPE.INPUT_DOWN:
         activeMenuIndex = wrapModulo(activeMenuIndex + 1, menuItems.length);
