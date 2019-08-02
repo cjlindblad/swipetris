@@ -1,16 +1,18 @@
 import { Scene, ChangeScene } from '../game/types';
-import { HandleInput } from '../input/types';
 import {
   SceneInitializer,
   SceneTransitionMapping,
   SceneController
 } from './types';
+import { EventDispatcher, UnregisterCallback } from '../eventDispatcher/types';
 
 const initializeSceneController = (
   startingSceneInitializer: SceneInitializer,
-  sceneTransitions: SceneTransitionMapping[]
+  sceneTransitions: SceneTransitionMapping[],
+  eventDispatcher: EventDispatcher
 ): SceneController => {
   let activeScene: Scene;
+  let unregisterCallback: UnregisterCallback;
 
   const changeScene: ChangeScene = sceneTransition => {
     const sceneTransitionMapping:
@@ -23,18 +25,24 @@ const initializeSceneController = (
       throw new Error('No scene initializer found');
     }
 
-    activeScene = sceneTransitionMapping.initializer(changeScene);
-  };
-
-  const handleInput: HandleInput = input => {
-    activeScene.handleInput(input);
+    activeScene = sceneTransitionMapping.initializer({
+      changeScene,
+      dispatch: eventDispatcher.dispatch
+    });
+    if (unregisterCallback) {
+      unregisterCallback();
+    }
+    unregisterCallback = eventDispatcher.register(activeScene);
   };
 
   // create first scene
-  activeScene = startingSceneInitializer(changeScene);
+  activeScene = startingSceneInitializer({
+    changeScene,
+    dispatch: eventDispatcher.dispatch
+  });
+  unregisterCallback = eventDispatcher.register(activeScene);
 
   return {
-    handleInput,
     changeScene
   };
 };

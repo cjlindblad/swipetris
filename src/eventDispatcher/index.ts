@@ -1,3 +1,11 @@
+import {
+  DispatchEvent,
+  UnregisterCallback,
+  EventDispatcher,
+  IdentityClient,
+  Client
+} from './types';
+
 const createEventDispatcher = (): EventDispatcher => {
   let _clients: IdentityClient[] = [];
   let _id = 0;
@@ -21,7 +29,7 @@ const createEventDispatcher = (): EventDispatcher => {
   const dispatch = (event: DispatchEvent): void => {
     _clients.forEach(
       (client): void => {
-        client.handle(event);
+        client.handleEvent(event);
       }
     );
   };

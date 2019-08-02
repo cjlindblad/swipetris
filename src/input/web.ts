@@ -1,4 +1,4 @@
-import { INPUT_TYPE } from './enums';
+import { EventType } from '../eventDispatcher/enums';
 import { SetupInputListenersParam } from './types';
 
 const setupInputListeners = (param: SetupInputListenersParam): void => {
@@ -7,29 +7,29 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
   // will probably break with multi touch.
   let touches: Touch[] = [];
 
-  function getInputType(dx: number, dy: number, clientX: number): INPUT_TYPE {
+  function getEventType(dx: number, dy: number, clientX: number): EventType {
     if (dx === 0 && dy === 0) {
       // tap
       // determine position on screen
       if (clientX > window.innerWidth / 2) {
-        return INPUT_TYPE.ROTATE;
+        return EventType.Rotate;
       } else {
-        return INPUT_TYPE.ROTATE_REVERSE;
+        return EventType.RotateReverse;
       }
     }
 
     const horizontalSwipe = Math.abs(dx) > Math.abs(dy);
     if (horizontalSwipe) {
       if (dx > 0) {
-        return INPUT_TYPE.INPUT_RIGHT;
+        return EventType.InputRight;
       } else {
-        return INPUT_TYPE.INPUT_LEFT;
+        return EventType.InputLeft;
       }
     } else {
       if (dy > 0) {
-        return INPUT_TYPE.INPUT_DOWN;
+        return EventType.InputDown;
       } else {
-        return INPUT_TYPE.INPUT_UP;
+        return EventType.InputUp;
       }
     }
   }
@@ -46,16 +46,16 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
     const ENTER = 13;
 
     const inputMapping: {
-      [index: number]: INPUT_TYPE;
+      [index: number]: EventType;
     } = {
-      [LEFT]: INPUT_TYPE.INPUT_LEFT,
-      [RIGHT]: INPUT_TYPE.INPUT_RIGHT,
-      [UP]: INPUT_TYPE.INPUT_UP,
-      [DOWN]: INPUT_TYPE.INPUT_DOWN,
-      [E]: INPUT_TYPE.ROTATE,
-      [Q]: INPUT_TYPE.ROTATE_REVERSE,
-      [SPACE]: INPUT_TYPE.GRAVITY_DROP,
-      [ENTER]: INPUT_TYPE.CONFIRMATION
+      [LEFT]: EventType.InputLeft,
+      [RIGHT]: EventType.InputRight,
+      [UP]: EventType.InputUp,
+      [DOWN]: EventType.InputDown,
+      [E]: EventType.Rotate,
+      [Q]: EventType.RotateReverse,
+      [SPACE]: EventType.GravityDrop,
+      [ENTER]: EventType.Confirmation
     };
 
     const inputType = inputMapping[event.keyCode];
@@ -79,7 +79,7 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
     const dx = lastTouch.pageX - initialTouch.pageX;
     const dy = lastTouch.pageY - initialTouch.pageY;
 
-    const inputType = getInputType(dx, dy, lastTouch.clientX);
+    const inputType = getEventType(dx, dy, lastTouch.clientX);
     handleInput(inputType);
 
     touches = [];

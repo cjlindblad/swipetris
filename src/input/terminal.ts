@@ -1,6 +1,5 @@
 import readline = require('readline');
-
-import { INPUT_TYPE } from './enums';
+import { EventType } from '../eventDispatcher/enums';
 import { SetupInputListenersParam } from './types';
 
 const setupInputListeners = (param: SetupInputListenersParam): void => {
@@ -24,25 +23,25 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
       } else {
         switch (key.name) {
           case 'left':
-            handleInput(INPUT_TYPE.INPUT_LEFT);
+            handleInput(EventType.InputLeft);
             break;
           case 'right':
-            handleInput(INPUT_TYPE.INPUT_RIGHT);
+            handleInput(EventType.InputRight);
             break;
           case 'up':
-            handleInput(INPUT_TYPE.INPUT_UP);
+            handleInput(EventType.InputUp);
             break;
           case 'down':
-            handleInput(INPUT_TYPE.INPUT_DOWN);
+            handleInput(EventType.InputDown);
             break;
           case 'q':
-            handleInput(INPUT_TYPE.ROTATE_REVERSE);
+            handleInput(EventType.RotateReverse);
             break;
           case 'e':
-            handleInput(INPUT_TYPE.ROTATE);
+            handleInput(EventType.Rotate);
             break;
           case 'return':
-            handleInput(INPUT_TYPE.CONFIRMATION);
+            handleInput(EventType.Confirmation);
             break;
         }
       }

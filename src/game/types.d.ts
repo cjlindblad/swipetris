@@ -1,10 +1,10 @@
-import { HandleInput } from '../input/types';
 import { SceneTransition } from './enums';
+import { DispatchEvent } from '../eventDispatcher/types';
 
 interface ChangeScene {
   (sceneTransition: SceneTransition): void;
 }
 
 interface Scene {
-  handleInput: HandleInput;
+  handleEvent(event: DispatchEvent): void;
 }

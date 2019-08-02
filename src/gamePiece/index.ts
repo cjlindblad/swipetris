@@ -17,6 +17,7 @@ import {
   GetNextState,
   GetState
 } from './types';
+import { EventType } from '../eventDispatcher/enums';
 
 // Borrowing some React wording here.
 //
@@ -59,17 +60,17 @@ export const createGamePiece = (
     return state;
   };
 
-  const getNextTransposition = (input: INPUT_TYPE): CoordinateData => {
-    switch (input) {
-      case INPUT_TYPE.INPUT_LEFT:
+  const getNextTransposition = (eventType: EventType): CoordinateData => {
+    switch (eventType) {
+      case EventType.InputLeft:
         return transpose(coordinates, origo, -1, 0);
-      case INPUT_TYPE.INPUT_RIGHT:
+      case EventType.InputRight:
         return transpose(coordinates, origo, 1, 0);
-      case INPUT_TYPE.INPUT_UP:
+      case EventType.InputUp:
         return transpose(coordinates, origo, 0, -1);
-      case INPUT_TYPE.INPUT_DOWN:
+      case EventType.InputDown:
         return transpose(coordinates, origo, 0, 1);
-      case INPUT_TYPE.ROTATE: {
+      case EventType.Rotate: {
         const nextRotation = getNextRotation({
           coordinates,
           origo,
@@ -80,7 +81,7 @@ export const createGamePiece = (
           origo: nextRotation.origo
         };
       }
-      case INPUT_TYPE.ROTATE_REVERSE: {
+      case EventType.RotateReverse: {
         const nextRotation = getNextRotation({
           coordinates,
           origo,
@@ -91,16 +92,20 @@ export const createGamePiece = (
           origo: nextRotation.origo
         };
       }
-      case INPUT_TYPE.GRAVITY_DROP:
+      case EventType.GravityDrop:
         // same as input down, but I think we're gonna rebuild this
         return transpose(coordinates, origo, 0, 1);
       default:
-        throw new Error(`Unknown input - ${input}`);
+        // don't alter anything
+        return {
+          coordinates,
+          origo
+        };
     }
   };
 
-  const getNextState: GetNextState = input => {
-    const transposition = getNextTransposition(input);
+  const getNextState: GetNextState = eventType => {
+    const transposition = getNextTransposition(eventType);
     return { ...transposition, moves };
   };
 

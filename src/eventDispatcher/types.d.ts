@@ -1,10 +1,16 @@
+import { EventType } from './enums';
+
 interface EventDispatcher {
   register: Register;
   dispatch: Dispatch;
 }
 
 interface Client {
-  handle(event: DispatchEvent): void;
+  handleEvent: HandleEvent;
+}
+
+interface HandleEvent {
+  (event: DispatchEvent): void;
 }
 
 interface Identity {
@@ -26,5 +32,5 @@ interface Dispatch {
 }
 
 interface DispatchEvent {
-  eventType: string; // TODO might want to use enums here
+  type: EventType;
 }

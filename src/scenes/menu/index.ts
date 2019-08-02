@@ -3,7 +3,7 @@ import { SceneInitializer, MenuItem } from '../types';
 import createMenu from '../menuTemplate';
 import DependencyContainer from '../../dependencyContainer';
 
-const initializeMenu: SceneInitializer = changeScene => {
+const initializeMenu: SceneInitializer = ({ changeScene }) => {
   const render: Render = DependencyContainer.resolve('render') as Render;
 
   const menuItems: MenuItem[] = [

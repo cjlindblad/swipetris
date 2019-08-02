@@ -1,4 +1,3 @@
-import { INPUT_TYPE } from '../../input/enums';
 import { createGamePiece } from '../../gamePiece/index';
 import { GAME_PIECE_TYPE } from '../../gamePiece/enums';
 import {
@@ -11,10 +10,15 @@ import { GameCharSelector } from '../../config/types';
 import DependencyContainer from '../../dependencyContainer';
 import { SceneInitializer } from '../types';
 import { Coordinate } from '../../gamePiece/types';
+import { HandleEvent } from '../../eventDispatcher/types';
+import { EventType } from '../../eventDispatcher/enums';
 
 // TODO give this whole file some love
 
-export const initializeGameState: SceneInitializer = changeScene => {
+export const initializeGameState: SceneInitializer = ({
+  changeScene,
+  dispatch
+}) => {
   let activeGravityDelay = BASE_GRAVITY_DELAY;
 
   const gameCharSelector: GameCharSelector = DependencyContainer.resolve(
@@ -140,25 +144,22 @@ export const initializeGameState: SceneInitializer = changeScene => {
     }
 
     const triggerGravityDrop = (): void => {
-      // TODO handle this with some refactoring
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      handleInput(INPUT_TYPE.GRAVITY_DROP);
+      dispatch({ type: EventType.GravityDrop });
       render(getRepresentation());
     };
 
     gravityInterval = setInterval(triggerGravityDrop, interval);
   };
 
-  // this will grow and should probably be moved out
-  const handleInput = (input: INPUT_TYPE): void => {
-    switch (input) {
-      case INPUT_TYPE.INPUT_UP:
+  const handleEvent: HandleEvent = event => {
+    switch (event.type) {
+      case EventType.InputUp:
         break;
-      case INPUT_TYPE.INPUT_LEFT:
-      case INPUT_TYPE.INPUT_RIGHT:
-      case INPUT_TYPE.ROTATE:
-      case INPUT_TYPE.ROTATE_REVERSE: {
-        const nextState = activePiece.getNextState(input);
+      case EventType.InputLeft:
+      case EventType.InputRight:
+      case EventType.Rotate:
+      case EventType.RotateReverse: {
+        const nextState = activePiece.getNextState(event.type);
         const validMove = isValidMove(nextState.coordinates);
 
         if (validMove) {
@@ -168,8 +169,8 @@ export const initializeGameState: SceneInitializer = changeScene => {
 
         // try to wall kick if possible
         if (
-          input === INPUT_TYPE.ROTATE ||
-          input === INPUT_TYPE.ROTATE_REVERSE
+          event.type === EventType.Rotate ||
+          event.type === EventType.RotateReverse
         ) {
           const wallKickOffsets = [1, 2, -1, -2];
           for (let i = 0; i < wallKickOffsets.length; i++) {
@@ -189,11 +190,11 @@ export const initializeGameState: SceneInitializer = changeScene => {
 
         break;
       }
-      case INPUT_TYPE.INPUT_DOWN:
-      case INPUT_TYPE.GRAVITY_DROP: {
+      case EventType.InputDown:
+      case EventType.GravityDrop: {
         setGravityInterval(activeGravityDelay);
 
-        const nextState = activePiece.getNextState(input);
+        const nextState = activePiece.getNextState(event.type);
 
         if (nextState.moves === undefined) {
           throw new Error("Expected to find property 'moves' on nextState");
@@ -288,7 +289,7 @@ export const initializeGameState: SceneInitializer = changeScene => {
         break;
       }
       default:
-        throw new Error(`Unknown input - ${input}`);
+        break;
     }
 
     render(getRepresentation());
@@ -301,6 +302,6 @@ export const initializeGameState: SceneInitializer = changeScene => {
   render(getRepresentation());
 
   return {
-    handleInput
+    handleEvent
   };
 };

@@ -1,4 +1,4 @@
-import { INPUT_TYPE } from './enums';
+import { EventType } from '../eventDispatcher/enums';
 
 interface InputController {
   register: RegisterInputHandler;
@@ -14,7 +14,7 @@ interface UnregisterInputHandler {
 }
 
 interface HandleInput {
-  (inputType: INPUT_TYPE): void;
+  (eventType: EventType): void;
 }
 
 interface InputHandler {

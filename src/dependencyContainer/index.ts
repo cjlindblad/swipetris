@@ -1,7 +1,7 @@
 import { Dependencies } from './types';
 import { isEmptyObject } from '../underdash';
-import { SetupInputListeners } from '../input/types';
 import { GameCharSelector } from '../config/types';
+import { SetupInputListeners } from '../input/types';
 
 class DependencyContainer {
   private constructor() {}

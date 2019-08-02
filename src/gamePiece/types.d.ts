@@ -1,4 +1,5 @@
 import { INPUT_TYPE } from '../input/enums';
+import { EventType } from '../eventDispatcher/enums';
 
 interface Coordinate {
   x: number;
@@ -29,7 +30,7 @@ interface GamePiece {
 }
 
 interface GetNextState {
-  (input: INPUT_TYPE): GamePieceState;
+  (eventType: EventType): GamePieceState;
 }
 
 interface SetState {

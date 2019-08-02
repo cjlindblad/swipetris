@@ -1,8 +1,8 @@
-import { HandleInput } from '../input/types';
-import { INPUT_TYPE } from '../input/enums';
 import { wrapModulo } from '../underdash';
 import { MenuItem } from './types';
 import { Scene } from '../game/types';
+import { EventType } from '../eventDispatcher/enums';
+import { HandleEvent } from '../eventDispatcher/types';
 
 const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
   let activeMenuIndex = 0;
@@ -26,17 +26,17 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
     };
   };
 
-  const handleInput: HandleInput = input => {
-    switch (input) {
-      case INPUT_TYPE.INPUT_DOWN:
+  const handleEvent: HandleEvent = event => {
+    switch (event.type) {
+      case EventType.InputDown:
         activeMenuIndex = wrapModulo(activeMenuIndex + 1, menuItems.length);
         render(getRepresentation());
         break;
-      case INPUT_TYPE.INPUT_UP:
+      case EventType.InputDown:
         activeMenuIndex = wrapModulo(activeMenuIndex - 1, menuItems.length);
         render(getRepresentation());
         break;
-      case INPUT_TYPE.CONFIRMATION:
+      case EventType.Confirmation:
         menuItems[activeMenuIndex].action();
         break;
       default:
@@ -48,7 +48,7 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
   render(getRepresentation());
 
   return {
-    handleInput
+    handleEvent
   };
 };
 
