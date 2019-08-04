@@ -9,5 +9,8 @@ export enum EventType {
   Confirmation = 'Confirmation',
   Rotate = 'Rotate',
   RotateReverse = 'RotateReverse',
-  GravityDrop = 'GravityDrop'
+  GravityDrop = 'GravityDrop',
+  StartGravityInterval = 'StartGravityInterval',
+  IncreaseGravityInterval = 'IncreaseGravityInterval',
+  ClearGravityInterval = 'ClearGravityInterval'
 }

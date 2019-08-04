@@ -19,8 +19,6 @@ export const initializeGameState: SceneInitializer = ({
   changeScene,
   dispatch
 }) => {
-  let activeGravityDelay = BASE_GRAVITY_DELAY;
-
   const gameCharSelector: GameCharSelector = DependencyContainer.resolve(
     'gameCharSelector'
   ) as GameCharSelector; // TODO should be automatic
@@ -137,6 +135,7 @@ export const initializeGameState: SceneInitializer = ({
     };
   };
 
+  // TODO move gravity handling to separate module
   let gravityInterval: NodeJS.Timeout | null = null;
   const setGravityInterval = (interval: number): void => {
     if (gravityInterval !== null) {
@@ -151,8 +150,20 @@ export const initializeGameState: SceneInitializer = ({
     gravityInterval = setInterval(triggerGravityDrop, interval);
   };
 
+  const clearGravityInterval = (): void => {
+    if (gravityInterval !== null) {
+      clearInterval(gravityInterval);
+    }
+  };
+
   const handleEvent: HandleEvent = event => {
     switch (event.type) {
+      case EventType.StartGravityInterval:
+        setGravityInterval(BASE_GRAVITY_DELAY);
+        break;
+      case EventType.ClearGravityInterval:
+        clearGravityInterval();
+        break;
       case EventType.InputUp:
         break;
       case EventType.InputLeft:
@@ -192,7 +203,8 @@ export const initializeGameState: SceneInitializer = ({
       }
       case EventType.InputDown:
       case EventType.GravityDrop: {
-        setGravityInterval(activeGravityDelay);
+        // TODO possible performance thief
+        dispatch({ type: EventType.StartGravityInterval });
 
         const nextState = activePiece.getNextState(event.type);
 
@@ -205,8 +217,10 @@ export const initializeGameState: SceneInitializer = ({
           activePiece.setState({ ...nextState, moves: nextState.moves + 1 });
         } else {
           if (nextState.moves === 0) {
-            // TODO
-            // alert('GAME OVER!!11!1!!!');
+            dispatch({
+              type: EventType.ClearGravityInterval
+            });
+            // TODO show some game over info
           }
           // this is where a piece lands
           // lots of stuff happening. maybe break it out to separate functions for clarity.
@@ -294,9 +308,6 @@ export const initializeGameState: SceneInitializer = ({
 
     render(getRepresentation());
   };
-
-  // initial gravity
-  setGravityInterval(BASE_GRAVITY_DELAY);
 
   // initial render
   render(getRepresentation());

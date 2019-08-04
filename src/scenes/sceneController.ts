@@ -5,6 +5,7 @@ import {
   SceneController
 } from './types';
 import { EventDispatcher, UnregisterCallback } from '../eventDispatcher/types';
+import { EventType } from '../eventDispatcher/enums';
 
 const initializeSceneController = (
   startingSceneInitializer: SceneInitializer,
@@ -33,6 +34,10 @@ const initializeSceneController = (
       unregisterCallback();
     }
     unregisterCallback = eventDispatcher.register(activeScene);
+
+    // TODO FIX THIS. We don't want to start gravity on every scene.
+    // initial gravity
+    eventDispatcher.dispatch({ type: EventType.StartGravityInterval });
   };
 
   // create first scene
