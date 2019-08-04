@@ -32,7 +32,7 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
         activeMenuIndex = wrapModulo(activeMenuIndex + 1, menuItems.length);
         render(getRepresentation());
         break;
-      case EventType.InputDown:
+      case EventType.InputUp:
         activeMenuIndex = wrapModulo(activeMenuIndex - 1, menuItems.length);
         render(getRepresentation());
         break;
