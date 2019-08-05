@@ -14,6 +14,10 @@ import { HandleEvent } from '../../eventDispatcher/types';
 import { EventType } from '../../eventDispatcher/enums';
 
 // TODO give this whole file some love
+enum GameState {
+  Active = 'Active',
+  GameOver = 'GameOver'
+}
 
 export const initializeGameState: SceneInitializer = ({
   changeScene,
@@ -38,6 +42,7 @@ export const initializeGameState: SceneInitializer = ({
 
   let activePiece = initialPiece;
   let nextPiece = next;
+  let gameState = GameState.Active;
 
   let clearedLines = 0;
 
@@ -170,6 +175,10 @@ export const initializeGameState: SceneInitializer = ({
       case EventType.InputRight:
       case EventType.Rotate:
       case EventType.RotateReverse: {
+        if (gameState !== GameState.Active) {
+          break;
+        }
+
         const nextState = activePiece.getNextState(event.type);
         const validMove = isValidMove(nextState.coordinates);
 
@@ -203,6 +212,9 @@ export const initializeGameState: SceneInitializer = ({
       }
       case EventType.InputDown:
       case EventType.GravityDrop: {
+        if (gameState !== GameState.Active) {
+          break;
+        }
         // TODO possible performance thief
         dispatch({ type: EventType.StartGravityInterval });
 
@@ -220,7 +232,9 @@ export const initializeGameState: SceneInitializer = ({
             dispatch({
               type: EventType.ClearGravityInterval
             });
+            gameState = GameState.GameOver;
             // TODO show some game over info
+            break;
           }
           // this is where a piece lands
           // lots of stuff happening. maybe break it out to separate functions for clarity.
