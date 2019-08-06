@@ -9,7 +9,7 @@ import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../../config';
 import { GameCharSelector } from '../../config/types';
 import DependencyContainer from '../../dependencyContainer';
 import { SceneInitializer } from '../types';
-import { Coordinate } from '../../gamePiece/types';
+import { Coordinate, GamePiece } from '../../gamePiece/types';
 import { HandleEvent } from '../../eventDispatcher/types';
 import { EventType } from '../../eventDispatcher/enums';
 
@@ -29,31 +29,38 @@ export const initializeGameState: SceneInitializer = ({
   const render: Render = DependencyContainer.resolve('render') as Render;
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
 
-  // TODO need to handle initial coordinates in a better way
-  const initialPiece = createGamePiece(getNextPieceType(), {
-    x: 2,
-    y: 1
-  });
+  // state
+  let activePiece: GamePiece;
+  let nextPiece: GamePiece;
+  let gameState: GameState;
+  let clearedLines: number;
+  let gameBoard: string[][];
 
-  const next = createGamePiece(getNextPieceType(), {
-    x: 2,
-    y: 1
-  });
+  const initialize = (): void => {
+    // TODO need to handle initial coordinates in a better way than with hard coded values
+    const initialPiece = createGamePiece(getNextPieceType(), {
+      x: 2,
+      y: 1
+    });
 
-  let activePiece = initialPiece;
-  let nextPiece = next;
-  let gameState = GameState.Active;
+    const next = createGamePiece(getNextPieceType(), {
+      x: 2,
+      y: 1
+    });
 
-  let clearedLines = 0;
-
-  // setup game board
-  const gameBoard: string[][] = [];
-  for (let y = 0; y < ROWS; y++) {
-    gameBoard[y] = [];
-    for (let x = 0; x < COLUMNS; x++) {
-      gameBoard[y][x] = EMPTY_SPACE_CHAR;
+    // setup state
+    activePiece = initialPiece;
+    nextPiece = next;
+    gameState = GameState.Active;
+    clearedLines = 0;
+    gameBoard = [];
+    for (let y = 0; y < ROWS; y++) {
+      gameBoard[y] = [];
+      for (let x = 0; x < COLUMNS; x++) {
+        gameBoard[y][x] = EMPTY_SPACE_CHAR;
+      }
     }
-  }
+  };
 
   const isValidMove = (coordinates: Coordinate[]): boolean => {
     let validMove = true;
@@ -141,9 +148,9 @@ export const initializeGameState: SceneInitializer = ({
   };
 
   // TODO move gravity handling to separate module
-  let gravityInterval: NodeJS.Timeout | null = null;
+  let gravityInterval: NodeJS.Timeout;
   const setGravityInterval = (interval: number): void => {
-    if (gravityInterval !== null) {
+    if (gravityInterval) {
       clearInterval(gravityInterval);
     }
 
@@ -161,8 +168,24 @@ export const initializeGameState: SceneInitializer = ({
     }
   };
 
+  const startNewGame = (): void => {
+    initialize();
+    render(getRepresentation());
+    dispatch({
+      type: EventType.StartGravityInterval
+    });
+  };
+
   const handleEvent: HandleEvent = event => {
     switch (event.type) {
+      case EventType.Restart:
+        if (gameState !== GameState.GameOver) {
+          break;
+        }
+
+        startNewGame();
+
+        break;
       case EventType.StartGravityInterval:
         setGravityInterval(BASE_GRAVITY_DELAY);
         break;
@@ -323,8 +346,8 @@ export const initializeGameState: SceneInitializer = ({
     render(getRepresentation());
   };
 
-  // initial render
-  render(getRepresentation());
+  // kick off everything
+  startNewGame();
 
   return {
     handleEvent

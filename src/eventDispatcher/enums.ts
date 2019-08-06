@@ -12,5 +12,6 @@ export enum EventType {
   GravityDrop = 'GravityDrop',
   StartGravityInterval = 'StartGravityInterval',
   IncreaseGravityInterval = 'IncreaseGravityInterval',
-  ClearGravityInterval = 'ClearGravityInterval'
+  ClearGravityInterval = 'ClearGravityInterval',
+  Restart = 'Restart'
 }

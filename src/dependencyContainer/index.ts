@@ -6,7 +6,7 @@ import { SetupInputListeners } from '../input/types';
 class DependencyContainer {
   private constructor() {}
 
-  private static dependencies: Dependencies | null = null;
+  private static dependencies: Dependencies;
 
   public static initialize(dependencies: Dependencies): void {
     if (!dependencies || isEmptyObject(dependencies)) {
@@ -20,7 +20,7 @@ class DependencyContainer {
     dependencyName: keyof Dependencies
   ): Render | SetupInputListeners | GameCharSelector | undefined {
     // TODO could be cleaner
-    if (DependencyContainer.dependencies === null) {
+    if (!DependencyContainer.dependencies) {
       throw new Error('Dependency container is not initialized');
     }
     const dependency = DependencyContainer.dependencies[dependencyName];

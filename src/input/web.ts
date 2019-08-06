@@ -42,6 +42,7 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
     const DOWN = 40;
     const Q = 81;
     const E = 69;
+    const R = 82;
     const SPACE = 32;
     const ENTER = 13;
 
@@ -55,7 +56,8 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
       [E]: EventType.Rotate,
       [Q]: EventType.RotateReverse,
       [SPACE]: EventType.GravityDrop,
-      [ENTER]: EventType.Confirmation
+      [ENTER]: EventType.Confirmation,
+      [R]: EventType.Restart
     };
 
     const inputType = inputMapping[event.keyCode];

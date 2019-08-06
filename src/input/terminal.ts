@@ -40,6 +40,9 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
           case 'e':
             handleInput(EventType.Rotate);
             break;
+          case 'r':
+            handleInput(EventType.Restart);
+            break;
           case 'return':
             handleInput(EventType.Confirmation);
             break;
