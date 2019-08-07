@@ -113,7 +113,9 @@ export const initializeGameState: SceneInitializer = ({
       for (let x = 0; x < COLUMNS; x++) {
         renderString += gameBoardBuffer[y][x];
       }
-      renderString += '\n';
+      if (y < ROWS - 1) {
+        renderString += '\n';
+      }
     }
 
     // not sure if we should just use a big string, or split the "UI" up
