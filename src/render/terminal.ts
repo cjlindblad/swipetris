@@ -1,27 +1,29 @@
-// import { COLUMNS, ROWS } from '../config/index';
-
 const render = (param: RenderParam): void => {
   const { renderString, nextPiece, score } = param;
 
-  const expandSize = (input: string, factor: number): string => {
+  const expandSize = (
+    input: string,
+    widthFactor: number,
+    heightFactor: number
+  ): string => {
     const lines = input.split('\n');
     let result = '';
     lines.forEach(line => {
       let expandedLine = '';
       line.split('').forEach(char => {
-        for (let i = 0; i < factor; i++) {
+        for (let i = 0; i < widthFactor; i++) {
           expandedLine += char;
         }
       });
       expandedLine += '\n';
-      for (let i = 0; i < factor; i++) {
+      for (let i = 0; i < heightFactor; i++) {
         result += expandedLine;
       }
     });
     return result.replace(/\n$/, '');
   };
 
-  const expandedRenderString = expandSize(renderString, 2);
+  const expandedRenderString = expandSize(renderString, 4, 2);
 
   let output = '';
   output += `score: ${score}\n`;
