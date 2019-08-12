@@ -1,4 +1,4 @@
-import { isEmptyObject, wrapModulo, maxLineLength } from './index';
+import { isEmptyObject, wrapModulo, lineWrap } from './index';
 
 describe('underdash isEmptyObject', () => {
   it('recognizes empty object', () => {
@@ -24,24 +24,24 @@ describe('underdash wrapModulo', () => {
   });
 });
 
-describe('underdash maxLineLength', () => {
+describe('underdash lineWrap', () => {
   it('breaks a long string into multiple lines', () => {
     const string = 'this string is a bit too long';
-    const result = maxLineLength(string, 10);
+    const result = lineWrap(string, 10);
     const expectedResult = 'this\nstring is\na bit too\nlong';
     expect(result).toEqual(expectedResult);
   });
 
   it('keeps words with same width as limit', () => {
     const string = 'lorem ipsum lorem ipsum';
-    const result = maxLineLength(string, 5);
+    const result = lineWrap(string, 5);
     const expectedResult = 'lorem\nipsum\nlorem\nipsum';
     expect(result).toEqual(expectedResult);
   });
 
   it('handles words longer than limit', () => {
     const string = 'one gargantually long word';
-    const result = maxLineLength(string, 4);
+    const result = lineWrap(string, 4);
     const expectedResult = 'one\ngar-\ngan-\ntua-\nlly\nlong\nword';
     expect(result).toEqual(expectedResult);
   });

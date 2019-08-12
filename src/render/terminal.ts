@@ -1,3 +1,5 @@
+import { lineWrap } from '../underdash';
+
 // TODO break this up
 const render = (param: RenderParam): void => {
   const { renderString, nextPiece, score } = param;
@@ -26,7 +28,7 @@ const render = (param: RenderParam): void => {
 
   const expandedRenderString = expandSize(renderString, 4, 2);
 
-  const addInfoWindow = (renderString: string): string => {
+  const addInfoWindow = (renderString: string, infoText: string): string => {
     const lines = renderString.split('\n');
     let longestLineLength = 0;
     lines.forEach(line => {
@@ -36,9 +38,21 @@ const render = (param: RenderParam): void => {
     });
 
     const MODAL_WIDTH = 20;
-    const MODAL_HEIGHT = 5;
     const MODAL_X_OFFSET = longestLineLength / 2 - MODAL_WIDTH / 2;
     const MODAL_Y_OFFSET = 10;
+    const VERTICAL_PADDING = 1;
+    const HORIZONTAL_PADDING = 1;
+
+    let wrappedText = lineWrap(
+      infoText,
+      MODAL_WIDTH - 2 - 2 * VERTICAL_PADDING
+    );
+
+    const lineCount = wrappedText.split('\n').length;
+
+    wrappedText = wrappedText.split('\n').join('');
+
+    const MODAL_HEIGHT = lineCount + 2 * HORIZONTAL_PADDING + 2;
 
     const result = lines.map((line, index) => {
       const isFirstOrLastLine =
@@ -65,6 +79,9 @@ const render = (param: RenderParam): void => {
 
       const isInBetweenLine =
         index > MODAL_Y_OFFSET && index < MODAL_Y_OFFSET + MODAL_HEIGHT - 1;
+      const isInVerticalPadding =
+        index < MODAL_Y_OFFSET + VERTICAL_PADDING + 1 ||
+        index >= MODAL_Y_OFFSET + MODAL_HEIGHT - 1 - VERTICAL_PADDING;
       if (isInBetweenLine) {
         return line
           .split('')
@@ -78,7 +95,21 @@ const render = (param: RenderParam): void => {
               i >= MODAL_X_OFFSET &&
               i < MODAL_X_OFFSET + MODAL_WIDTH
             ) {
-              return ' ';
+              const isInHorizontalPadding =
+                i < MODAL_X_OFFSET + HORIZONTAL_PADDING + 1 ||
+                i >= MODAL_X_OFFSET + MODAL_WIDTH - 1 - HORIZONTAL_PADDING;
+              if (
+                isInVerticalPadding ||
+                isInHorizontalPadding ||
+                wrappedText.length === 0
+              ) {
+                return ' ';
+              }
+              // TODO could optimize this
+              const nextChar = wrappedText[0];
+              wrappedText = wrappedText.substring(1);
+
+              return nextChar;
             }
             return c;
           })
@@ -91,7 +122,10 @@ const render = (param: RenderParam): void => {
     return result.join('\n');
   };
 
-  const renderStringWithInfo = addInfoWindow(expandedRenderString);
+  const renderStringWithInfo = addInfoWindow(
+    expandedRenderString,
+    'Game over!'
+  );
 
   let output = '';
   output += `score: ${score}\n`;

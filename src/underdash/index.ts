@@ -7,7 +7,7 @@ export const isEmptyObject = (obj: Object): boolean =>
 export const wrapModulo = (x: number, n: number): number => ((x % n) + n) % n;
 
 // TODO refactor (has unit tests)
-export const maxLineLength = (str: string, maxLength: number): string => {
+export const lineWrap = (str: string, maxLength: number): string => {
   const words = str.match(/\S+/g) || [];
 
   if (words.length === 0) {
