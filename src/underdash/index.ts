@@ -14,7 +14,7 @@ export const lineWrap = (str: string, maxLength: number): string => {
     return '';
   }
 
-  const lines: string[] = [];
+  let lines: string[] = [];
   let nextLine = '';
   words.forEach((word, index) => {
     if (nextLine === '' && word.length <= maxLength) {
@@ -44,6 +44,19 @@ export const lineWrap = (str: string, maxLength: number): string => {
     if (index === words.length - 1) {
       lines.push(nextLine);
     }
+  });
+
+  // TODO optimize this
+  lines = lines.map(line => {
+    if (line.length === maxLength) {
+      return line;
+    }
+
+    let rightPad = '';
+    for (let i = 0; i < maxLength - line.length; i++) {
+      rightPad += ' ';
+    }
+    return line + rightPad;
   });
 
   return lines.join('\n');

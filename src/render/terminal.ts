@@ -124,7 +124,7 @@ const render = (param: RenderParam): void => {
 
   const renderStringWithInfo = addInfoWindow(
     expandedRenderString,
-    'Game over!'
+    "Game over! Press 'r' to play again."
   );
 
   let output = '';

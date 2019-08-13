@@ -25,10 +25,10 @@ describe('underdash wrapModulo', () => {
 });
 
 describe('underdash lineWrap', () => {
-  it('breaks a long string into multiple lines', () => {
+  it('breaks a long string into multiple lines of equal length', () => {
     const string = 'this string is a bit too long';
     const result = lineWrap(string, 10);
-    const expectedResult = 'this\nstring is\na bit too\nlong';
+    const expectedResult = 'this      \nstring is \na bit too \nlong      ';
     expect(result).toEqual(expectedResult);
   });
 
@@ -42,7 +42,7 @@ describe('underdash lineWrap', () => {
   it('handles words longer than limit', () => {
     const string = 'one gargantually long word';
     const result = lineWrap(string, 4);
-    const expectedResult = 'one\ngar-\ngan-\ntua-\nlly\nlong\nword';
+    const expectedResult = 'one \ngar-\ngan-\ntua-\nlly \nlong\nword';
     expect(result).toEqual(expectedResult);
   });
 });
