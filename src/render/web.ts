@@ -1,3 +1,5 @@
+import { RenderParam } from './types';
+
 export const render = (param: RenderParam): void => {
   const { renderString, nextPiece, score } = param;
 

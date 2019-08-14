@@ -12,9 +12,10 @@ import { SceneInitializer } from '../types';
 import { Coordinate, GamePiece } from '../../gamePiece/types';
 import { HandleEvent } from '../../eventDispatcher/types';
 import { EventType } from '../../eventDispatcher/enums';
+import { Render } from '../../render/types';
 
 // TODO give this whole file some love
-enum GameState {
+export enum GameState {
   Active = 'Active',
   GameOver = 'GameOver'
 }
@@ -149,6 +150,10 @@ export const initializeGameState: SceneInitializer = ({
     };
   };
 
+  const renderGameState = (): void => {
+    render(getRepresentation(), gameState);
+  };
+
   // TODO move gravity handling to separate module
   let gravityInterval: NodeJS.Timeout;
   const setGravityInterval = (interval: number): void => {
@@ -158,7 +163,7 @@ export const initializeGameState: SceneInitializer = ({
 
     const triggerGravityDrop = (): void => {
       dispatch({ type: EventType.GravityDrop });
-      render(getRepresentation());
+      renderGameState();
     };
 
     gravityInterval = setInterval(triggerGravityDrop, interval);
@@ -172,7 +177,7 @@ export const initializeGameState: SceneInitializer = ({
 
   const startNewGame = (): void => {
     initialize();
-    render(getRepresentation());
+    renderGameState();
     dispatch({
       type: EventType.StartGravityInterval
     });
@@ -345,7 +350,7 @@ export const initializeGameState: SceneInitializer = ({
         break;
     }
 
-    render(getRepresentation());
+    renderGameState();
   };
 
   // kick off everything

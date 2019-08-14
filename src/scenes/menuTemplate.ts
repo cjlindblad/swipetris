@@ -3,6 +3,7 @@ import { MenuItem } from './types';
 import { Scene } from '../game/types';
 import { EventType } from '../eventDispatcher/enums';
 import { HandleEvent } from '../eventDispatcher/types';
+import { Render } from '../render/types';
 
 const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
   let activeMenuIndex = 0;

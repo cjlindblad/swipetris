@@ -2,6 +2,7 @@ import { Dependencies } from './types';
 import { isEmptyObject } from '../underdash';
 import { GameCharSelector } from '../config/types';
 import { SetupInputListeners } from '../input/types';
+import { Render } from '../render/types';
 
 class DependencyContainer {
   private constructor() {}

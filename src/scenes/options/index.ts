@@ -2,6 +2,7 @@ import { SceneInitializer, MenuItem } from '../types';
 import { SceneTransition } from '../../game/enums';
 import createMenu from '../menuTemplate';
 import DependencyContainer from '../../dependencyContainer';
+import { Render } from '../../render/types';
 
 const initializeOptions: SceneInitializer = ({ changeScene }) => {
   const render: Render = DependencyContainer.resolve('render') as Render;

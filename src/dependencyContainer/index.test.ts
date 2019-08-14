@@ -1,6 +1,7 @@
 import DependencyContainer from '.';
 import { GameCharSelector } from '../config/types';
 import { GAME_PIECE_TYPE } from '../gamePiece/enums';
+import { Render } from '../render/types';
 
 describe('dependencyContainer', (): void => {
   it('throws when resolved before initialization', (): void => {

@@ -1,7 +1,10 @@
 import { lineWrap } from '../underdash';
+import { Render } from './types';
+import { GameState } from '../scenes/gameState';
 
 // TODO break this up
-const render = (param: RenderParam): void => {
+const render: Render = (param, gameState): void => {
+  console.log('gameState: ', gameState);
   const { renderString, nextPiece, score } = param;
 
   const expandSize = (
@@ -105,7 +108,8 @@ const render = (param: RenderParam): void => {
               ) {
                 return ' ';
               }
-              // TODO could optimize this
+              // TODO could optimize this by keeping an index counter
+              // instead of creating n new strings
               const nextChar = wrappedText[0];
               wrappedText = wrappedText.substring(1);
 
@@ -122,10 +126,14 @@ const render = (param: RenderParam): void => {
     return result.join('\n');
   };
 
-  const renderStringWithInfo = addInfoWindow(
-    expandedRenderString,
-    "Game over! Press 'r' to play again."
-  );
+  let renderStringWithInfo = expandedRenderString;
+
+  if (gameState && gameState === GameState.GameOver) {
+    renderStringWithInfo = addInfoWindow(
+      renderStringWithInfo,
+      "Game over! Press 'r' to play again."
+    );
+  }
 
   let output = '';
   output += `score: ${score}\n`;
