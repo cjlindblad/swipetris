@@ -135,11 +135,20 @@ const render: Render = (param, gameState): void => {
     );
   }
 
+  const createDivider = (length: number): string => {
+    let string = '+';
+    for (let i = 0; i < length; i++) {
+      string += '-';
+    }
+    string += '+';
+    return string;
+  }
+
   let output = '';
   output += `score: ${score}\n`;
   output += 'next:\n';
   output += nextPiece + '\n';
-  output += '\n\n';
+  output += '{{replace-me}}\n';
   output += renderStringWithInfo;
   const lines = output.split('\n');
   let longestLine = 0;
@@ -162,7 +171,11 @@ const render: Render = (param, gameState): void => {
         padding += ' ';
       }
     }
-    display += `|${line}${padding}|\n`;
+    if (line.includes('{{replace-me}}')) {
+      display += `${createDivider(longestLine)}\n`
+    } else {
+      display += `|${line}${padding}|\n`;
+    }
   });
   display += '+';
   for (let i = 0; i < longestLine; i++) {
