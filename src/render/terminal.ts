@@ -7,7 +7,6 @@ const EXPAND_HEIGHT = 2;
 
 // TODO break this up
 const render: Render = (param, gameState): void => {
-  console.log('gameState: ', gameState);
   const { renderString, nextPiece, score } = param;
 
   const expandSize = (
