@@ -2,6 +2,9 @@ import { lineWrap } from '../underdash';
 import { Render } from './types';
 import { GameState } from '../scenes/gameState';
 
+const EXPAND_WIDTH = 4;
+const EXPAND_HEIGHT = 2;
+
 // TODO break this up
 const render: Render = (param, gameState): void => {
   console.log('gameState: ', gameState);
@@ -29,7 +32,7 @@ const render: Render = (param, gameState): void => {
     return result.replace(/\n$/, '');
   };
 
-  const expandedRenderString = expandSize(renderString, 4, 2);
+  const expandedRenderString = expandSize(renderString, EXPAND_WIDTH, EXPAND_HEIGHT);
 
   const addInfoWindow = (renderString: string, infoText: string): string => {
     const lines = renderString.split('\n');
@@ -144,10 +147,23 @@ const render: Render = (param, gameState): void => {
     return string;
   }
 
+  const minHeight = (string: string, height: number): string => {
+    const lines = string.split('\n').length;
+    if (lines >= height) {
+      return string;
+    } 
+
+    let newlines = '';
+    for (let i = 0; i < height - lines; i++) {
+      newlines += '\n';
+    }
+    return `${string}${newlines}`;
+  }
+
   let output = '';
   output += `score: ${score}\n`;
   output += 'next:\n';
-  output += nextPiece + '\n';
+  output += expandSize(minHeight(`${nextPiece}\n`, 3), EXPAND_WIDTH, EXPAND_HEIGHT);
   output += '{{replace-me}}\n';
   output += renderStringWithInfo;
   const lines = output.split('\n');
