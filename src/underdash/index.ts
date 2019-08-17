@@ -61,3 +61,25 @@ export const lineWrap = (str: string, maxLength: number): string => {
 
   return lines.join('\n');
 };
+
+export const expandString = (
+  input: string,
+  widthFactor: number,
+  heightFactor: number
+): string => {
+  const lines = input.split('\n');
+  let result = '';
+  lines.forEach(line => {
+    let expandedLine = '';
+    line.split('').forEach(char => {
+      for (let i = 0; i < widthFactor; i++) {
+        expandedLine += char;
+      }
+    });
+    expandedLine += '\n';
+    for (let i = 0; i < heightFactor; i++) {
+      result += expandedLine;
+    }
+  });
+  return result.replace(/\n$/, '');
+};

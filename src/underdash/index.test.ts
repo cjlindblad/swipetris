@@ -1,4 +1,4 @@
-import { isEmptyObject, wrapModulo, lineWrap } from './index';
+import { isEmptyObject, wrapModulo, lineWrap, expandString } from './index';
 
 describe('underdash isEmptyObject', () => {
   it('recognizes empty object', () => {
@@ -43,6 +43,29 @@ describe('underdash lineWrap', () => {
     const string = 'one gargantually long word';
     const result = lineWrap(string, 4);
     const expectedResult = 'one \ngar-\ngan-\ntua-\nlly \nlong\nword';
+    expect(result).toEqual(expectedResult);
+  });
+});
+
+describe('underdash expandString', () => {
+  it('expands horizontally', () => {
+    const string = '*';
+    const result = expandString(string, 5, 1);
+    const expectedResult = '*****';
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('expands vertically', () => {
+    const string = '*';
+    const result = expandString(string, 1, 5);
+    const expectedResult = '*\n*\n*\n*\n*';
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('expands in two dimensions', () => {
+    const string = '*';
+    const result = expandString(string, 5, 5);
+    const expectedResult = '*****\n*****\n*****\n*****\n*****';
     expect(result).toEqual(expectedResult);
   });
 });

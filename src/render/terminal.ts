@@ -1,4 +1,4 @@
-import { lineWrap } from '../underdash';
+import { lineWrap, expandString } from '../underdash';
 import { Render } from './types';
 import { GameState } from '../scenes/gameState';
 
@@ -9,29 +9,11 @@ const EXPAND_HEIGHT = 2;
 const render: Render = (param, gameState): void => {
   const { renderString, nextPiece, score } = param;
 
-  const expandSize = (
-    input: string,
-    widthFactor: number,
-    heightFactor: number
-  ): string => {
-    const lines = input.split('\n');
-    let result = '';
-    lines.forEach(line => {
-      let expandedLine = '';
-      line.split('').forEach(char => {
-        for (let i = 0; i < widthFactor; i++) {
-          expandedLine += char;
-        }
-      });
-      expandedLine += '\n';
-      for (let i = 0; i < heightFactor; i++) {
-        result += expandedLine;
-      }
-    });
-    return result.replace(/\n$/, '');
-  };
-
-  const expandedRenderString = expandSize(renderString, EXPAND_WIDTH, EXPAND_HEIGHT);
+  const expandedRenderString = expandString(
+    renderString,
+    EXPAND_WIDTH,
+    EXPAND_HEIGHT
+  );
 
   const addInfoWindow = (renderString: string, infoText: string): string => {
     const lines = renderString.split('\n');
@@ -137,32 +119,24 @@ const render: Render = (param, gameState): void => {
     );
   }
 
-  const createDivider = (length: number): string => {
-    let string = '+';
-    for (let i = 0; i < length; i++) {
-      string += '-';
-    }
-    string += '+';
-    return string;
-  }
-
   const minHeight = (string: string, height: number): string => {
     const lines = string.split('\n').length;
     if (lines >= height) {
       return string;
-    } 
-
-    let newlines = '';
-    for (let i = 0; i < height - lines; i++) {
-      newlines += '\n';
     }
+
+    const newlines = expandString('\n', height - lines, 1);
     return `${string}${newlines}`;
-  }
+  };
 
   let output = '';
   output += `score: ${score}\n`;
   output += 'next:\n';
-  output += expandSize(minHeight(`${nextPiece}\n`, 3), EXPAND_WIDTH, EXPAND_HEIGHT);
+  output += expandString(
+    minHeight(`${nextPiece}\n`, 3),
+    EXPAND_WIDTH,
+    EXPAND_HEIGHT
+  );
   output += '{{replace-me}}\n';
   output += renderStringWithInfo;
   const lines = output.split('\n');
@@ -174,28 +148,22 @@ const render: Render = (param, gameState): void => {
   });
   let display = '';
   display += '+';
-  for (let i = 0; i < longestLine; i++) {
-    display += '-';
-  }
+  display += expandString('-', longestLine, 1);
   display += '+\n';
   lines.forEach(line => {
     const lineLength = line.length;
     let padding = '';
     if (lineLength < longestLine) {
-      for (let i = lineLength; i < longestLine; i++) {
-        padding += ' ';
-      }
+      padding = expandString(' ', longestLine - lineLength, 1);
     }
     if (line.includes('{{replace-me}}')) {
-      display += `${createDivider(longestLine)}\n`
+      display += `+${expandString('-', longestLine, 1)}+\n`;
     } else {
       display += `|${line}${padding}|\n`;
     }
   });
   display += '+';
-  for (let i = 0; i < longestLine; i++) {
-    display += '-';
-  }
+  display += expandString('-', longestLine, 1);
   display += '+\n';
   process.stdout.write('\x1b[2J');
   process.stdout.write(display);
