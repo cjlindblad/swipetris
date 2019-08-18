@@ -5,7 +5,7 @@ import {
   transpose,
   getNextPieceType
 } from '../../gamePiece/utils';
-import { COLUMNS, ROWS, BASE_GRAVITY_DELAY } from '../../config';
+import { COLUMNS, ROWS } from '../../config';
 import { GameCharSelector } from '../../config/types';
 import DependencyContainer from '../../dependencyContainer';
 import { SceneInitializer } from '../types';
@@ -13,6 +13,7 @@ import { Coordinate, GamePiece } from '../../gamePiece/types';
 import { HandleEvent } from '../../eventDispatcher/types';
 import { EventType } from '../../eventDispatcher/enums';
 import { Render } from '../../render/types';
+import LevelController from './levelController';
 
 // TODO give this whole file some love
 export enum GameState {
@@ -24,6 +25,7 @@ export const initializeGameState: SceneInitializer = ({
   changeScene,
   dispatch
 }) => {
+  // inject dependencies
   const gameCharSelector: GameCharSelector = DependencyContainer.resolve(
     'gameCharSelector'
   ) as GameCharSelector; // TODO should be automatic
@@ -36,6 +38,7 @@ export const initializeGameState: SceneInitializer = ({
   let gameState: GameState;
   let clearedLines: number;
   let gameBoard: string[][];
+  const levelController = new LevelController();
 
   const initialize = (): void => {
     // TODO need to handle initial coordinates in a better way than with hard coded values
@@ -194,7 +197,7 @@ export const initializeGameState: SceneInitializer = ({
 
         break;
       case EventType.StartGravityInterval:
-        setGravityInterval(BASE_GRAVITY_DELAY);
+        setGravityInterval(levelController.getGravityInterval());
         break;
       case EventType.ClearGravityInterval:
         clearGravityInterval();
@@ -335,6 +338,14 @@ export const initializeGameState: SceneInitializer = ({
 
           // register cleared lines to score
           clearedLines += solidRows.length;
+
+          // crude level increaser
+          solidRows.forEach(() => {
+            levelController.increaseLevel();
+          });
+          dispatch({
+            type: EventType.StartGravityInterval
+          });
 
           // add new active piece
           const newPiece = createGamePiece(getNextPieceType(), {
