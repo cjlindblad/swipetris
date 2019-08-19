@@ -38,9 +38,11 @@ export const initializeGameState: SceneInitializer = ({
   let gameState: GameState;
   let clearedLines: number;
   let gameBoard: string[][];
-  const levelController = new LevelController();
+  let levelController: LevelController;
 
   const initialize = (): void => {
+    levelController = new LevelController();
+
     // TODO need to handle initial coordinates in a better way than with hard coded values
     const initialPiece = createGamePiece(getNextPieceType(), {
       x: 2,
