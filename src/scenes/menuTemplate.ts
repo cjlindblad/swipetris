@@ -23,7 +23,8 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
     return {
       renderString: representation,
       nextPiece: '',
-      score: 0
+      score: 0,
+      level: 0
     };
   };
 

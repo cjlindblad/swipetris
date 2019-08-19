@@ -7,7 +7,7 @@ const EXPAND_HEIGHT = 2;
 
 // TODO break this up
 const render: Render = (param, gameState): void => {
-  const { renderString, nextPiece, score } = param;
+  const { renderString, nextPiece, score, level } = param;
 
   const expandedRenderString = expandString(
     renderString,
@@ -130,6 +130,7 @@ const render: Render = (param, gameState): void => {
   };
 
   let output = '';
+  output += `level: ${level}\n`;
   output += `score: ${score}\n`;
   output += 'next:\n';
   output += expandString(

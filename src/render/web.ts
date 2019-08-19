@@ -1,6 +1,6 @@
-import { RenderParam } from './types';
+import { Render } from './types';
 
-export const render = (param: RenderParam): void => {
+export const render: Render = param => {
   const { renderString, nextPiece, score } = param;
 
   const gameboardElement = document.getElementById('input');
