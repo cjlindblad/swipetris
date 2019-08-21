@@ -152,7 +152,8 @@ export const initializeGameState: SceneInitializer = ({
       renderString,
       nextPiece: previewString,
       score: clearedLines,
-      level: levelController.getLevel()
+      level: levelController.getLevel(),
+      gameBoard: gameBoardBuffer
     };
   };
 
