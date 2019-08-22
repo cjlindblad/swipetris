@@ -87,13 +87,26 @@ export const render: Render = param => {
   ctx.canvas.height = CANVAS_HEIGHT;
   ctx.canvas.width = CANVAS_WIDTH;
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-  const INITIAL_Y = 0;
-  const INITIAL_X = 0;
   const CELL_WIDTH = CANVAS_WIDTH / COLUMNS;
   const CELL_HEIGHT = CELL_WIDTH;
+  const INITIAL_Y = CANVAS_HEIGHT - ROWS * CELL_HEIGHT;
+  const INITIAL_X = 0;
+
+  // draw game board background
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.fillRect(INITIAL_X, INITIAL_Y, CANVAS_WIDTH, CANVAS_HEIGHT - INITIAL_Y);
+
+  // draw real next piece preview
+  const LINE_HEIGHT = 25;
+  const lines = nextPiece.split('\n');
+  let startY = 100;
+  ctx.fillStyle = 'rgb(0, 0, 0)';
+  ctx.font = '20px monospace';
+  lines.forEach(line => {
+    ctx.fillText(line, 50, startY);
+    startY += LINE_HEIGHT;
+  });
+
   if (gameBoard) {
     for (let y = 0; y < gameBoard.length; y++) {
       for (let x = 0; x < gameBoard[0].length; x++) {
@@ -111,18 +124,6 @@ export const render: Render = param => {
       }
     }
   }
-
-  // test for rendering render string
-
-  // const LINE_HEIGHT = 25;
-  // const lines = renderString.split('\n');
-  // let startY = 100;
-  // ctx.fillStyle = 'rgb(0, 0, 0)';
-  // ctx.font = '20px monospace';
-  // lines.forEach(line => {
-  //   ctx.fillText(line, 50, startY);
-  //   startY += LINE_HEIGHT;
-  // });
 };
 
 export default render;
