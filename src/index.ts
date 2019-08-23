@@ -9,7 +9,7 @@ export const main = async (GAME_ENV: string): Promise<void> => {
   switch (GAME_ENV) {
     case WEB_ENV:
       dependencies = {
-        render: (await import('./render/web')).default,
+        render: (await import('./render/web')).default(),
         setupInputListeners: (await import('./input/web')).default,
         gameCharSelector: createGameCharSelector(WEB_ENV)
       };

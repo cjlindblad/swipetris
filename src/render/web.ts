@@ -1,8 +1,6 @@
 import { Render } from './types';
-import { GameCharSelector } from '../config/types';
-import DependencyContainer from '../dependencyContainer';
 import { GAME_PIECE_TYPE } from '../gamePiece/enums';
-import { COLUMNS, ROWS } from '../config';
+import { WEB_ENV, COLUMNS, ROWS, createGameCharSelector } from '../config';
 
 // utils (move these out)
 const randomInt = (max: number): number =>
@@ -24,10 +22,8 @@ const S_INVERTED_COLOR = createRandomColor();
 const I_COLOR = createRandomColor();
 const BLOCK_COLOR = createRandomColor();
 
-export const render: Render = param => {
-  const gameCharSelector: GameCharSelector = DependencyContainer.resolve(
-    'gameCharSelector'
-  ) as GameCharSelector; // TODO should be automatic
+const createRender = (): Render => {
+  const gameCharSelector = createGameCharSelector(WEB_ENV);
 
   // could be cleaner
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
@@ -61,14 +57,6 @@ export const render: Render = param => {
     }
   };
 
-  const { renderString, gameBoard, nextPiece, score } = param;
-
-  if (!renderString) {
-    throw new Error('Render string was not supplied to render function');
-  }
-
-  // TODO extract initialization logic
-
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 
   if (!canvas) {
@@ -92,38 +80,51 @@ export const render: Render = param => {
   const INITIAL_Y = CANVAS_HEIGHT - ROWS * CELL_HEIGHT;
   const INITIAL_X = 0;
 
-  // draw game board background
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-  ctx.fillRect(INITIAL_X, INITIAL_Y, CANVAS_WIDTH, CANVAS_HEIGHT - INITIAL_Y);
+  const render: Render = param => {
+    const { renderString, gameBoard, nextPiece, score } = param;
 
-  // draw real next piece preview
-  const LINE_HEIGHT = 25;
-  const lines = nextPiece.split('\n');
-  let startY = 100;
-  ctx.fillStyle = 'rgb(0, 0, 0)';
-  ctx.font = '20px monospace';
-  lines.forEach(line => {
-    ctx.fillText(line, 50, startY);
-    startY += LINE_HEIGHT;
-  });
+    if (!renderString) {
+      throw new Error('Render string was not supplied to render function');
+    }
 
-  if (gameBoard) {
-    for (let y = 0; y < gameBoard.length; y++) {
-      for (let x = 0; x < gameBoard[0].length; x++) {
-        const cell = gameBoard[y][x];
-        if (cell !== EMPTY_SPACE_CHAR) {
-          const color = getPieceColor(cell);
-          ctx.fillStyle = color;
-          ctx.fillRect(
-            INITIAL_X + x * CELL_WIDTH,
-            INITIAL_Y + y * CELL_HEIGHT,
-            CELL_WIDTH,
-            CELL_HEIGHT
-          );
+    // (comment for trailing effect)
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    // draw game board background
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.fillRect(INITIAL_X, INITIAL_Y, CANVAS_WIDTH, CANVAS_HEIGHT - INITIAL_Y);
+
+    // TODO draw real next piece preview
+    // const LINE_HEIGHT = 25;
+    // const lines = nextPiece.split('\n');
+    // let startY = 100;
+    // ctx.fillStyle = 'rgb(0, 0, 0)';
+    // ctx.font = '20px monospace';
+    // lines.forEach(line => {
+    //   ctx.fillText(line, 50, startY);
+    //   startY += LINE_HEIGHT;
+    // });
+
+    if (gameBoard) {
+      for (let y = 0; y < gameBoard.length; y++) {
+        for (let x = 0; x < gameBoard[0].length; x++) {
+          const cell = gameBoard[y][x];
+          if (cell !== EMPTY_SPACE_CHAR) {
+            const color = getPieceColor(cell);
+            ctx.fillStyle = color;
+            ctx.fillRect(
+              INITIAL_X + x * CELL_WIDTH,
+              INITIAL_Y + y * CELL_HEIGHT,
+              CELL_WIDTH,
+              CELL_HEIGHT
+            );
+          }
         }
       }
     }
-  }
+  };
+
+  return render;
 };
 
-export default render;
+export default createRender;
