@@ -1,11 +1,14 @@
+import { GamePiece } from '../../gamePiece/types';
+
 interface GetGameStateRepresentation {
   (): GameStateRepresentation;
 }
 
 interface GameStateRepresentation {
   renderString?: string; // migrate away from this
-  nextPiece: string;
+  nextPieceString: string;
   score: number;
   level: number;
   gameBoard?: string[][];
+  nextPiece?: GamePiece;
 }

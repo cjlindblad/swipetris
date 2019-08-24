@@ -69,7 +69,8 @@ const createRender = (): Render => {
     throw new Error('Could not find context element');
   }
 
-  const CANVAS_HEIGHT = window.innerHeight;
+  const CANVAS_HEIGHT_PADDING = 50;
+  const CANVAS_HEIGHT = window.innerHeight - CANVAS_HEIGHT_PADDING;
   const CANVAS_WIDTH = CANVAS_HEIGHT / 2;
 
   ctx.canvas.height = CANVAS_HEIGHT;
@@ -81,7 +82,13 @@ const createRender = (): Render => {
   const INITIAL_X = 0;
 
   const render: Render = param => {
-    const { renderString, gameBoard, nextPiece, score } = param;
+    const {
+      renderString,
+      gameBoard,
+      nextPieceString,
+      nextPiece,
+      score
+    } = param;
 
     if (!renderString) {
       throw new Error('Render string was not supplied to render function');
@@ -94,16 +101,39 @@ const createRender = (): Render => {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
     ctx.fillRect(INITIAL_X, INITIAL_Y, CANVAS_WIDTH, CANVAS_HEIGHT - INITIAL_Y);
 
+    // TODO check how many times render function is called
+
     // TODO draw real next piece preview
-    // const LINE_HEIGHT = 25;
-    // const lines = nextPiece.split('\n');
-    // let startY = 100;
-    // ctx.fillStyle = 'rgb(0, 0, 0)';
-    // ctx.font = '20px monospace';
-    // lines.forEach(line => {
-    //   ctx.fillText(line, 50, startY);
-    //   startY += LINE_HEIGHT;
-    // });
+    if (nextPiece) {
+      const TOP_X = 0;
+      const TOP_Y = 0;
+      const PREVIEW_WIDTH = CELL_WIDTH / 2;
+      const PREVIEW_HEIGHT = CELL_HEIGHT / 2;
+
+      const color = getPieceColor(nextPiece.getChar());
+      ctx.fillStyle = color;
+
+      nextPiece.getState().coordinates.forEach(coordinate => {
+        const { x, y } = coordinate;
+
+        ctx.fillRect(
+          TOP_X + PREVIEW_WIDTH * x,
+          TOP_Y + PREVIEW_HEIGHT * y,
+          PREVIEW_WIDTH,
+          PREVIEW_HEIGHT
+        );
+      });
+
+      // const LINE_HEIGHT = 25;
+      // const lines = nextPiece.split('\n');
+      // let startY = 100;
+      // ctx.fillStyle = 'rgb(0, 0, 0)';
+      // ctx.font = '20px monospace';
+      // lines.forEach(line => {
+      //   ctx.fillText(line, 50, startY);
+      //   startY += LINE_HEIGHT;
+      // });
+    }
 
     if (gameBoard) {
       for (let y = 0; y < gameBoard.length; y++) {

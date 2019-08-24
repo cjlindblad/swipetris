@@ -14,6 +14,7 @@ import { HandleEvent } from '../../eventDispatcher/types';
 import { EventType } from '../../eventDispatcher/enums';
 import { Render } from '../../render/types';
 import LevelController from './levelController';
+import { GameStateRepresentation } from './types';
 
 // TODO give this whole file some love
 export enum GameState {
@@ -150,10 +151,11 @@ export const initializeGameState: SceneInitializer = ({
 
     return {
       renderString,
-      nextPiece: previewString,
+      nextPieceString: previewString,
       score: clearedLines,
       level: levelController.getLevel(),
-      gameBoard: gameBoardBuffer
+      gameBoard: gameBoardBuffer,
+      nextPiece
     };
   };
 

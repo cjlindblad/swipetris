@@ -7,7 +7,11 @@ const EXPAND_HEIGHT = 2;
 
 // TODO break this up
 const render: Render = (param, gameState): void => {
-  const { renderString, nextPiece, score, level } = param;
+  const { renderString, nextPieceString: nextPiece, score, level } = param;
+
+  if (!renderString) {
+    throw new Error('No render string supplied');
+  }
 
   const expandedRenderString = expandString(
     renderString,
