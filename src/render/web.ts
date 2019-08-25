@@ -87,8 +87,11 @@ const createRender = (): Render => {
       gameBoard,
       nextPieceString,
       nextPiece,
-      score
+      score,
+      level
     } = param;
+
+    // TODO pass which screen we are rendering
 
     if (!renderString) {
       throw new Error('Render string was not supplied to render function');
@@ -103,55 +106,70 @@ const createRender = (): Render => {
 
     // TODO check how many times render function is called
 
-    // TODO draw real next piece preview
-    if (nextPiece) {
-      const TOP_X = 0;
-      const TOP_Y = 0;
-      const PREVIEW_WIDTH = CELL_WIDTH / 2;
-      const PREVIEW_HEIGHT = CELL_HEIGHT / 2;
+    // render functions for different parts of UI
+    const renderNextPiece = (): void => {
+      if (nextPiece) {
+        const PREVIEW_WIDTH = CELL_WIDTH / 2;
+        const PREVIEW_HEIGHT = CELL_HEIGHT / 2;
 
-      const color = getPieceColor(nextPiece.getChar());
-      ctx.fillStyle = color;
+        const INITIAL_X = CANVAS_WIDTH - 4 * PREVIEW_WIDTH;
+        const INITIAL_Y = 0;
 
-      nextPiece.getState().coordinates.forEach(coordinate => {
-        const { x, y } = coordinate;
+        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.font = '18px monospace';
+        ctx.fillText('Next:', INITIAL_X - 50, INITIAL_Y + 20);
 
-        ctx.fillRect(
-          TOP_X + PREVIEW_WIDTH * x,
-          TOP_Y + PREVIEW_HEIGHT * y,
-          PREVIEW_WIDTH,
-          PREVIEW_HEIGHT
-        );
-      });
+        const color = getPieceColor(nextPiece.getChar());
+        ctx.fillStyle = color;
 
-      // const LINE_HEIGHT = 25;
-      // const lines = nextPiece.split('\n');
-      // let startY = 100;
-      // ctx.fillStyle = 'rgb(0, 0, 0)';
-      // ctx.font = '20px monospace';
-      // lines.forEach(line => {
-      //   ctx.fillText(line, 50, startY);
-      //   startY += LINE_HEIGHT;
-      // });
-    }
+        nextPiece.getState().coordinates.forEach(coordinate => {
+          const { x, y } = coordinate;
 
-    if (gameBoard) {
-      for (let y = 0; y < gameBoard.length; y++) {
-        for (let x = 0; x < gameBoard[0].length; x++) {
-          const cell = gameBoard[y][x];
-          if (cell !== EMPTY_SPACE_CHAR) {
-            const color = getPieceColor(cell);
-            ctx.fillStyle = color;
-            ctx.fillRect(
-              INITIAL_X + x * CELL_WIDTH,
-              INITIAL_Y + y * CELL_HEIGHT,
-              CELL_WIDTH,
-              CELL_HEIGHT
-            );
+          ctx.fillRect(
+            INITIAL_X + PREVIEW_WIDTH * x,
+            INITIAL_Y + PREVIEW_HEIGHT * y,
+            PREVIEW_WIDTH,
+            PREVIEW_HEIGHT
+          );
+        });
+      }
+    };
+
+    const renderGameBoard = (): void => {
+      if (gameBoard) {
+        for (let y = 0; y < gameBoard.length; y++) {
+          for (let x = 0; x < gameBoard[0].length; x++) {
+            const cell = gameBoard[y][x];
+            if (cell !== EMPTY_SPACE_CHAR) {
+              const color = getPieceColor(cell);
+              ctx.fillStyle = color;
+              ctx.fillRect(
+                INITIAL_X + x * CELL_WIDTH,
+                INITIAL_Y + y * CELL_HEIGHT,
+                CELL_WIDTH,
+                CELL_HEIGHT
+              );
+            }
           }
         }
       }
-    }
+    };
+
+    const renderUIText = (): void => {
+      const START_Y = 20;
+      const LINE_HEIGHT = 25;
+      const TEXT_COLOR = 'rgb(0, 0, 0)';
+      const TEXT_FONT = '18px monospace';
+      ctx.fillStyle = TEXT_COLOR;
+      ctx.font = TEXT_FONT;
+      ctx.fillText(`Level: ${level}`, 0, START_Y);
+      ctx.fillText(`Score: ${score}`, 0, START_Y + LINE_HEIGHT);
+    };
+
+    // trigger render functions
+    renderNextPiece();
+    renderGameBoard();
+    renderUIText();
   };
 
   return render;
