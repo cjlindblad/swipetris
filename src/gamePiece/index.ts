@@ -18,6 +18,7 @@ import {
   GetState
 } from './types';
 import { EventType } from '../eventDispatcher/enums';
+import { COLUMNS } from '../config';
 
 // Borrowing some React wording here.
 //
@@ -28,11 +29,14 @@ import { EventType } from '../eventDispatcher/enums';
 //
 // So state updates will happen separately
 // from input handling.
-export const createGamePiece = (
-  pieceType: GAME_PIECE_TYPE,
-  center: Coordinate
-): GamePiece => {
+export const createGamePiece = (pieceType: GAME_PIECE_TYPE): GamePiece => {
+  const center: Coordinate = {
+    x: 2,
+    y: 2
+  };
   let coordinates = getInitialCoordinates(pieceType, center);
+
+  console.log('COORDINATES', coordinates);
 
   let origo = {
     x: center.x,
@@ -40,12 +44,20 @@ export const createGamePiece = (
   };
 
   // make sure piece starts from the top
-  const [min] = getMinMaxCoordinates(coordinates);
-  for (let y = min.y; y > 0; y--) {
-    const transposition = transpose(coordinates, origo, 0, -1);
-    coordinates = transposition.coordinates;
-    origo = transposition.origo;
-  }
+  const [min, max] = getMinMaxCoordinates(coordinates);
+
+  console.log('max.x', max.x);
+  console.log('min.x', min.x);
+  console.log('COLUMNS / 2', COLUMNS / 2);
+
+  const transposition = transpose(
+    coordinates,
+    origo,
+    COLUMNS / 2 - origo.x - 1,
+    0 - min.y
+  );
+  coordinates = transposition.coordinates;
+  origo = transposition.origo;
 
   // initial values
   let char = getPieceChar(pieceType);
