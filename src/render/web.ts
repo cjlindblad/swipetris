@@ -2,6 +2,7 @@ import { Render } from './types';
 import { GAME_PIECE_TYPE } from '../gamePiece/enums';
 import { getMinMaxCoordinates, transpose } from '../gamePiece/utils';
 import { WEB_ENV, COLUMNS, ROWS, createGameCharSelector } from '../config';
+import { GameState } from '../scenes/gameState';
 
 // utils (move these out)
 const randomInt = (max: number): number =>
@@ -82,7 +83,7 @@ const createRender = (): Render => {
   const INITIAL_Y = CANVAS_HEIGHT - ROWS * CELL_HEIGHT;
   const INITIAL_X = 0;
 
-  const render: Render = param => {
+  const render: Render = (param, gameState) => {
     const {
       renderString,
       gameBoard,
@@ -171,10 +172,35 @@ const createRender = (): Render => {
       ctx.fillText(`Score: ${score}`, 0, START_Y + LINE_HEIGHT);
     };
 
+    const renderModal = (): void => {
+      const MODAL_HORIZONTAL_PADDING = 20;
+      const MODAL_TOP_PADDING = 50;
+      const MODAL_INNER_PADDING = 20;
+      const MODAL_HEIGHT = 200;
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(
+        MODAL_HORIZONTAL_PADDING,
+        INITIAL_Y + MODAL_TOP_PADDING,
+        CANVAS_WIDTH - MODAL_HORIZONTAL_PADDING * 2,
+        MODAL_HEIGHT
+      );
+
+      ctx.fillStyle = 'rgb(255, 255, 255)';
+      ctx.font = '18px monospace';
+      ctx.fillText(
+        'Game over!',
+        MODAL_HORIZONTAL_PADDING + MODAL_INNER_PADDING,
+        INITIAL_Y + MODAL_TOP_PADDING + MODAL_INNER_PADDING * 2
+      );
+    };
+
     // trigger render functions
     renderNextPiece();
     renderGameBoard();
     renderUIText();
+    if (gameState && gameState === GameState.GameOver) {
+      renderModal();
+    }
   };
 
   return render;
