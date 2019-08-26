@@ -1,5 +1,6 @@
 import { Render } from './types';
 import { GAME_PIECE_TYPE } from '../gamePiece/enums';
+import { getMinMaxCoordinates, transpose } from '../gamePiece/utils';
 import { WEB_ENV, COLUMNS, ROWS, createGameCharSelector } from '../config';
 
 // utils (move these out)
@@ -117,21 +118,25 @@ const createRender = (): Render => {
 
         ctx.fillStyle = 'rgb(0, 0, 0)';
         ctx.font = '18px monospace';
-        ctx.fillText('Next:', INITIAL_X - 50, INITIAL_Y + 20);
+        ctx.fillText('Next:', INITIAL_X - 60, INITIAL_Y + 20);
 
         const color = getPieceColor(nextPiece.getChar());
         ctx.fillStyle = color;
 
-        nextPiece.getState().coordinates.forEach(coordinate => {
-          const { x, y } = coordinate;
+        const { coordinates, origo } = nextPiece.getState();
+        const [min] = getMinMaxCoordinates(coordinates);
+        transpose(coordinates, origo, min.x * -1, 0).coordinates.forEach(
+          coordinate => {
+            const { x, y } = coordinate;
 
-          ctx.fillRect(
-            INITIAL_X + PREVIEW_WIDTH * x,
-            INITIAL_Y + PREVIEW_HEIGHT * y,
-            PREVIEW_WIDTH,
-            PREVIEW_HEIGHT
-          );
-        });
+            ctx.fillRect(
+              INITIAL_X + PREVIEW_WIDTH * x,
+              INITIAL_Y + PREVIEW_HEIGHT * y,
+              PREVIEW_WIDTH,
+              PREVIEW_HEIGHT
+            );
+          }
+        );
       }
     };
 

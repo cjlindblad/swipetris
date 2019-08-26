@@ -1,4 +1,3 @@
-import { INPUT_TYPE } from '../input/enums';
 import {
   getMinMaxCoordinates,
   transpose,
@@ -36,19 +35,13 @@ export const createGamePiece = (pieceType: GAME_PIECE_TYPE): GamePiece => {
   };
   let coordinates = getInitialCoordinates(pieceType, center);
 
-  console.log('COORDINATES', coordinates);
-
   let origo = {
     x: center.x,
     y: center.y
   };
 
   // make sure piece starts from the top
-  const [min, max] = getMinMaxCoordinates(coordinates);
-
-  console.log('max.x', max.x);
-  console.log('min.x', min.x);
-  console.log('COLUMNS / 2', COLUMNS / 2);
+  const [min] = getMinMaxCoordinates(coordinates);
 
   const transposition = transpose(
     coordinates,
