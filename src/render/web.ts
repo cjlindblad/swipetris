@@ -112,7 +112,7 @@ const createRender = (): Render => {
         const PREVIEW_WIDTH = CELL_WIDTH / 2;
         const PREVIEW_HEIGHT = CELL_HEIGHT / 2;
 
-        const INITIAL_X = CANVAS_WIDTH - 4 * PREVIEW_WIDTH;
+        const INITIAL_X = CANVAS_WIDTH - 5 * PREVIEW_WIDTH;
         const INITIAL_Y = 0;
 
         ctx.fillStyle = 'rgb(0, 0, 0)';
