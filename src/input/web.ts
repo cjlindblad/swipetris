@@ -26,7 +26,11 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
         return EventType.InputLeft;
       }
     } else {
-      if (dy > 0) {
+      // TODO test on different devices..
+      if (dy > 200) {
+        console.log(dy);
+        return EventType.QuickDrop;
+      } else if (dy > 0) {
         return EventType.InputDown;
       } else {
         return EventType.InputUp;
@@ -43,6 +47,7 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
     const Q = 81;
     const E = 69;
     const R = 82;
+    const W = 87;
     const SPACE = 32;
     const ENTER = 13;
 
@@ -55,6 +60,7 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
       [DOWN]: EventType.InputDown,
       [E]: EventType.Rotate,
       [Q]: EventType.RotateReverse,
+      [W]: EventType.QuickDrop,
       [SPACE]: EventType.GravityDrop,
       [ENTER]: EventType.Confirmation,
       [R]: EventType.Restart

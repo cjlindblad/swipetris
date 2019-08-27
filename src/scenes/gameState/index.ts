@@ -9,7 +9,7 @@ import { COLUMNS, ROWS } from '../../config';
 import { GameCharSelector } from '../../config/types';
 import DependencyContainer from '../../dependencyContainer';
 import { SceneInitializer } from '../types';
-import { Coordinate, GamePiece } from '../../gamePiece/types';
+import { Coordinate, GamePiece, GamePieceState } from '../../gamePiece/types';
 import { HandleEvent } from '../../eventDispatcher/types';
 import { EventType } from '../../eventDispatcher/enums';
 import { Render } from '../../render/types';
@@ -239,6 +239,28 @@ export const initializeGameState: SceneInitializer = ({
 
         break;
       }
+      case EventType.QuickDrop:
+        if (gameState !== GameState.Active) {
+          break;
+        }
+
+        // TODO possible performance thief
+        dispatch({ type: EventType.StartGravityInterval });
+        let nextState: GamePieceState;
+        let validMove = true;
+        do {
+          nextState = activePiece.getNextState(EventType.GravityDrop);
+          if (nextState.moves === undefined) {
+            throw new Error("Expected to find property 'moves' on nextState");
+          }
+          validMove = isValidMove(nextState.coordinates);
+          if (validMove) {
+            activePiece.setState({ ...nextState, moves: nextState.moves + 1 });
+          }
+        } while (validMove);
+
+        dispatch({ type: EventType.GravityDrop });
+        break;
       case EventType.InputDown:
       case EventType.GravityDrop: {
         if (gameState !== GameState.Active) {

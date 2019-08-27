@@ -10,6 +10,7 @@ export enum EventType {
   Rotate = 'Rotate',
   RotateReverse = 'RotateReverse',
   GravityDrop = 'GravityDrop',
+  QuickDrop = 'QuickDrop',
   StartGravityInterval = 'StartGravityInterval',
   IncreaseGravityInterval = 'IncreaseGravityInterval',
   ClearGravityInterval = 'ClearGravityInterval',

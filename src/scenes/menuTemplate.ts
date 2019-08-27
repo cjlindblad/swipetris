@@ -40,6 +40,8 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
         render(getRepresentation());
         break;
       case EventType.Confirmation:
+      case EventType.Rotate:
+      case EventType.RotateReverse:
         menuItems[activeMenuIndex].action();
         break;
       default:
