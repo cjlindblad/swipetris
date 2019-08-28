@@ -1,4 +1,5 @@
-import { BASE_GRAVITY_DELAY } from '../../config';
+const getGravityDelay = (level: number): number =>
+  Math.pow(0.8 - (level - 1) * 0.007, level - 1) * 1000;
 
 class LevelController {
   private _gravityInterval: number;
@@ -6,14 +7,15 @@ class LevelController {
 
   public constructor() {
     this._level = 1;
-    this._gravityInterval = BASE_GRAVITY_DELAY;
+    this._gravityInterval = getGravityDelay(this._level);
   }
 
   // TODO re-think public api (we should think in levels)
   public increaseLevel(): void {
-    if (this._level < 10) {
+    if (this._level < 15) {
       this._level += 1;
-      this._gravityInterval *= 0.85; // very arbitrary.
+      this._gravityInterval = getGravityDelay(this._level);
+      console.log(this._gravityInterval / 1000);
     }
   }
 

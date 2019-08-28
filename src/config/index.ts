@@ -8,8 +8,6 @@ export const TEST_ENV = 'TEST_ENV';
 export const COLUMNS = 10;
 export const ROWS = 16;
 
-export const BASE_GRAVITY_DELAY = 800;
-
 const GAME_CHARS: Record<string, Record<string, string>> = {
   [WEB_ENV]: {
     [GAME_PIECE_TYPE.L]: '😁',
