@@ -4,25 +4,13 @@ import { getMinMaxCoordinates, transpose } from '../gamePiece/utils';
 import { WEB_ENV, COLUMNS, ROWS, createGameCharSelector } from '../config';
 import { GameState } from '../scenes/gameState';
 
-// utils (move these out)
-const randomInt = (max: number): number =>
-  Math.floor(Math.random() * Math.floor(max));
-
-const createRandomColor = (): string => {
-  const r = randomInt(256);
-  const g = randomInt(256);
-  const b = randomInt(256);
-
-  return `rgb(${r}, ${g}, ${b})`;
-};
-
-const T_COLOR = createRandomColor();
-const L_COLOR = createRandomColor();
-const L_INVERTED_COLOR = createRandomColor();
-const S_COLOR = createRandomColor();
-const S_INVERTED_COLOR = createRandomColor();
-const I_COLOR = createRandomColor();
-const BLOCK_COLOR = createRandomColor();
+const T_COLOR = 'rgb(171, 0, 235)';
+const L_COLOR = 'rgb(252, 158, 0)';
+const L_INVERTED_COLOR = 'rgb(45, 0, 248)';
+const S_COLOR = 'rgb(0, 254, 0)';
+const S_INVERTED_COLOR = 'rgb(255, 0, 0)';
+const I_COLOR = 'rgb(0, 185, 224)';
+const BLOCK_COLOR = 'rgb(237, 247, 0)';
 
 const createRender = (): Render => {
   const gameCharSelector = createGameCharSelector(WEB_ENV);
