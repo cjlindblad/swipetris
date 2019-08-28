@@ -15,7 +15,6 @@ class LevelController {
     if (this._level < 15) {
       this._level += 1;
       this._gravityInterval = getGravityDelay(this._level);
-      console.log(this._gravityInterval / 1000);
     }
   }
 

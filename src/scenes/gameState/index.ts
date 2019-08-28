@@ -38,6 +38,7 @@ export const initializeGameState: SceneInitializer = ({
   let nextPiece: GamePiece;
   let gameState: GameState;
   let clearedLines: number;
+  let score: number;
   let gameBoard: string[][];
   let levelController: LevelController;
 
@@ -54,6 +55,7 @@ export const initializeGameState: SceneInitializer = ({
     nextPiece = next;
     gameState = GameState.Active;
     clearedLines = 0;
+    score = 0;
     gameBoard = [];
     for (let y = 0; y < ROWS; y++) {
       gameBoard[y] = [];
@@ -102,9 +104,11 @@ export const initializeGameState: SceneInitializer = ({
 
     // place active piece
     const state = activePiece.getState();
-    state.coordinates.forEach((coordinate): void => {
-      gameBoardBuffer[coordinate.y][coordinate.x] = activePiece.getChar();
-    });
+    state.coordinates.forEach(
+      (coordinate): void => {
+        gameBoardBuffer[coordinate.y][coordinate.x] = activePiece.getChar();
+      }
+    );
 
     // generate string representation
     let renderString = '';
@@ -121,12 +125,14 @@ export const initializeGameState: SceneInitializer = ({
 
     const nextPiecePreview = nextPiece.getPreview();
     let pieceCoordinates: string[][] = [];
-    nextPiecePreview.forEach((coordinate): void => {
-      if (!pieceCoordinates[coordinate.y]) {
-        pieceCoordinates[coordinate.y] = [];
+    nextPiecePreview.forEach(
+      (coordinate): void => {
+        if (!pieceCoordinates[coordinate.y]) {
+          pieceCoordinates[coordinate.y] = [];
+        }
+        pieceCoordinates[coordinate.y][coordinate.x] = nextPiece.getChar();
       }
-      pieceCoordinates[coordinate.y][coordinate.x] = nextPiece.getChar();
-    });
+    );
 
     let previewString = '';
     const [min, max] = getMinMaxCoordinates(nextPiecePreview);
@@ -142,7 +148,7 @@ export const initializeGameState: SceneInitializer = ({
     return {
       renderString,
       nextPieceString: previewString,
-      score: clearedLines,
+      score,
       level: levelController.getLevel(),
       gameBoard: gameBoardBuffer,
       nextPiece
@@ -292,9 +298,11 @@ export const initializeGameState: SceneInitializer = ({
 
           // transfer active piece to game board
           const activePieceCoordinates = activePiece.getState().coordinates;
-          activePieceCoordinates.forEach((coordinate): void => {
-            gameBoard[coordinate.y][coordinate.x] = activePiece.getChar();
-          });
+          activePieceCoordinates.forEach(
+            (coordinate): void => {
+              gameBoard[coordinate.y][coordinate.x] = activePiece.getChar();
+            }
+          );
 
           // check for solid lines
           const solidRows: number[] = [];
@@ -312,11 +320,13 @@ export const initializeGameState: SceneInitializer = ({
           }
 
           // clear solid lines
-          solidRows.forEach((y): void => {
-            for (let x = 0; x < COLUMNS; x++) {
-              gameBoard[y][x] = EMPTY_SPACE_CHAR;
+          solidRows.forEach(
+            (y): void => {
+              for (let x = 0; x < COLUMNS; x++) {
+                gameBoard[y][x] = EMPTY_SPACE_CHAR;
+              }
             }
-          });
+          );
 
           // move everything down after clearace
           if (solidRows.length > 0) {
@@ -350,8 +360,31 @@ export const initializeGameState: SceneInitializer = ({
             }
           }
 
-          // register cleared lines to score
-          clearedLines += solidRows.length;
+          // calculate score
+          let nextScore = 0;
+          const level = levelController.getLevel();
+          switch (solidRows.length) {
+            case 0:
+              break;
+            case 1:
+              nextScore += 100 * level;
+              break;
+            case 2:
+              nextScore += 300 * level;
+              break;
+            case 3:
+              nextScore += 500 * level;
+              break;
+            case 4:
+              nextScore += 800 * level;
+              break;
+            default:
+              throw new Error(
+                "We shouldn't be able to clear more than 4 lines in one play.."
+              );
+          }
+
+          score += nextScore;
 
           // crude level increaser
           solidRows.forEach(() => {
