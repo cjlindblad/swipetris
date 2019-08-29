@@ -45,9 +45,7 @@ export const initializeGameState: SceneInitializer = ({
   const initialize = (): void => {
     levelController = new LevelController();
 
-    // TODO need to handle initial coordinates in a better way than with hard coded values
     const initialPiece = createGamePiece(getNextPieceType());
-
     const next = createGamePiece(getNextPieceType());
 
     // setup state
@@ -104,11 +102,9 @@ export const initializeGameState: SceneInitializer = ({
 
     // place active piece
     const state = activePiece.getState();
-    state.coordinates.forEach(
-      (coordinate): void => {
-        gameBoardBuffer[coordinate.y][coordinate.x] = activePiece.getChar();
-      }
-    );
+    state.coordinates.forEach((coordinate): void => {
+      gameBoardBuffer[coordinate.y][coordinate.x] = activePiece.getChar();
+    });
 
     // generate string representation
     let renderString = '';
@@ -125,14 +121,12 @@ export const initializeGameState: SceneInitializer = ({
 
     const nextPiecePreview = nextPiece.getPreview();
     let pieceCoordinates: string[][] = [];
-    nextPiecePreview.forEach(
-      (coordinate): void => {
-        if (!pieceCoordinates[coordinate.y]) {
-          pieceCoordinates[coordinate.y] = [];
-        }
-        pieceCoordinates[coordinate.y][coordinate.x] = nextPiece.getChar();
+    nextPiecePreview.forEach((coordinate): void => {
+      if (!pieceCoordinates[coordinate.y]) {
+        pieceCoordinates[coordinate.y] = [];
       }
-    );
+      pieceCoordinates[coordinate.y][coordinate.x] = nextPiece.getChar();
+    });
 
     let previewString = '';
     const [min, max] = getMinMaxCoordinates(nextPiecePreview);
@@ -298,11 +292,9 @@ export const initializeGameState: SceneInitializer = ({
 
           // transfer active piece to game board
           const activePieceCoordinates = activePiece.getState().coordinates;
-          activePieceCoordinates.forEach(
-            (coordinate): void => {
-              gameBoard[coordinate.y][coordinate.x] = activePiece.getChar();
-            }
-          );
+          activePieceCoordinates.forEach((coordinate): void => {
+            gameBoard[coordinate.y][coordinate.x] = activePiece.getChar();
+          });
 
           // check for solid lines
           const solidRows: number[] = [];
@@ -320,13 +312,11 @@ export const initializeGameState: SceneInitializer = ({
           }
 
           // clear solid lines
-          solidRows.forEach(
-            (y): void => {
-              for (let x = 0; x < COLUMNS; x++) {
-                gameBoard[y][x] = EMPTY_SPACE_CHAR;
-              }
+          solidRows.forEach((y): void => {
+            for (let x = 0; x < COLUMNS; x++) {
+              gameBoard[y][x] = EMPTY_SPACE_CHAR;
             }
-          );
+          });
 
           // move everything down after clearace
           if (solidRows.length > 0) {

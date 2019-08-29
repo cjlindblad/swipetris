@@ -10,23 +10,21 @@ export const getMinMaxCoordinates = (
   let minY = Number.MAX_SAFE_INTEGER;
   let maxX = Number.MIN_SAFE_INTEGER;
   let maxY = Number.MIN_SAFE_INTEGER;
-  coordinates.forEach(
-    (coordinate): void => {
-      const { x, y } = coordinate;
-      if (x > maxX) {
-        maxX = x;
-      }
-      if (x < minX) {
-        minX = x;
-      }
-      if (y > maxY) {
-        maxY = y;
-      }
-      if (y < minY) {
-        minY = y;
-      }
+  coordinates.forEach((coordinate): void => {
+    const { x, y } = coordinate;
+    if (x > maxX) {
+      maxX = x;
     }
-  );
+    if (x < minX) {
+      minX = x;
+    }
+    if (y > maxY) {
+      maxY = y;
+    }
+    if (y < minY) {
+      minY = y;
+    }
+  });
 
   return [
     {
@@ -52,6 +50,7 @@ export const isLongestSideEven = (coordinates: Coordinate[]): boolean => {
   return isLongestDistanceEven;
 };
 
+const pieceBag: GAME_PIECE_TYPE[] = [];
 export const getNextPieceType = (): GAME_PIECE_TYPE => {
   // might be a cleaner way to write this
   // (we want to filter out GAME_PIECE_TYPE.EMPTY_SPACE)
@@ -64,8 +63,18 @@ export const getNextPieceType = (): GAME_PIECE_TYPE => {
     GAME_PIECE_TYPE.I,
     GAME_PIECE_TYPE.BLOCK
   ];
-  const nextTypeIndex = Math.floor(Math.random() * pieceTypes.length);
-  return pieceTypes[nextTypeIndex];
+
+  if (pieceBag.length === 0) {
+    pieceTypes.forEach(pieceType => {
+      pieceBag.push(pieceType);
+    });
+  }
+
+  const nextTypeIndex = Math.floor(Math.random() * pieceBag.length);
+
+  const nextType = pieceBag.splice(nextTypeIndex, 1)[0];
+
+  return nextType;
 };
 
 export const getPieceChar = (pieceType: GAME_PIECE_TYPE): string => {
