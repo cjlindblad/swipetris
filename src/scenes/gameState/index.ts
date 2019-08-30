@@ -35,6 +35,7 @@ export const initializeGameState: SceneInitializer = ({
 
   // state
   let activePiece: GamePiece;
+  let ghostPiece: GamePiece;
   let nextPiece: GamePiece;
   let gameState: GameState;
   let clearedLines: number;
@@ -45,11 +46,14 @@ export const initializeGameState: SceneInitializer = ({
   const initialize = (): void => {
     levelController = new LevelController();
 
-    const initialPiece = createGamePiece(getNextPieceType());
+    const initialPieceType = getNextPieceType();
+    const initialPiece = createGamePiece(initialPieceType);
     const next = createGamePiece(getNextPieceType());
 
     // setup state
     activePiece = initialPiece;
+    ghostPiece = createGamePiece(initialPieceType);
+
     nextPiece = next;
     gameState = GameState.Active;
     clearedLines = 0;
@@ -61,6 +65,20 @@ export const initializeGameState: SceneInitializer = ({
         gameBoard[y][x] = EMPTY_SPACE_CHAR;
       }
     }
+
+    // TODO encapsulate all of these
+    // place ghost piece at bottom (DUPLICATED)
+    let validGhostMove = true;
+    do {
+      let nextState = ghostPiece.getNextState(EventType.GravityDrop);
+      if (nextState.moves === undefined) {
+        throw new Error("Expected to find property 'moves' on nextState");
+      }
+      validGhostMove = isValidMove(nextState.coordinates);
+      if (validGhostMove) {
+        ghostPiece.setState({ ...nextState, moves: nextState.moves + 1 });
+      }
+    } while (validGhostMove);
   };
 
   const isValidMove = (coordinates: Coordinate[]): boolean => {
@@ -145,7 +163,8 @@ export const initializeGameState: SceneInitializer = ({
       score,
       level: levelController.getLevel(),
       gameBoard: gameBoardBuffer,
-      nextPiece
+      nextPiece,
+      ghostPiece
     };
   };
 
@@ -208,11 +227,26 @@ export const initializeGameState: SceneInitializer = ({
           break;
         }
 
-        const nextState = activePiece.getNextState(event.type);
+        let nextState = activePiece.getNextState(event.type);
         const validMove = isValidMove(nextState.coordinates);
 
         if (validMove) {
           activePiece.setState(nextState);
+          ghostPiece.setState(nextState);
+
+          // place ghost piece at bottom (DUPLICATED)
+          let validGhostMove = true;
+          do {
+            nextState = ghostPiece.getNextState(EventType.GravityDrop);
+            if (nextState.moves === undefined) {
+              throw new Error("Expected to find property 'moves' on nextState");
+            }
+            validGhostMove = isValidMove(nextState.coordinates);
+            if (validGhostMove) {
+              ghostPiece.setState({ ...nextState, moves: nextState.moves + 1 });
+            }
+          } while (validGhostMove);
+
           break;
         }
 
@@ -232,6 +266,7 @@ export const initializeGameState: SceneInitializer = ({
             );
             if (isValidMove(transposition.coordinates)) {
               activePiece.setState(transposition);
+              ghostPiece.setState(transposition);
               break;
             }
           }
@@ -386,6 +421,21 @@ export const initializeGameState: SceneInitializer = ({
 
           // add new active piece
           const newPiece = createGamePiece(getNextPieceType());
+          ghostPiece = createGamePiece(nextPiece.getType());
+
+          // place ghost piece at bottom (DUPLICATED)
+          let validGhostMove = true;
+          do {
+            let nextState = ghostPiece.getNextState(EventType.GravityDrop);
+            if (nextState.moves === undefined) {
+              throw new Error("Expected to find property 'moves' on nextState");
+            }
+            validGhostMove = isValidMove(nextState.coordinates);
+            if (validGhostMove) {
+              ghostPiece.setState({ ...nextState, moves: nextState.moves + 1 });
+            }
+          } while (validGhostMove);
+
           activePiece = nextPiece;
           nextPiece = newPiece;
         }

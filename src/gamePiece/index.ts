@@ -132,12 +132,15 @@ export const createGamePiece = (pieceType: GAME_PIECE_TYPE): GamePiece => {
   const getPreview: GetPreview = () =>
     getInitialCoordinates(pieceType, { x: 0, y: 0 });
 
+  const getType = () => pieceType;
+
   // public API
   return {
     getNextState,
     setState,
     getState,
     getChar,
-    getPreview
+    getPreview,
+    getType
   };
 };

@@ -11,4 +11,5 @@ interface GameStateRepresentation {
   level: number;
   gameBoard?: string[][];
   nextPiece?: GamePiece;
+  ghostPiece?: GamePiece;
 }

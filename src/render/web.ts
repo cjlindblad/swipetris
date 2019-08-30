@@ -78,7 +78,8 @@ const createRender = (): Render => {
       nextPieceString,
       nextPiece,
       score,
-      level
+      level,
+      ghostPiece
     } = param;
 
     // TODO pass which screen we are rendering
@@ -149,6 +150,20 @@ const createRender = (): Render => {
       }
     };
 
+    const renderGhostPiece = (): void => {
+      if (ghostPiece) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ghostPiece.getState().coordinates.forEach(({ x, y }) => {
+          ctx.fillRect(
+            INITIAL_X + x * CELL_WIDTH,
+            INITIAL_Y + y * CELL_HEIGHT,
+            CELL_WIDTH,
+            CELL_HEIGHT
+          );
+        });
+      }
+    };
+
     const renderUIText = (): void => {
       const START_Y = 20;
       const LINE_HEIGHT = 25;
@@ -184,6 +199,7 @@ const createRender = (): Render => {
 
     // trigger render functions
     renderNextPiece();
+    renderGhostPiece();
     renderGameBoard();
     renderUIText();
     if (gameState && gameState === GameState.GameOver) {
