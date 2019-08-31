@@ -152,7 +152,7 @@ const createRender = (): Render => {
 
     const renderGhostPiece = (): void => {
       if (ghostPiece) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.075)';
         ghostPiece.getState().coordinates.forEach(({ x, y }) => {
           ctx.fillRect(
             INITIAL_X + x * CELL_WIDTH,

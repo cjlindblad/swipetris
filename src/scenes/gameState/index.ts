@@ -43,6 +43,47 @@ export const initializeGameState: SceneInitializer = ({
   let gameBoard: string[][];
   let levelController: LevelController;
 
+  function isValidMove(coordinates: Coordinate[]): boolean {
+    let validMove = true;
+
+    for (let i = 0; i < coordinates.length; i++) {
+      const coordinate = coordinates[i];
+      // check for out of bounds
+      if (
+        coordinate.x < 0 ||
+        coordinate.x >= COLUMNS ||
+        coordinate.y < 0 ||
+        coordinate.y >= ROWS
+      ) {
+        validMove = false;
+        break;
+      }
+
+      // check for collision with rest of board
+      if (gameBoard[coordinate.y][coordinate.x] !== EMPTY_SPACE_CHAR) {
+        validMove = false;
+      }
+    }
+
+    return validMove;
+  }
+
+  function pushToBottom(gamePiece: GamePiece): void {
+    let validMove = true;
+
+    do {
+      let nextState = gamePiece.getNextState(EventType.GravityDrop);
+      if (nextState.moves === undefined) {
+        throw new Error("Expected to find property 'moves' on nextState");
+      }
+      validMove = isValidMove(nextState.coordinates);
+      if (validMove) {
+        // we're manipulating our arguments here..
+        gamePiece.setState({ ...nextState, moves: nextState.moves + 1 });
+      }
+    } while (validMove);
+  }
+
   const initialize = (): void => {
     levelController = new LevelController();
 
@@ -66,44 +107,7 @@ export const initializeGameState: SceneInitializer = ({
       }
     }
 
-    // TODO encapsulate all of these
-    // place ghost piece at bottom (DUPLICATED)
-    let validGhostMove = true;
-    do {
-      let nextState = ghostPiece.getNextState(EventType.GravityDrop);
-      if (nextState.moves === undefined) {
-        throw new Error("Expected to find property 'moves' on nextState");
-      }
-      validGhostMove = isValidMove(nextState.coordinates);
-      if (validGhostMove) {
-        ghostPiece.setState({ ...nextState, moves: nextState.moves + 1 });
-      }
-    } while (validGhostMove);
-  };
-
-  const isValidMove = (coordinates: Coordinate[]): boolean => {
-    let validMove = true;
-
-    for (let i = 0; i < coordinates.length; i++) {
-      const coordinate = coordinates[i];
-      // check for out of bounds
-      if (
-        coordinate.x < 0 ||
-        coordinate.x >= COLUMNS ||
-        coordinate.y < 0 ||
-        coordinate.y >= ROWS
-      ) {
-        validMove = false;
-        break;
-      }
-
-      // check for collision with rest of board
-      if (gameBoard[coordinate.y][coordinate.x] !== EMPTY_SPACE_CHAR) {
-        validMove = false;
-      }
-    }
-
-    return validMove;
+    pushToBottom(ghostPiece);
   };
 
   const getRepresentation = (): GameStateRepresentation => {
@@ -234,18 +238,7 @@ export const initializeGameState: SceneInitializer = ({
           activePiece.setState(nextState);
           ghostPiece.setState(nextState);
 
-          // place ghost piece at bottom (DUPLICATED)
-          let validGhostMove = true;
-          do {
-            nextState = ghostPiece.getNextState(EventType.GravityDrop);
-            if (nextState.moves === undefined) {
-              throw new Error("Expected to find property 'moves' on nextState");
-            }
-            validGhostMove = isValidMove(nextState.coordinates);
-            if (validGhostMove) {
-              ghostPiece.setState({ ...nextState, moves: nextState.moves + 1 });
-            }
-          } while (validGhostMove);
+          pushToBottom(ghostPiece);
 
           break;
         }
@@ -267,6 +260,7 @@ export const initializeGameState: SceneInitializer = ({
             if (isValidMove(transposition.coordinates)) {
               activePiece.setState(transposition);
               ghostPiece.setState(transposition);
+              pushToBottom(ghostPiece);
               break;
             }
           }
@@ -423,18 +417,7 @@ export const initializeGameState: SceneInitializer = ({
           const newPiece = createGamePiece(getNextPieceType());
           ghostPiece = createGamePiece(nextPiece.getType());
 
-          // place ghost piece at bottom (DUPLICATED)
-          let validGhostMove = true;
-          do {
-            let nextState = ghostPiece.getNextState(EventType.GravityDrop);
-            if (nextState.moves === undefined) {
-              throw new Error("Expected to find property 'moves' on nextState");
-            }
-            validGhostMove = isValidMove(nextState.coordinates);
-            if (validGhostMove) {
-              ghostPiece.setState({ ...nextState, moves: nextState.moves + 1 });
-            }
-          } while (validGhostMove);
+          pushToBottom(ghostPiece);
 
           activePiece = nextPiece;
           nextPiece = newPiece;
