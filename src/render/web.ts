@@ -3,14 +3,15 @@ import { GAME_PIECE_TYPE } from '../gamePiece/enums';
 import { getMinMaxCoordinates, transpose } from '../gamePiece/utils';
 import { WEB_ENV, COLUMNS, ROWS, createGameCharSelector } from '../config';
 import { GameState } from '../scenes/gameState';
+import Color from './color';
 
-const T_COLOR = 'rgb(171, 0, 235)';
-const L_COLOR = 'rgb(252, 158, 0)';
-const L_INVERTED_COLOR = 'rgb(45, 0, 248)';
-const S_COLOR = 'rgb(0, 254, 0)';
-const S_INVERTED_COLOR = 'rgb(255, 0, 0)';
-const I_COLOR = 'rgb(0, 185, 224)';
-const BLOCK_COLOR = 'rgb(237, 247, 0)';
+const T_COLOR = new Color(171, 0, 235);
+const L_COLOR = new Color(252, 158, 0);
+const L_INVERTED_COLOR = new Color(45, 0, 248);
+const S_COLOR = new Color(0, 254, 0);
+const S_INVERTED_COLOR = new Color(255, 0, 0);
+const I_COLOR = new Color(0, 185, 224);
+const BLOCK_COLOR = new Color(237, 247, 0);
 
 const createRender = (): Render => {
   const gameCharSelector = createGameCharSelector(WEB_ENV);
@@ -26,7 +27,7 @@ const createRender = (): Render => {
   const I = gameCharSelector(GAME_PIECE_TYPE.I);
   const BLOCK = gameCharSelector(GAME_PIECE_TYPE.BLOCK);
 
-  const getPieceColor = (piece: string): string => {
+  const getPieceColor = (piece: string): Color => {
     switch (piece) {
       case T:
         return T_COLOR;
@@ -43,7 +44,7 @@ const createRender = (): Render => {
       case BLOCK:
         return BLOCK_COLOR;
       default:
-        return 'rgb(255, 255, 255)';
+        return new Color(255, 255, 255);
     }
   };
 
@@ -92,7 +93,7 @@ const createRender = (): Render => {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     // draw game board background
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.fillStyle = new Color(255, 255, 255, 0.25).toString();
     ctx.fillRect(INITIAL_X, INITIAL_Y, CANVAS_WIDTH, CANVAS_HEIGHT - INITIAL_Y);
 
     // TODO check how many times render function is called
@@ -106,12 +107,12 @@ const createRender = (): Render => {
         const INITIAL_X = CANVAS_WIDTH - 5 * PREVIEW_WIDTH;
         const INITIAL_Y = 0;
 
-        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.fillStyle = new Color(0, 0, 0).toString();
         ctx.font = '18px monospace';
         ctx.fillText('Next:', INITIAL_X - 60, INITIAL_Y + 20);
 
         const color = getPieceColor(nextPiece.getChar());
-        ctx.fillStyle = color;
+        ctx.fillStyle = color.toString();
 
         const { coordinates, origo } = nextPiece.getState();
         const [min] = getMinMaxCoordinates(coordinates);
@@ -137,7 +138,7 @@ const createRender = (): Render => {
             const cell = gameBoard[y][x];
             if (cell !== EMPTY_SPACE_CHAR) {
               const color = getPieceColor(cell);
-              ctx.fillStyle = color;
+              ctx.fillStyle = color.toString();
               ctx.fillRect(
                 INITIAL_X + x * CELL_WIDTH,
                 INITIAL_Y + y * CELL_HEIGHT,
@@ -152,7 +153,8 @@ const createRender = (): Render => {
 
     const renderGhostPiece = (): void => {
       if (ghostPiece) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.075)';
+        const color = getPieceColor(ghostPiece.getChar()).setAlpha(0.15);
+        ctx.fillStyle = color.toString();
         ghostPiece.getState().coordinates.forEach(({ x, y }) => {
           ctx.fillRect(
             INITIAL_X + x * CELL_WIDTH,
@@ -167,7 +169,7 @@ const createRender = (): Render => {
     const renderUIText = (): void => {
       const START_Y = 20;
       const LINE_HEIGHT = 25;
-      const TEXT_COLOR = 'rgb(0, 0, 0)';
+      const TEXT_COLOR = new Color(0, 0, 0).toString();
       const TEXT_FONT = '18px monospace';
       ctx.fillStyle = TEXT_COLOR;
       ctx.font = TEXT_FONT;
@@ -180,7 +182,7 @@ const createRender = (): Render => {
       const MODAL_TOP_PADDING = 50;
       const MODAL_INNER_PADDING = 20;
       const MODAL_HEIGHT = 200;
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillStyle = new Color(0, 0, 0, 0.5).toString();
       ctx.fillRect(
         MODAL_HORIZONTAL_PADDING,
         INITIAL_Y + MODAL_TOP_PADDING,
@@ -188,7 +190,7 @@ const createRender = (): Render => {
         MODAL_HEIGHT
       );
 
-      ctx.fillStyle = 'rgb(255, 255, 255)';
+      ctx.fillStyle = new Color(255, 255, 255).toString();
       ctx.font = '18px monospace';
       ctx.fillText(
         'Game over!',
