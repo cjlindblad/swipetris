@@ -15,41 +15,41 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
   }
   process.stdin.setRawMode(true);
 
-  process.stdin.on(
-    'keypress',
-    (_, key): void => {
-      if (key.ctrl && key.name === 'c') {
-        process.exit();
-      } else {
-        switch (key.name) {
-          case 'left':
-            handleInput(EventType.InputLeft);
-            break;
-          case 'right':
-            handleInput(EventType.InputRight);
-            break;
-          case 'up':
-            handleInput(EventType.InputUp);
-            break;
-          case 'down':
-            handleInput(EventType.InputDown);
-            break;
-          case 'q':
-            handleInput(EventType.RotateReverse);
-            break;
-          case 'e':
-            handleInput(EventType.Rotate);
-            break;
-          case 'r':
-            handleInput(EventType.Restart);
-            break;
-          case 'return':
-            handleInput(EventType.Confirmation);
-            break;
-        }
+  process.stdin.on('keypress', (_, key): void => {
+    if (key.ctrl && key.name === 'c') {
+      process.exit();
+    } else {
+      switch (key.name) {
+        case 'left':
+          handleInput(EventType.InputLeft);
+          break;
+        case 'right':
+          handleInput(EventType.InputRight);
+          break;
+        case 'up':
+          handleInput(EventType.InputUp);
+          break;
+        case 'down':
+          handleInput(EventType.InputDown);
+          break;
+        case 'q':
+          handleInput(EventType.RotateReverse);
+          break;
+        case 'e':
+          handleInput(EventType.Rotate);
+          break;
+        case 'r':
+          handleInput(EventType.Restart);
+          break;
+        case 'w':
+          handleInput(EventType.QuickDrop);
+          break;
+        case 'return':
+          handleInput(EventType.Confirmation);
+          break;
       }
     }
-  );
+  });
 };
 
 export default setupInputListeners;
