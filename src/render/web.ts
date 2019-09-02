@@ -145,6 +145,15 @@ const createRender = (): Render => {
                 CELL_WIDTH,
                 CELL_HEIGHT
               );
+
+              ctx.strokeStyle = new Color(0, 0, 0).toString();
+              ctx.lineWidth = 1;
+              ctx.strokeRect(
+                INITIAL_X + x * CELL_WIDTH,
+                INITIAL_Y + y * CELL_HEIGHT,
+                CELL_WIDTH,
+                CELL_HEIGHT
+              );
             }
           }
         }
