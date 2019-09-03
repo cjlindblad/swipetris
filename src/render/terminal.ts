@@ -1,20 +1,52 @@
 import { lineWrap, expandString } from '../underdash';
 import { Render } from './types';
 import { GameState } from '../scenes/gameState';
+import { Coordinate } from '../gamePiece/types';
 
 const EXPAND_WIDTH = 4;
 const EXPAND_HEIGHT = 2;
 
 // TODO break this up
 const render: Render = (param, gameState): void => {
-  const { renderString, nextPieceString: nextPiece, score, level } = param;
+  const {
+    renderString,
+    nextPieceString: nextPiece,
+    score,
+    level,
+    gameBoard,
+    ghostPiece
+  } = param;
 
   if (!renderString) {
     throw new Error('No render string supplied');
   }
 
+  let stringToRender = renderString;
+
+  if (gameBoard) {
+    let ghostPieceCoordinates: Coordinate[] = [];
+    if (ghostPiece) {
+      ghostPieceCoordinates = ghostPiece.getState().coordinates;
+    }
+    stringToRender = '';
+    for (let y = 0; y < gameBoard.length; y++) {
+      for (let x = 0; x < gameBoard[0].length; x++) {
+        let nextCell = gameBoard[y][x];
+        for (const ghostCoordinate of ghostPieceCoordinates) {
+          if (ghostCoordinate.x === x && ghostCoordinate.y === y) {
+            nextCell = '.';
+          }
+        }
+        stringToRender += nextCell;
+      }
+      if (y < gameBoard.length - 1) {
+        stringToRender += '\n';
+      }
+    }
+  }
+
   const expandedRenderString = expandString(
-    renderString,
+    stringToRender,
     EXPAND_WIDTH,
     EXPAND_HEIGHT
   );
