@@ -2,11 +2,15 @@ import { lineWrap, expandString } from '../underdash';
 import { Render } from './types';
 import { GameState } from '../scenes/gameState';
 import { Coordinate } from '../gamePiece/types';
+import { createGameCharSelector, TERMINAL_ENV } from '../config';
+import { GAME_PIECE_TYPE } from '../gamePiece/enums';
 
 const EXPAND_WIDTH = 4;
 const EXPAND_HEIGHT = 2;
 
-// TODO break this up
+const gameCharSelector = createGameCharSelector(TERMINAL_ENV);
+const EMPTY_SPACE = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
+
 const render: Render = (param, gameState): void => {
   const {
     renderString,
@@ -33,7 +37,11 @@ const render: Render = (param, gameState): void => {
       for (let x = 0; x < gameBoard[0].length; x++) {
         let nextCell = gameBoard[y][x];
         for (const ghostCoordinate of ghostPieceCoordinates) {
-          if (ghostCoordinate.x === x && ghostCoordinate.y === y) {
+          if (
+            ghostCoordinate.x === x &&
+            ghostCoordinate.y === y &&
+            nextCell === EMPTY_SPACE
+          ) {
             nextCell = '.';
           }
         }
