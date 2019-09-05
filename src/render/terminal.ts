@@ -51,13 +51,10 @@ const render: Render = (param, gameState): void => {
         stringToRender += '\n';
       }
     }
-  }
 
-  const expandedRenderString = expandString(
-    stringToRender,
-    EXPAND_WIDTH,
-    EXPAND_HEIGHT
-  );
+    // only expand game board
+    stringToRender = expandString(stringToRender, EXPAND_WIDTH, EXPAND_HEIGHT);
+  }
 
   const addInfoWindow = (renderString: string, infoText: string): string => {
     const lines = renderString.split('\n');
@@ -154,7 +151,7 @@ const render: Render = (param, gameState): void => {
     return result.join('\n');
   };
 
-  let renderStringWithInfo = expandedRenderString;
+  let renderStringWithInfo = stringToRender;
 
   if (gameState && gameState === GameState.GameOver) {
     renderStringWithInfo = addInfoWindow(
