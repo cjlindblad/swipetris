@@ -18,6 +18,13 @@ class LevelController {
     }
   }
 
+  public setLevel(level: number): void {
+    if (level >= 1 && level <= 15) {
+      this._level = level;
+      this._gravityInterval = getGravityDelay(this._level);
+    }
+  }
+
   public getLevel(): number {
     return this._level;
   }

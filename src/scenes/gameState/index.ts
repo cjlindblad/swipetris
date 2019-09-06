@@ -407,8 +407,9 @@ export const initializeGameState: SceneInitializer = ({
 
           // crude level increaser
           solidRows.forEach(() => {
-            levelController.increaseLevel();
+            clearedLines += 1;
           });
+          levelController.setLevel(Math.floor(clearedLines / 15) + 1);
           dispatch({
             type: EventType.StartGravityInterval
           });
