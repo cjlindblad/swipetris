@@ -7,6 +7,7 @@ export enum EventType {
   InputLeft = 'InputLeft',
   InputRight = 'InputRight',
   Confirmation = 'Confirmation',
+  Pause = 'Pause',
   Rotate = 'Rotate',
   RotateReverse = 'RotateReverse',
   GravityDrop = 'GravityDrop',

@@ -47,6 +47,8 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
         case 'return':
           handleInput(EventType.Confirmation);
           break;
+        case 'escape':
+          handleInput(EventType.Pause);
       }
     }
   });

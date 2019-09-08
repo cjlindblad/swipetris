@@ -50,6 +50,7 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
     const W = 87;
     const SPACE = 32;
     const ENTER = 13;
+    const ESCAPE = 27;
 
     const inputMapping: {
       [index: number]: EventType;
@@ -63,7 +64,8 @@ const setupInputListeners = (param: SetupInputListenersParam): void => {
       [W]: EventType.QuickDrop,
       [SPACE]: EventType.GravityDrop,
       [ENTER]: EventType.Confirmation,
-      [R]: EventType.Restart
+      [R]: EventType.Restart,
+      [ESCAPE]: EventType.Pause
     };
 
     const inputType = inputMapping[event.keyCode];

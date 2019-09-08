@@ -186,7 +186,7 @@ const createRender = (): Render => {
       ctx.fillText(`Score: ${score}`, 0, START_Y + LINE_HEIGHT);
     };
 
-    const renderModal = (): void => {
+    const renderModal = (text: string): void => {
       const MODAL_HORIZONTAL_PADDING = 20;
       const MODAL_TOP_PADDING = 50;
       const MODAL_INNER_PADDING = 20;
@@ -202,7 +202,7 @@ const createRender = (): Render => {
       ctx.fillStyle = new Color(255, 255, 255).toString();
       ctx.font = '18px monospace';
       ctx.fillText(
-        'Game over!',
+        text,
         MODAL_HORIZONTAL_PADDING + MODAL_INNER_PADDING,
         INITIAL_Y + MODAL_TOP_PADDING + MODAL_INNER_PADDING * 2
       );
@@ -214,7 +214,10 @@ const createRender = (): Render => {
     renderGameBoard();
     renderUIText();
     if (gameState && gameState === GameState.GameOver) {
-      renderModal();
+      renderModal('Game over!');
+    }
+    if (gameState && gameState === GameState.Paused) {
+      renderModal('Game paused');
     }
   };
 

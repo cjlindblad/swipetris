@@ -19,7 +19,8 @@ import { GameStateRepresentation } from './types';
 // TODO give this whole file some love
 export enum GameState {
   Active = 'Active',
-  GameOver = 'GameOver'
+  GameOver = 'GameOver',
+  Paused = 'Paused'
 }
 
 export const initializeGameState: SceneInitializer = ({
@@ -207,6 +208,19 @@ export const initializeGameState: SceneInitializer = ({
 
   const handleEvent: HandleEvent = event => {
     switch (event.type) {
+      case EventType.Pause:
+        if (gameState === GameState.Active) {
+          gameState = GameState.Paused;
+          dispatch({
+            type: EventType.ClearGravityInterval
+          });
+        } else if (gameState === GameState.Paused) {
+          gameState = GameState.Active;
+          dispatch({
+            type: EventType.StartGravityInterval
+          });
+        }
+        break;
       case EventType.Restart:
         if (gameState !== GameState.GameOver) {
           break;

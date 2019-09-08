@@ -160,6 +160,10 @@ const render: Render = (param, gameState): void => {
     );
   }
 
+  if (gameState && gameState === GameState.Paused) {
+    renderStringWithInfo = addInfoWindow(renderStringWithInfo, 'Game paused');
+  }
+
   const minHeight = (string: string, height: number): string => {
     const lines = string.split('\n').length;
     if (lines >= height) {

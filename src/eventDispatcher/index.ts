@@ -27,11 +27,9 @@ const createEventDispatcher = (): EventDispatcher => {
   };
 
   const dispatch = (event: DispatchEvent): void => {
-    _clients.forEach(
-      (client): void => {
-        client.handleEvent(event);
-      }
-    );
+    _clients.forEach((client): void => {
+      client.handleEvent(event);
+    });
   };
 
   return {
