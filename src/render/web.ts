@@ -80,7 +80,8 @@ const createRender = (): Render => {
       nextPiece,
       score,
       level,
-      ghostPiece
+      ghostPiece,
+      clearedLines
     } = param;
 
     // TODO pass which screen we are rendering
@@ -184,6 +185,11 @@ const createRender = (): Render => {
       ctx.font = TEXT_FONT;
       ctx.fillText(`Level: ${level}`, 0, START_Y);
       ctx.fillText(`Score: ${score}`, 0, START_Y + LINE_HEIGHT);
+      ctx.fillText(
+        `Cleared lines: ${clearedLines}`,
+        0,
+        START_Y + 2 * LINE_HEIGHT
+      );
     };
 
     const renderModal = (text: string): void => {

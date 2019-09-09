@@ -9,6 +9,7 @@ interface GameStateRepresentation {
   nextPieceString: string;
   score: number;
   level: number;
+  clearedLines: number;
   gameBoard?: string[][];
   nextPiece?: GamePiece;
   ghostPiece?: GamePiece;

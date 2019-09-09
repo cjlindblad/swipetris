@@ -167,6 +167,7 @@ export const initializeGameState: SceneInitializer = ({
       nextPieceString: previewString,
       score,
       level: levelController.getLevel(),
+      clearedLines,
       gameBoard: gameBoardBuffer,
       nextPiece,
       ghostPiece
