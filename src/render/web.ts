@@ -207,11 +207,18 @@ const createRender = (): Render => {
 
       ctx.fillStyle = new Color(255, 255, 255).toString();
       ctx.font = '18px monospace';
-      ctx.fillText(
-        text,
-        MODAL_HORIZONTAL_PADDING + MODAL_INNER_PADDING,
-        INITIAL_Y + MODAL_TOP_PADDING + MODAL_INNER_PADDING * 2
-      );
+      const lines = text.split('\n');
+      const LINE_HEIGHT = 18;
+      for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(
+          lines[i],
+          MODAL_HORIZONTAL_PADDING + MODAL_INNER_PADDING,
+          INITIAL_Y +
+            MODAL_TOP_PADDING +
+            MODAL_INNER_PADDING * 2 +
+            i * LINE_HEIGHT
+        );
+      }
     };
 
     // trigger render functions
@@ -225,7 +232,7 @@ const createRender = (): Render => {
       renderModal('Game over!');
     }
     if (gameState && gameState === GameState.Paused) {
-      renderModal('Game paused');
+      renderModal('Game paused.\nPress "q" to exit to menu.');
     }
   };
 
