@@ -218,7 +218,9 @@ const createRender = (): Render => {
     renderNextPiece();
     renderGhostPiece();
     renderGameBoard();
-    renderUIText();
+    if (gameState) {
+      renderUIText();
+    }
     if (gameState && gameState === GameState.GameOver) {
       renderModal('Game over!');
     }
