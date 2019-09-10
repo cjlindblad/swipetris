@@ -193,30 +193,29 @@ const createRender = (): Render => {
     };
 
     const renderModal = (text: string): void => {
-      const MODAL_HORIZONTAL_PADDING = 20;
-      const MODAL_TOP_PADDING = 50;
-      const MODAL_INNER_PADDING = 20;
-      const MODAL_HEIGHT = 200;
+      const lines = text.split('\n');
+      console.log('lines length', lines.length);
+
+      const MODAL_HORIZONTAL_PADDING = CELL_WIDTH;
+      const MODAL_MARGIN_TOP = CELL_HEIGHT * 2;
+      const MODAL_INNER_PADDING = CELL_WIDTH;
+      const MODAL_HEIGHT = CELL_HEIGHT * 2 + CELL_HEIGHT * lines.length;
       ctx.fillStyle = new Color(0, 0, 0, 0.5).toString();
       ctx.fillRect(
         MODAL_HORIZONTAL_PADDING,
-        INITIAL_Y + MODAL_TOP_PADDING,
+        INITIAL_Y + MODAL_MARGIN_TOP,
         CANVAS_WIDTH - MODAL_HORIZONTAL_PADDING * 2,
         MODAL_HEIGHT
       );
 
       ctx.fillStyle = new Color(255, 255, 255).toString();
-      ctx.font = '18px monospace';
-      const lines = text.split('\n');
-      const LINE_HEIGHT = 18;
+      ctx.font = '16px monospace';
+      const LINE_HEIGHT = CELL_HEIGHT;
       for (let i = 0; i < lines.length; i++) {
         ctx.fillText(
           lines[i],
           MODAL_HORIZONTAL_PADDING + MODAL_INNER_PADDING,
-          INITIAL_Y +
-            MODAL_TOP_PADDING +
-            MODAL_INNER_PADDING * 2 +
-            i * LINE_HEIGHT
+          INITIAL_Y + MODAL_MARGIN_TOP + MODAL_INNER_PADDING + i * LINE_HEIGHT
         );
       }
     };

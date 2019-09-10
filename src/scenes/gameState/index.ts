@@ -328,7 +328,6 @@ export const initializeGameState: SceneInitializer = ({
               type: EventType.ClearGravityInterval
             });
             gameState = GameState.GameOver;
-            // TODO show some game over info
             break;
           }
           // this is where a piece lands
