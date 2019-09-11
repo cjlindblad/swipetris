@@ -4,6 +4,7 @@ import { getMinMaxCoordinates, transpose } from '../gamePiece/utils';
 import { WEB_ENV, COLUMNS, ROWS, createGameCharSelector } from '../config';
 import { GameState } from '../scenes/gameState';
 import Color from './color';
+import { lineWrap } from '../underdash';
 
 const T_COLOR = new Color(171, 0, 235);
 const L_COLOR = new Color(252, 158, 0);
@@ -193,8 +194,7 @@ const createRender = (): Render => {
     };
 
     const renderModal = (text: string): void => {
-      const lines = text.split('\n');
-      console.log('lines length', lines.length);
+      const lines = lineWrap(text, 20).split('\n');
 
       const MODAL_HORIZONTAL_PADDING = CELL_WIDTH;
       const MODAL_MARGIN_TOP = CELL_HEIGHT * 2;
@@ -209,13 +209,18 @@ const createRender = (): Render => {
       );
 
       ctx.fillStyle = new Color(255, 255, 255).toString();
-      ctx.font = '16px monospace';
+      const FONT_SIZE = 20;
+      ctx.font = `${FONT_SIZE}px monospace`;
       const LINE_HEIGHT = CELL_HEIGHT;
       for (let i = 0; i < lines.length; i++) {
         ctx.fillText(
           lines[i],
           MODAL_HORIZONTAL_PADDING + MODAL_INNER_PADDING,
-          INITIAL_Y + MODAL_MARGIN_TOP + MODAL_INNER_PADDING + i * LINE_HEIGHT
+          INITIAL_Y +
+            MODAL_MARGIN_TOP +
+            FONT_SIZE +
+            MODAL_INNER_PADDING +
+            i * LINE_HEIGHT
         );
       }
     };
@@ -228,10 +233,10 @@ const createRender = (): Render => {
       renderUIText();
     }
     if (gameState && gameState === GameState.GameOver) {
-      renderModal('Game over!');
+      renderModal('Game over! Press "r" to play again.');
     }
     if (gameState && gameState === GameState.Paused) {
-      renderModal('Game paused.\nPress "q" to exit to menu.');
+      renderModal('Game paused. Press "q" to exit to menu.');
     }
   };
 
