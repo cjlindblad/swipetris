@@ -263,14 +263,30 @@ export const initializeGameState: SceneInitializer = ({
           event.type === EventType.Rotate ||
           event.type === EventType.RotateReverse
         ) {
-          const wallKickOffsets = [1, 2, -1, -2];
-          for (let i = 0; i < wallKickOffsets.length; i++) {
-            const offset = wallKickOffsets[i];
+          // try x and y axis offsets separately
+          const wallKickOffsetsX = [1, 2, -1, -2];
+          for (const wallKickOffset of wallKickOffsetsX) {
             const transposition = transpose(
               nextState.coordinates,
               nextState.origo,
-              offset,
+              wallKickOffset,
               0
+            );
+            if (isValidMove(transposition.coordinates)) {
+              activePiece.setState(transposition);
+              ghostPiece.setState(transposition);
+              pushToBottom(ghostPiece);
+              break;
+            }
+          }
+
+          const wallKickOffsetsY = [1];
+          for (const wallKickOffset of wallKickOffsetsY) {
+            const transposition = transpose(
+              nextState.coordinates,
+              nextState.origo,
+              0,
+              wallKickOffset
             );
             if (isValidMove(transposition.coordinates)) {
               activePiece.setState(transposition);

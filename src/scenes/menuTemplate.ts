@@ -25,7 +25,8 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
       renderString: representation,
       nextPieceString: '',
       score: 0,
-      level: 1
+      level: 1,
+      clearedLines: 0,
     };
   };
 

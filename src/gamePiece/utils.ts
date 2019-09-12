@@ -52,8 +52,6 @@ export const isLongestSideEven = (coordinates: Coordinate[]): boolean => {
 
 const pieceBag: GAME_PIECE_TYPE[] = [];
 export const getNextPieceType = (): GAME_PIECE_TYPE => {
-  // might be a cleaner way to write this
-  // (we want to filter out GAME_PIECE_TYPE.EMPTY_SPACE)
   const pieceTypes = [
     GAME_PIECE_TYPE.T,
     GAME_PIECE_TYPE.L,
