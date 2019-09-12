@@ -77,7 +77,6 @@ const createRender = (): Render => {
     const {
       renderString,
       gameBoard,
-      nextPieceString,
       nextPiece,
       score,
       level,
@@ -85,7 +84,7 @@ const createRender = (): Render => {
       clearedLines
     } = param;
 
-    // TODO pass which screen we are rendering
+    // TODO pass which screen we are rendering, instead of checking gameState
 
     if (!renderString) {
       throw new Error('Render string was not supplied to render function');
@@ -177,7 +176,27 @@ const createRender = (): Render => {
       }
     };
 
-    const renderUIText = (): void => {
+    const renderMenuChoice = (): void => {
+      const TEXT_COLOR = new Color(0, 0, 0).toString();
+      const TEXT_FONT = '18px monospace';
+      ctx.fillStyle = TEXT_COLOR;
+      ctx.font = TEXT_FONT;
+
+      const lines = renderString.split('\n');
+
+      const FONT_SIZE = 16;
+      ctx.font = `${FONT_SIZE}px monospace`;
+      const LINE_HEIGHT = CELL_HEIGHT;
+      for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(
+          lines[i],
+          CELL_WIDTH,
+          INITIAL_Y + 2 * CELL_HEIGHT + i * LINE_HEIGHT
+        );
+      }
+    };
+
+    const renderHUD = (): void => {
       const START_Y = 20;
       const LINE_HEIGHT = 25;
       const TEXT_COLOR = new Color(0, 0, 0).toString();
@@ -230,7 +249,10 @@ const createRender = (): Render => {
     renderGhostPiece();
     renderGameBoard();
     if (gameState) {
-      renderUIText();
+      renderHUD();
+    }
+    if (!gameState) {
+      renderMenuChoice();
     }
     if (gameState && gameState === GameState.GameOver) {
       renderModal('Game over! Press "r" to play again.');

@@ -12,7 +12,7 @@ const initializeOptions: SceneInitializer = params => {
 
   const menuItems: MenuItem[] = [
     {
-      text: 'Ghost pieces -',
+      text: 'Ghost pieces - (TODO)',
       action: (): void => dispatch({ type: EventType.ToggleGhostPieceOption })
     },
     {
