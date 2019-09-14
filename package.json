@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tsc && jest",
     "web": "parcel index.html --open",
-    "build": "rm -rf ./dist ./docs && parcel build index.html && mkdir ./docs && cp -a ./dist/. ./docs/",
+    "build": "rm -rf ./dist ./docs && parcel build index.html --public-url ./ && mkdir ./docs && cp -a ./dist/. ./docs/",
     "terminal": "tsc && node ./out/terminal.js"
   },
   "repository": {
