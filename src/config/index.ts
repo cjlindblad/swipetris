@@ -10,14 +10,14 @@ export const ROWS = 16;
 
 const GAME_CHARS: Record<string, Record<string, string>> = {
   [WEB_ENV]: {
-    [GAME_PIECE_TYPE.L]: '😁',
-    [GAME_PIECE_TYPE.L_INVERTED]: '😫',
-    [GAME_PIECE_TYPE.S]: '😜',
-    [GAME_PIECE_TYPE.S_INVERTED]: '🤗',
-    [GAME_PIECE_TYPE.T]: '😮',
-    [GAME_PIECE_TYPE.I]: '😎',
-    [GAME_PIECE_TYPE.BLOCK]: '😅',
-    [GAME_PIECE_TYPE.EMPTY_SPACE]: '〰️'
+    [GAME_PIECE_TYPE.L]: 'l',
+    [GAME_PIECE_TYPE.L_INVERTED]: 'l',
+    [GAME_PIECE_TYPE.S]: 's',
+    [GAME_PIECE_TYPE.S_INVERTED]: 's',
+    [GAME_PIECE_TYPE.T]: 't',
+    [GAME_PIECE_TYPE.I]: 'i',
+    [GAME_PIECE_TYPE.BLOCK]: 'o',
+    [GAME_PIECE_TYPE.EMPTY_SPACE]: ' '
   },
   [TERMINAL_ENV]: {
     [GAME_PIECE_TYPE.L]: 'l',

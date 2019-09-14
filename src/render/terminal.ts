@@ -211,8 +211,12 @@ const render: Render = (param, gameState): void => {
   display += '+';
   display += expandString('-', longestLine, 1);
   display += '+\n';
-  process.stdout.write('\x1b[2J');
-  process.stdout.write(display);
+  if (console.clear) {
+    console.clear();
+  } else {
+    console.log('\x1b[2J');
+  }
+  console.log(display);
 };
 
 export default render;

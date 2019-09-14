@@ -6,6 +6,8 @@ import { GameState } from '../scenes/gameState';
 import Color from './color';
 import { lineWrap } from '../underdash';
 
+import terminalRender from './terminal';
+
 const T_COLOR = new Color(171, 0, 235);
 const L_COLOR = new Color(252, 158, 0);
 const L_INVERTED_COLOR = new Color(45, 0, 248);
@@ -74,6 +76,9 @@ const createRender = (): Render => {
   const INITIAL_X = 0;
 
   const render: Render = (param, gameState) => {
+    // log to console as well!
+    terminalRender(param, gameState);
+
     const {
       renderString,
       gameBoard,
