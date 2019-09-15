@@ -15,6 +15,7 @@ import { EventType } from '../../eventDispatcher/enums';
 import { Render } from '../../render/types';
 import LevelController from './levelController';
 import { GameStateRepresentation } from './types';
+import { SceneTransition } from '../../game/enums';
 
 // TODO give this whole file some love
 export enum GameState {
@@ -242,6 +243,14 @@ export const initializeGameState: SceneInitializer = ({
       case EventType.InputRight:
       case EventType.Rotate:
       case EventType.RotateReverse: {
+        if (
+          event.type === EventType.RotateReverse &&
+          gameState === GameState.Paused
+        ) {
+          changeScene(SceneTransition.OptionsToStart);
+          return;
+        }
+
         if (gameState !== GameState.Active) {
           break;
         }

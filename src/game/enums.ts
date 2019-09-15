@@ -23,7 +23,7 @@ Possible scene transitions (TODO)
 
 export enum SceneTransition {
   StartToGame,
-  // GameToStart,
+  GameToStart,
   StartToOptions,
   OptionsToStart
   // StartToHighScore,

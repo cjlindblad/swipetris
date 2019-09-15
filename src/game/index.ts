@@ -27,6 +27,10 @@ const initializeGame = (): void => {
     {
       transition: SceneTransition.OptionsToStart,
       initializer: initializeMenu
+    },
+    {
+      transition: SceneTransition.GameToStart,
+      initializer: initializeMenu
     }
   ];
 

@@ -11,22 +11,20 @@ const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
 
   const getRepresentation = (): GameStateRepresentation => {
     let representation = '';
-    menuItems.forEach(
-      (item, index): void => {
-        if (index === activeMenuIndex) {
-          representation += `-> ${item.text}\n`;
-        } else {
-          representation += `   ${item.text}\n`;
-        }
+    menuItems.forEach((item, index): void => {
+      if (index === activeMenuIndex) {
+        representation += `-> ${item.text}\n`;
+      } else {
+        representation += `   ${item.text}\n`;
       }
-    );
+    });
 
     return {
       renderString: representation,
       nextPieceString: '',
       score: 0,
       level: 1,
-      clearedLines: 0,
+      clearedLines: 0
     };
   };
 
