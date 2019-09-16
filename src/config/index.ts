@@ -11,9 +11,9 @@ export const ROWS = 16;
 const GAME_CHARS: Record<string, Record<string, string>> = {
   [WEB_ENV]: {
     [GAME_PIECE_TYPE.L]: 'l',
-    [GAME_PIECE_TYPE.L_INVERTED]: 'l',
+    [GAME_PIECE_TYPE.L_INVERTED]: 'j',
     [GAME_PIECE_TYPE.S]: 's',
-    [GAME_PIECE_TYPE.S_INVERTED]: 's',
+    [GAME_PIECE_TYPE.S_INVERTED]: 'z',
     [GAME_PIECE_TYPE.T]: 't',
     [GAME_PIECE_TYPE.I]: 'i',
     [GAME_PIECE_TYPE.BLOCK]: 'o',
