@@ -317,6 +317,7 @@ export const initializeGameState: SceneInitializer = ({
         dispatch({ type: EventType.StartGravityInterval });
         let nextState: GamePieceState;
         let validMove = true;
+        let droppedLines = 0;
         do {
           nextState = activePiece.getNextState(EventType.GravityDrop);
           if (nextState.moves === undefined) {
@@ -325,8 +326,12 @@ export const initializeGameState: SceneInitializer = ({
           validMove = isValidMove(nextState.coordinates);
           if (validMove) {
             activePiece.setState({ ...nextState, moves: nextState.moves + 1 });
+            droppedLines += 1;
           }
         } while (validMove);
+
+        // hard drop scoring
+        score += 2 * droppedLines;
 
         dispatch({ type: EventType.GravityDrop });
         break;
