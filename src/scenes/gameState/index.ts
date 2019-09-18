@@ -33,6 +33,9 @@ export const initializeGameState: SceneInitializer = ({
     'gameCharSelector'
   ) as GameCharSelector; // TODO should be automatic
   const render: Render = DependencyContainer.resolve('render') as Render;
+  const highScore: HighScore = DependencyContainer.resolve(
+    'highScore'
+  ) as HighScore;
   const EMPTY_SPACE_CHAR = gameCharSelector(GAME_PIECE_TYPE.EMPTY_SPACE);
 
   // state
@@ -358,6 +361,7 @@ export const initializeGameState: SceneInitializer = ({
               type: EventType.ClearGravityInterval
             });
             gameState = GameState.GameOver;
+            highScore.save(score);
             break;
           }
           // this is where a piece lands

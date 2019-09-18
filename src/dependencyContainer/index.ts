@@ -19,7 +19,7 @@ class DependencyContainer {
 
   public static resolve(
     dependencyName: keyof Dependencies
-  ): Render | SetupInputListeners | GameCharSelector | undefined {
+  ): Render | SetupInputListeners | GameCharSelector | HighScore | undefined {
     // TODO could be cleaner
     if (!DependencyContainer.dependencies) {
       throw new Error('Dependency container is not initialized');

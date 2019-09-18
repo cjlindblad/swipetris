@@ -6,4 +6,5 @@ interface Dependencies {
   render?: Render;
   setupInputListeners?: SetupInputListeners;
   gameCharSelector?: GameCharSelector;
+  highScore?: HighScore;
 }

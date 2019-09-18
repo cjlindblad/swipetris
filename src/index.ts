@@ -11,14 +11,16 @@ export const main = async (GAME_ENV: string): Promise<void> => {
       dependencies = {
         render: (await import('./render/web')).default(),
         setupInputListeners: (await import('./input/web')).default,
-        gameCharSelector: createGameCharSelector(WEB_ENV)
+        gameCharSelector: createGameCharSelector(WEB_ENV),
+        highScore: (await import('./highScore/web')).default
       };
       break;
     case TERMINAL_ENV:
       dependencies = {
         render: (await import('./render/terminal')).default,
         setupInputListeners: (await import('./input/terminal')).default,
-        gameCharSelector: createGameCharSelector(TERMINAL_ENV)
+        gameCharSelector: createGameCharSelector(TERMINAL_ENV),
+        highScore: (await import('./highScore/terminal')).default
       };
       break;
     default:
