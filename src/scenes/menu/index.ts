@@ -15,6 +15,10 @@ const initializeMenu: SceneInitializer = ({ changeScene }) => {
     {
       text: 'Options',
       action: (): void => changeScene(SceneTransition.StartToOptions)
+    },
+    {
+      text: 'High score',
+      action: () => changeScene(SceneTransition.StartToHighScore)
     }
   ];
 

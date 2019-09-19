@@ -5,6 +5,7 @@ import { SceneTransitionMapping } from '../scenes/types';
 import { SceneTransition } from './enums';
 import { initializeGameState } from '../scenes/gameState';
 import initializeOptions from '../scenes/options';
+import initializeHighScore from '../scenes/highScore';
 import createEventDispatcher from '../eventDispatcher';
 import { EventType } from '../eventDispatcher/enums';
 import { SetupInputListeners } from '../input/types';
@@ -30,6 +31,14 @@ const initializeGame = (): void => {
     },
     {
       transition: SceneTransition.GameToStart,
+      initializer: initializeMenu
+    },
+    {
+      transition: SceneTransition.StartToHighScore,
+      initializer: initializeHighScore
+    },
+    {
+      transition: SceneTransition.HighScoreToStart,
       initializer: initializeMenu
     }
   ];

@@ -102,8 +102,6 @@ const createRender = (): Render => {
     ctx.fillStyle = new Color(255, 255, 255, 0.25).toString();
     ctx.fillRect(INITIAL_X, INITIAL_Y, CANVAS_WIDTH, CANVAS_HEIGHT - INITIAL_Y);
 
-    // TODO check how many times render function is called
-
     // render functions for different parts of UI
     const renderNextPiece = (): void => {
       if (nextPiece) {

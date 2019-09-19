@@ -1,5 +1,6 @@
+const HIGH_SCORE_KEY = 'high_scores';
+
 const saveHighScore = (score: number): void => {
-  const HIGH_SCORE_KEY = 'high_scores';
   const serializedHighScore = localStorage.getItem(HIGH_SCORE_KEY);
 
   if (serializedHighScore === null) {
@@ -7,17 +8,30 @@ const saveHighScore = (score: number): void => {
     return;
   }
 
-  let highScores: number[] = JSON.parse(serializedHighScore);
-  highScores.push(score);
-  highScores.sort((a, b) => b - a);
-  if (highScores.length > 10) {
-    highScores.splice(10);
+  let highScore: number[] = JSON.parse(serializedHighScore);
+  highScore.push(score);
+  highScore.sort((a, b) => b - a);
+  if (highScore.length > 10) {
+    highScore.splice(10);
   }
-  localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highScores));
+  localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highScore));
+};
+
+const loadHighScore = (): number[] => {
+  const serializedHighScore = localStorage.getItem(HIGH_SCORE_KEY);
+
+  if (serializedHighScore === null) {
+    return [];
+  }
+
+  const highScore: number[] = JSON.parse(serializedHighScore);
+
+  return highScore;
 };
 
 const highScore: HighScore = {
-  save: saveHighScore
+  save: saveHighScore,
+  load: loadHighScore
 };
 
 export default highScore;

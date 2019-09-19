@@ -6,11 +6,20 @@ import { HandleEvent } from '../eventDispatcher/types';
 import { Render } from '../render/types';
 import { GameStateRepresentation } from './gameState/types';
 
-const createMenu = (render: Render, menuItems: MenuItem[]): Scene => {
+const createMenu = (
+  render: Render,
+  menuItems: MenuItem[],
+  text?: string
+): Scene => {
   let activeMenuIndex = 0;
 
   const getRepresentation = (): GameStateRepresentation => {
     let representation = '';
+
+    if (text) {
+      representation += `${text.trim()}\n\n`;
+    }
+
     menuItems.forEach((item, index): void => {
       if (index === activeMenuIndex) {
         representation += `-> ${item.text}\n`;
