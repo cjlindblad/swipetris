@@ -1,9 +1,17 @@
+let savedHighScore: number[] = [];
+
 const loadHighScore = (): number[] => {
-  return [13, 37, 13, 37];
+  return savedHighScore;
 };
 
 const saveHighScore = (score: number): void => {
-  // TODO not implemented
+  const highScore = savedHighScore;
+  highScore.push(score);
+  highScore.sort((a, b) => b - a);
+  if (highScore.length > 10) {
+    highScore.splice(10);
+  }
+  savedHighScore = highScore;
 };
 
 const highScore: HighScore = {
