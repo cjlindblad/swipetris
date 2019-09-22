@@ -1,6 +1,7 @@
 import { ChangeScene, Scene } from '../game/types';
 import { SceneTransition } from '../game/enums';
 import { Dispatch } from '../eventDispatcher/types';
+import { Options } from '../options/types';
 
 interface MenuItem {
   text: string;
@@ -19,6 +20,7 @@ interface SceneInitializer {
 interface InitializerParam {
   changeScene: ChangeScene;
   dispatch: Dispatch;
+  options: Options;
 }
 
 interface ChangeScene {

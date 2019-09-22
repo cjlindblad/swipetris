@@ -6,11 +6,13 @@ import {
 } from './types';
 import { EventDispatcher, UnregisterCallback } from '../eventDispatcher/types';
 import { EventType } from '../eventDispatcher/enums';
+import { Options } from '../options/types';
 
 const initializeSceneController = (
   startingSceneInitializer: SceneInitializer,
   sceneTransitions: SceneTransitionMapping[],
-  eventDispatcher: EventDispatcher
+  eventDispatcher: EventDispatcher,
+  options: Options
 ): SceneController => {
   let activeScene: Scene;
   let unregisterCallback: UnregisterCallback;
@@ -28,7 +30,8 @@ const initializeSceneController = (
 
     activeScene = sceneTransitionMapping.initializer({
       changeScene,
-      dispatch: eventDispatcher.dispatch
+      dispatch: eventDispatcher.dispatch,
+      options
     });
     if (unregisterCallback) {
       unregisterCallback();
@@ -43,7 +46,8 @@ const initializeSceneController = (
   // create first scene
   activeScene = startingSceneInitializer({
     changeScene,
-    dispatch: eventDispatcher.dispatch
+    dispatch: eventDispatcher.dispatch,
+    options
   });
   unregisterCallback = eventDispatcher.register(activeScene);
 

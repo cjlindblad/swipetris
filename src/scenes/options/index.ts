@@ -6,14 +6,16 @@ import { Render } from '../../render/types';
 import { EventType } from '../../eventDispatcher/enums';
 
 const initializeOptions: SceneInitializer = params => {
-  const { changeScene, dispatch } = params;
+  const { changeScene, dispatch, options } = params;
 
   const render: Render = DependencyContainer.resolve('render') as Render;
 
   const menuItems: MenuItem[] = [
     {
-      text: 'Ghost pieces - (TODO)',
-      action: (): void => dispatch({ type: EventType.ToggleGhostPieceOption })
+      text: `Ghost pieces - ${options.ghostPieceActive ? 'on' : 'off'}`,
+      action: (): void => {
+        dispatch({ type: EventType.ToggleGhostPieceOption });
+      }
     },
     {
       text: 'Back to start screen',

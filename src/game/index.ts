@@ -1,6 +1,7 @@
 import DependencyContainer from '../dependencyContainer';
 import initializeMenu from '../scenes/menu';
 import initializeSceneController from '../scenes/sceneController';
+import initializeGameOptions from '../options';
 import { SceneTransitionMapping } from '../scenes/types';
 import { SceneTransition } from './enums';
 import { initializeGameState } from '../scenes/gameState';
@@ -46,7 +47,15 @@ const initializeGame = (): void => {
   // create event dispatcher
   const eventDispatcher = createEventDispatcher();
 
-  initializeSceneController(initializeMenu, sceneTransitions, eventDispatcher);
+  const options = initializeGameOptions();
+  eventDispatcher.register(options.eventClient);
+
+  initializeSceneController(
+    initializeMenu,
+    sceneTransitions,
+    eventDispatcher,
+    options.options
+  );
 
   // map inputs to dispatch events
   const dispatchInputEvent = (eventType: EventType): void => {

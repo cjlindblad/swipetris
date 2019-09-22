@@ -26,7 +26,8 @@ export enum GameState {
 
 export const initializeGameState: SceneInitializer = ({
   changeScene,
-  dispatch
+  dispatch,
+  options
 }) => {
   // inject dependencies
   const gameCharSelector: GameCharSelector = DependencyContainer.resolve(
@@ -174,7 +175,7 @@ export const initializeGameState: SceneInitializer = ({
       clearedLines,
       gameBoard: gameBoardBuffer,
       nextPiece,
-      ghostPiece
+      ghostPiece: options.ghostPieceActive ? ghostPiece : undefined
     };
   };
 

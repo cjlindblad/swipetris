@@ -77,7 +77,7 @@ const createRender = (): Render => {
 
   const render: Render = (param, gameState) => {
     // log to console as well!
-    terminalRender(param, gameState);
+    // terminalRender(param, gameState);
 
     const {
       renderString,
