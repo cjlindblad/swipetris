@@ -22,9 +22,9 @@ const createMenu = (
 
     menuItems.forEach((item, index): void => {
       if (index === activeMenuIndex) {
-        representation += `-> ${item.text}\n`;
+        representation += `-> ${item.text()}\n`;
       } else {
-        representation += `   ${item.text}\n`;
+        representation += `   ${item.text()}\n`;
       }
     });
 
@@ -45,6 +45,9 @@ const createMenu = (
         break;
       case EventType.InputUp:
         activeMenuIndex = wrapModulo(activeMenuIndex - 1, menuItems.length);
+        render(getRepresentation());
+        break;
+      case EventType.Render:
         render(getRepresentation());
         break;
       case EventType.Confirmation:

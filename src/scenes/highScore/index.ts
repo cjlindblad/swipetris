@@ -14,7 +14,7 @@ const initializeHighScore: SceneInitializer = params => {
 
   const menuItems: MenuItem[] = [
     {
-      text: 'Back',
+      text: (): string => 'Back',
       action: (): void => changeScene(SceneTransition.HighScoreToStart)
     }
   ];

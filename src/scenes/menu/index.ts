@@ -9,16 +9,16 @@ const initializeMenu: SceneInitializer = ({ changeScene }) => {
 
   const menuItems: MenuItem[] = [
     {
-      text: 'Start game',
+      text: (): string => 'Start game',
       action: (): void => changeScene(SceneTransition.StartToGame)
     },
     {
-      text: 'Options',
+      text: (): string => 'Options',
       action: (): void => changeScene(SceneTransition.StartToOptions)
     },
     {
-      text: 'High score',
-      action: () => changeScene(SceneTransition.StartToHighScore)
+      text: (): string => 'High score',
+      action: (): void => changeScene(SceneTransition.StartToHighScore)
     }
   ];
 

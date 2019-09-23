@@ -12,13 +12,15 @@ const initializeOptions: SceneInitializer = params => {
 
   const menuItems: MenuItem[] = [
     {
-      text: `Ghost pieces - ${options.ghostPieceActive ? 'on' : 'off'}`,
+      text: (): string =>
+        `Ghost pieces - ${options.ghostPieceActive ? 'on' : 'off'}`,
       action: (): void => {
         dispatch({ type: EventType.ToggleGhostPieceOption });
+        dispatch({ type: EventType.Render });
       }
     },
     {
-      text: 'Back to start screen',
+      text: (): string => 'Back to start screen',
       action: (): void => changeScene(SceneTransition.OptionsToStart)
     }
   ];

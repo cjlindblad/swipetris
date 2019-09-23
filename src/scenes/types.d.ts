@@ -4,7 +4,7 @@ import { Dispatch } from '../eventDispatcher/types';
 import { Options } from '../options/types';
 
 interface MenuItem {
-  text: string;
+  text: () => string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   action: any;
 }
