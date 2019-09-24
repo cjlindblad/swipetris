@@ -76,9 +76,6 @@ const createRender = (): Render => {
   const INITIAL_X = 0;
 
   const render: Render = (param, gameState) => {
-    // log to console as well!
-    // terminalRender(param, gameState);
-
     const {
       renderString,
       gameBoard,
@@ -86,8 +83,15 @@ const createRender = (): Render => {
       score,
       level,
       ghostPiece,
-      clearedLines
+      clearedLines,
+      options
     } = param;
+
+    if (options && options.consoleRenderingActive) {
+      terminalRender(param, gameState);
+    } else {
+      console.clear();
+    }
 
     // TODO pass which screen we are rendering, instead of checking gameState
 

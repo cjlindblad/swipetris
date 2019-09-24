@@ -7,4 +7,5 @@ interface GameOptions {
 
 interface Options {
   ghostPieceActive: boolean;
+  consoleRenderingActive: boolean;
 }

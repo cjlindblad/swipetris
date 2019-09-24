@@ -17,5 +17,6 @@ export enum EventType {
   ClearGravityInterval = 'ClearGravityInterval',
   Restart = 'Restart',
   ToggleGhostPieceOption = 'ToggleGhostPieceOption',
+  ToggleConsoleRenderingOption = 'ToggleConsoleRenderingOption',
   Render = 'Render'
 }

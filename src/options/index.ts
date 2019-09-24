@@ -4,13 +4,17 @@ import { GameOptions } from './types';
 
 const initializeGameOptions = (): GameOptions => {
   const options = {
-    ghostPieceActive: true
+    ghostPieceActive: true,
+    consoleRenderingActive: false
   };
 
   const eventClient = {
     handleEvent: (event: DispatchEvent): void => {
       if (event.type === EventType.ToggleGhostPieceOption) {
         options.ghostPieceActive = !options.ghostPieceActive;
+      }
+      if (event.type === EventType.ToggleConsoleRenderingOption) {
+        options.consoleRenderingActive = !options.consoleRenderingActive;
       }
     }
   };

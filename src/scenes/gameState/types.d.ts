@@ -1,4 +1,5 @@
 import { GamePiece } from '../../gamePiece/types';
+import { Options } from '../../options/types';
 
 interface GetGameStateRepresentation {
   (): GameStateRepresentation;
@@ -13,4 +14,5 @@ interface GameStateRepresentation {
   gameBoard?: string[][];
   nextPiece?: GamePiece;
   ghostPiece?: GamePiece;
+  options?: Options;
 }

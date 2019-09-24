@@ -4,7 +4,7 @@ import createMenu from '../menuTemplate';
 import DependencyContainer from '../../dependencyContainer';
 import { Render } from '../../render/types';
 
-const initializeMenu: SceneInitializer = ({ changeScene }) => {
+const initializeMenu: SceneInitializer = ({ changeScene, options }) => {
   const render: Render = DependencyContainer.resolve('render') as Render;
 
   const menuItems: MenuItem[] = [
@@ -22,7 +22,7 @@ const initializeMenu: SceneInitializer = ({ changeScene }) => {
     }
   ];
 
-  const menu = createMenu(render, menuItems);
+  const menu = createMenu(render, menuItems, options);
 
   return menu;
 };

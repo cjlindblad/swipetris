@@ -175,7 +175,8 @@ export const initializeGameState: SceneInitializer = ({
       clearedLines,
       gameBoard: gameBoardBuffer,
       nextPiece,
-      ghostPiece: options.ghostPieceActive ? ghostPiece : undefined
+      ghostPiece: options.ghostPieceActive ? ghostPiece : undefined,
+      options
     };
   };
 

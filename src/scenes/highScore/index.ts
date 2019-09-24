@@ -5,7 +5,7 @@ import { Render } from '../../render/types';
 import DependencyContainer from '../../dependencyContainer';
 
 const initializeHighScore: SceneInitializer = params => {
-  const { changeScene, dispatch } = params;
+  const { changeScene, dispatch, options } = params;
 
   const highScore = DependencyContainer.resolve('highScore') as HighScore;
   const highScores = highScore.load();
@@ -21,7 +21,7 @@ const initializeHighScore: SceneInitializer = params => {
 
   const text = highScores.map((score, i) => `${i + 1} - ${score}`).join('\n');
 
-  const menu = createMenu(render, menuItems, text);
+  const menu = createMenu(render, menuItems, options, text);
 
   return menu;
 };

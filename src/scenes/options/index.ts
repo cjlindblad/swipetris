@@ -20,12 +20,21 @@ const initializeOptions: SceneInitializer = params => {
       }
     },
     {
+      // TODO only in web environment
+      text: (): string =>
+        `Console rendering - ${options.consoleRenderingActive ? 'on' : 'off'}`,
+      action: (): void => {
+        dispatch({ type: EventType.ToggleConsoleRenderingOption });
+        dispatch({ type: EventType.Render });
+      }
+    },
+    {
       text: (): string => 'Back to start screen',
       action: (): void => changeScene(SceneTransition.OptionsToStart)
     }
   ];
 
-  const menu = createMenu(render, menuItems);
+  const menu = createMenu(render, menuItems, options);
 
   return menu;
 };
