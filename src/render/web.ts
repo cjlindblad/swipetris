@@ -220,12 +220,20 @@ const createRender = (): Render => {
     };
 
     const renderModal = (text: string): void => {
-      const lines = lineWrap(text, 20).split('\n');
-
       const MODAL_HORIZONTAL_PADDING = CELL_WIDTH;
       const MODAL_MARGIN_TOP = CELL_HEIGHT * 2;
       const MODAL_INNER_PADDING = CELL_WIDTH;
+
+      const charactersPerLine =
+        (CANVAS_WIDTH -
+          2 * MODAL_HORIZONTAL_PADDING -
+          2 * MODAL_INNER_PADDING) /
+        (CELL_WIDTH / 2);
+      console.log(charactersPerLine);
+      const lines = lineWrap(text, charactersPerLine).split('\n');
+
       const MODAL_HEIGHT = CELL_HEIGHT * 2 + CELL_HEIGHT * lines.length;
+
       ctx.fillStyle = new Color(0, 0, 0, 0.5).toString();
       ctx.fillRect(
         MODAL_HORIZONTAL_PADDING,
@@ -238,16 +246,21 @@ const createRender = (): Render => {
       const FONT_SIZE = 20;
       ctx.font = `${FONT_SIZE}px monospace`;
       const LINE_HEIGHT = CELL_HEIGHT;
-      for (let i = 0; i < lines.length; i++) {
-        ctx.fillText(
-          lines[i],
-          MODAL_HORIZONTAL_PADDING + MODAL_INNER_PADDING,
-          INITIAL_Y +
-            MODAL_MARGIN_TOP +
-            FONT_SIZE +
-            MODAL_INNER_PADDING +
-            i * LINE_HEIGHT
-        );
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        for (let charIndex = 0; charIndex < line.length; charIndex++) {
+          ctx.fillText(
+            line.charAt(charIndex),
+            MODAL_HORIZONTAL_PADDING +
+              MODAL_INNER_PADDING +
+              charIndex * (CELL_WIDTH / 2),
+            INITIAL_Y +
+              MODAL_MARGIN_TOP +
+              FONT_SIZE +
+              MODAL_INNER_PADDING +
+              lineIndex * LINE_HEIGHT
+          );
+        }
       }
     };
 
