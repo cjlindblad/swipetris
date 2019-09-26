@@ -229,7 +229,6 @@ const createRender = (): Render => {
           2 * MODAL_HORIZONTAL_PADDING -
           2 * MODAL_INNER_PADDING) /
         (CELL_WIDTH / 2);
-      console.log(charactersPerLine);
       const lines = lineWrap(text, charactersPerLine).split('\n');
 
       const MODAL_HEIGHT = CELL_HEIGHT * 2 + CELL_HEIGHT * lines.length;
@@ -243,7 +242,7 @@ const createRender = (): Render => {
       );
 
       ctx.fillStyle = new Color(255, 255, 255).toString();
-      const FONT_SIZE = 20;
+      const FONT_SIZE = CELL_WIDTH / 2;
       ctx.font = `${FONT_SIZE}px monospace`;
       const LINE_HEIGHT = CELL_HEIGHT;
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
@@ -253,7 +252,7 @@ const createRender = (): Render => {
             line.charAt(charIndex),
             MODAL_HORIZONTAL_PADDING +
               MODAL_INNER_PADDING +
-              charIndex * (CELL_WIDTH / 2),
+              charIndex * (CELL_WIDTH / 3),
             INITIAL_Y +
               MODAL_MARGIN_TOP +
               FONT_SIZE +
@@ -275,7 +274,7 @@ const createRender = (): Render => {
       renderMenuChoice();
     }
     if (gameState && gameState === GameState.GameOver) {
-      renderModal('Game over! Press "r" to play again.');
+      renderModal('Game over!\n(r) restart\n(q) quit');
     }
     if (gameState && gameState === GameState.Paused) {
       renderModal('Game paused. Press "q" to exit to menu.');

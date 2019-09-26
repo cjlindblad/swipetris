@@ -250,7 +250,7 @@ export const initializeGameState: SceneInitializer = ({
       case EventType.RotateReverse: {
         if (
           event.type === EventType.RotateReverse &&
-          gameState === GameState.Paused
+          (gameState === GameState.Paused || gameState === GameState.GameOver)
         ) {
           changeScene(SceneTransition.OptionsToStart);
           return;
