@@ -276,6 +276,9 @@ const createRender = (): Render => {
     if (gameState && gameState === GameState.GameOver) {
       renderModal('Game over!\n(r) restart\n(q) quit');
     }
+    if (gameState && gameState === GameState.HighScore) {
+      renderModal(`High score! ${score}`);
+    }
     if (gameState && gameState === GameState.Paused) {
       renderModal('Game paused. Press "q" to exit to menu.');
     }

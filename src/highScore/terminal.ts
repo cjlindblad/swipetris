@@ -14,9 +14,16 @@ const saveHighScore = (score: number): void => {
   savedHighScore = highScore;
 };
 
+const isHighScore = (score: number): boolean => {
+  const highScore = loadHighScore();
+  const minScore = Math.min(...highScore);
+  return score > minScore;
+};
+
 const highScore: HighScore = {
   save: saveHighScore,
-  load: loadHighScore
+  load: loadHighScore,
+  isHighScore
 };
 
 export default highScore;

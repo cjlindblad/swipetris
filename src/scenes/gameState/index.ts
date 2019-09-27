@@ -21,7 +21,8 @@ import { SceneTransition } from '../../game/enums';
 export enum GameState {
   Active = 'Active',
   GameOver = 'GameOver',
-  Paused = 'Paused'
+  Paused = 'Paused',
+  HighScore = 'HighScore'
 }
 
 export const initializeGameState: SceneInitializer = ({
@@ -362,8 +363,12 @@ export const initializeGameState: SceneInitializer = ({
             dispatch({
               type: EventType.ClearGravityInterval
             });
-            gameState = GameState.GameOver;
-            highScore.save(score);
+            if (highScore.isHighScore(score)) {
+              gameState = GameState.HighScore;
+              highScore.save(score);
+            } else {
+              gameState = GameState.GameOver;
+            }
             break;
           }
           // this is where a piece lands

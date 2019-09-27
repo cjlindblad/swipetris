@@ -29,9 +29,19 @@ const loadHighScore = (): number[] => {
   return highScore;
 };
 
+const isHighScore = (score: number): boolean => {
+  const highScore = loadHighScore();
+  const minScore = Math.min(...highScore);
+  console.log('highScore', highScore);
+  console.log('minScore', minScore);
+  console.log('score', score);
+  return score > minScore;
+};
+
 const highScore: HighScore = {
   save: saveHighScore,
-  load: loadHighScore
+  load: loadHighScore,
+  isHighScore
 };
 
 export default highScore;
