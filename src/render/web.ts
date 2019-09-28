@@ -84,7 +84,8 @@ const createRender = (): Render => {
       level,
       ghostPiece,
       clearedLines,
-      options
+      options,
+      name
     } = param;
 
     if (options && options.consoleRenderingActive) {
@@ -277,7 +278,7 @@ const createRender = (): Render => {
       renderModal('Game over!\n(r) restart\n(q) quit');
     }
     if (gameState && gameState === GameState.HighScore) {
-      renderModal(`High score! ${score}`);
+      renderModal(`High score! ${score}\n${name && name.getName()}`);
     }
     if (gameState && gameState === GameState.Paused) {
       renderModal('Game paused. Press "q" to exit to menu.');

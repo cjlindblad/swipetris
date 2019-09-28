@@ -16,6 +16,7 @@ import { Render } from '../../render/types';
 import LevelController from './levelController';
 import { GameStateRepresentation } from './types';
 import { SceneTransition } from '../../game/enums';
+import { createName } from '../../highScore/name';
 
 // TODO give this whole file some love
 export enum GameState {
@@ -49,6 +50,8 @@ export const initializeGameState: SceneInitializer = ({
   let score: number;
   let gameBoard: string[][];
   let levelController: LevelController;
+
+  const name = createName();
 
   function isValidMove(coordinates: Coordinate[]): boolean {
     let validMove = true;
@@ -177,7 +180,8 @@ export const initializeGameState: SceneInitializer = ({
       gameBoard: gameBoardBuffer,
       nextPiece,
       ghostPiece: options.ghostPieceActive ? ghostPiece : undefined,
-      options
+      options,
+      name
     };
   };
 
@@ -244,6 +248,9 @@ export const initializeGameState: SceneInitializer = ({
         clearGravityInterval();
         break;
       case EventType.InputUp:
+        if (gameState === GameState.HighScore) {
+          name.nextCharacter();
+        }
         break;
       case EventType.InputLeft:
       case EventType.InputRight:
@@ -255,6 +262,20 @@ export const initializeGameState: SceneInitializer = ({
         ) {
           changeScene(SceneTransition.OptionsToStart);
           return;
+        }
+
+        if (
+          event.type === EventType.InputLeft &&
+          gameState === GameState.HighScore
+        ) {
+          name.prevIndex();
+        }
+
+        if (
+          event.type === EventType.InputRight &&
+          gameState === GameState.HighScore
+        ) {
+          name.nextIndex();
         }
 
         if (gameState !== GameState.Active) {
@@ -343,9 +364,17 @@ export const initializeGameState: SceneInitializer = ({
         break;
       case EventType.InputDown:
       case EventType.GravityDrop: {
+        if (
+          event.type === EventType.InputDown &&
+          gameState === GameState.HighScore
+        ) {
+          name.prevCharacter();
+          break;
+        }
         if (gameState !== GameState.Active) {
           break;
         }
+
         // TODO possible performance thief
         dispatch({ type: EventType.StartGravityInterval });
 

@@ -31,10 +31,12 @@ const loadHighScore = (): number[] => {
 
 const isHighScore = (score: number): boolean => {
   const highScore = loadHighScore();
+
+  if (highScore.length < 10) {
+    return true;
+  }
+
   const minScore = Math.min(...highScore);
-  console.log('highScore', highScore);
-  console.log('minScore', minScore);
-  console.log('score', score);
   return score > minScore;
 };
 
