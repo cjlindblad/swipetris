@@ -3,6 +3,7 @@ import { isEmptyObject } from '../underdash';
 import { GameCharSelector } from '../config/types';
 import { SetupInputListeners } from '../input/types';
 import { Render } from '../render/types';
+import { HighScore } from '../highScore/types';
 
 class DependencyContainer {
   private constructor() {}

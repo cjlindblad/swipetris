@@ -1,3 +1,5 @@
+import { HighScore } from './types';
+
 let savedHighScore: number[] = [];
 
 const loadHighScore = (): number[] => {

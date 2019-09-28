@@ -1,3 +1,5 @@
+import { HighScore } from './types';
+
 const HIGH_SCORE_KEY = 'high_scores';
 
 const saveHighScore = (score: number): void => {

@@ -3,6 +3,7 @@ import { SceneTransition } from '../../game/enums';
 import createMenu from '../menuTemplate';
 import { Render } from '../../render/types';
 import DependencyContainer from '../../dependencyContainer';
+import { HighScore } from '../../highScore/types';
 
 const initializeHighScore: SceneInitializer = params => {
   const { changeScene, dispatch, options } = params;

@@ -17,6 +17,7 @@ import LevelController from './levelController';
 import { GameStateRepresentation } from './types';
 import { SceneTransition } from '../../game/enums';
 import { createName } from '../../highScore/name';
+import { HighScore } from '../../highScore/types';
 
 // TODO give this whole file some love
 export enum GameState {
