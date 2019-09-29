@@ -20,7 +20,9 @@ const initializeHighScore: SceneInitializer = params => {
     }
   ];
 
-  const text = highScores.map((score, i) => `${i + 1} - ${score}`).join('\n');
+  const text = highScores
+    .map((score, i) => `${i + 1} - ${score.name} ${score.value}`)
+    .join('\n');
 
   const menu = createMenu(render, menuItems, options, text);
 

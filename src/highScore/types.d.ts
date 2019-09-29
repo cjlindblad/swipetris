@@ -7,7 +7,12 @@ export interface Name {
 }
 
 interface HighScore {
-  save: (score: number) => void;
-  load: () => number[];
-  isHighScore: (score: number) => boolean;
+  save: (score: Score) => void;
+  load: () => Score[];
+  isHighScore: (value: number) => boolean;
+}
+
+interface Score {
+  name: string;
+  value: number;
 }

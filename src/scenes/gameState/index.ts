@@ -261,7 +261,7 @@ export const initializeGameState: SceneInitializer = ({
           event.type === EventType.RotateReverse &&
           (gameState === GameState.Paused || gameState === GameState.GameOver)
         ) {
-          changeScene(SceneTransition.OptionsToStart);
+          changeScene(SceneTransition.GameToStart);
           return;
         }
 
@@ -395,7 +395,6 @@ export const initializeGameState: SceneInitializer = ({
             });
             if (highScore.isHighScore(score)) {
               gameState = GameState.HighScore;
-              highScore.save(score);
             } else {
               gameState = GameState.GameOver;
             }
@@ -510,6 +509,16 @@ export const initializeGameState: SceneInitializer = ({
         }
         break;
       }
+      case EventType.Confirmation:
+        if (gameState === GameState.HighScore) {
+          highScore.save({
+            name: name.getName(),
+            value: score
+          });
+          changeScene(SceneTransition.GameToHighScore);
+          return;
+        }
+        break;
       default:
         break;
     }

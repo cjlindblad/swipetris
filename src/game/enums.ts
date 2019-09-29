@@ -6,10 +6,10 @@ Possible scene transitions
 |              |-------->|             |
 | Start screen |         | Active game |
 |              |<--------|             |
-+--------------+         +-------------+
-  ^ |      ^ | 
-  | |      | |   +------------+
-  | |      | +-->|            |
++--------------+         +---------+---+
+  ^ |      ^ |                     |
+  | |      | |   +------------+    |
+  | |      | +-->|            |<---+
   | |      |     | High score |
   | |      +-----|            |
   | v            +------------+
@@ -27,5 +27,6 @@ export enum SceneTransition {
   StartToOptions,
   OptionsToStart,
   StartToHighScore,
-  HighScoreToStart
+  HighScoreToStart,
+  GameToHighScore
 }

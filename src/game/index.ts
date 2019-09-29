@@ -41,6 +41,10 @@ const initializeGame = (): void => {
     {
       transition: SceneTransition.HighScoreToStart,
       initializer: initializeMenu
+    },
+    {
+      transition: SceneTransition.GameToHighScore,
+      initializer: initializeHighScore
     }
   ];
 
