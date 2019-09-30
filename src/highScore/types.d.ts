@@ -4,6 +4,7 @@ export interface Name {
   nextCharacter: () => void;
   prevCharacter: () => void;
   getName: () => string;
+  getIndex: () => number;
 }
 
 interface HighScore {

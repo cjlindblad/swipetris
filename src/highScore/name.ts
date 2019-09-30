@@ -35,11 +35,14 @@ export const createName = (): Name => {
 
   const getName = (): string => name.join('');
 
+  const getIndex = (): number => activeIndex;
+
   return {
     nextIndex,
     prevIndex,
     nextCharacter,
     prevCharacter,
-    getName
+    getName,
+    getIndex
   };
 };

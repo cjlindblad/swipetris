@@ -220,7 +220,10 @@ const createRender = (): Render => {
       );
     };
 
-    const renderModal = (text: string): void => {
+    const renderModal = (
+      text: string,
+      highlightedCharacterIndex?: number
+    ): void => {
       const MODAL_HORIZONTAL_PADDING = CELL_WIDTH;
       const MODAL_MARGIN_TOP = CELL_HEIGHT * 2;
       const MODAL_INNER_PADDING = CELL_WIDTH;
@@ -246,20 +249,29 @@ const createRender = (): Render => {
       const FONT_SIZE = CELL_WIDTH / 2;
       ctx.font = `${FONT_SIZE}px monospace`;
       const LINE_HEIGHT = CELL_HEIGHT;
+      let charCount = 0;
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         for (let charIndex = 0; charIndex < line.length; charIndex++) {
-          ctx.fillText(
-            line.charAt(charIndex),
+          const textX =
             MODAL_HORIZONTAL_PADDING +
-              MODAL_INNER_PADDING +
-              charIndex * (CELL_WIDTH / 3),
+            MODAL_INNER_PADDING +
+            charIndex * (CELL_WIDTH / 3);
+          const textY =
             INITIAL_Y +
-              MODAL_MARGIN_TOP +
-              FONT_SIZE +
-              MODAL_INNER_PADDING +
-              lineIndex * LINE_HEIGHT
-          );
+            MODAL_MARGIN_TOP +
+            FONT_SIZE +
+            MODAL_INNER_PADDING +
+            lineIndex * LINE_HEIGHT;
+
+          ctx.fillText(line.charAt(charIndex), textX, textY);
+          if (
+            highlightedCharacterIndex &&
+            highlightedCharacterIndex === charCount
+          ) {
+            ctx.fillText('_', textX, textY);
+          }
+          charCount++;
         }
       }
     };
@@ -278,7 +290,15 @@ const createRender = (): Render => {
       renderModal('Game over!\n(r) restart\n(q) quit');
     }
     if (gameState && gameState === GameState.HighScore) {
-      renderModal(`High score! ${score}\n${name && name.getName()}`);
+      if (name) {
+        const prefix = `High score! ${score}\n$`;
+        const prefixLength = prefix.length;
+        const highLightedIndex = prefixLength + (name.getIndex() - 1);
+        renderModal(
+          `High score! ${score}\n${name.getName()}`,
+          highLightedIndex
+        );
+      }
     }
     if (gameState && gameState === GameState.Paused) {
       renderModal('Game paused. Press "q" to exit to menu.');
