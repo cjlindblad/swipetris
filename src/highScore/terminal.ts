@@ -1,15 +1,15 @@
-import { HighScore } from './types';
+import { HighScore, Score } from './types';
 
-let savedHighScore: number[] = [];
+let savedHighScore: Score[] = [];
 
-const loadHighScore = (): number[] => {
+const loadHighScore = (): Score[] => {
   return savedHighScore;
 };
 
-const saveHighScore = (score: number): void => {
+const saveHighScore = (score: Score): void => {
   const highScore = savedHighScore;
   highScore.push(score);
-  highScore.sort((a, b) => b - a);
+  highScore.sort((a, b) => b.value - a.value);
   if (highScore.length > 10) {
     highScore.splice(10);
   }
@@ -18,7 +18,12 @@ const saveHighScore = (score: number): void => {
 
 const isHighScore = (score: number): boolean => {
   const highScore = loadHighScore();
-  const minScore = Math.min(...highScore);
+
+  if (highScore.length < 10) {
+    return true;
+  }
+
+  const minScore = Math.min(...highScore.map(e => e.value));
   return score > minScore;
 };
 

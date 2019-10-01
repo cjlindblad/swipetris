@@ -18,7 +18,8 @@ const render: Render = (param, gameState): void => {
     score,
     level,
     gameBoard,
-    ghostPiece
+    ghostPiece,
+    name
   } = param;
 
   if (!renderString) {
@@ -158,6 +159,15 @@ const render: Render = (param, gameState): void => {
       renderStringWithInfo,
       "Game over! Press 'r' to play again."
     );
+  }
+
+  if (gameState && gameState === GameState.HighScore) {
+    if (name) {
+      renderStringWithInfo = addInfoWindow(
+        renderStringWithInfo,
+        `High score! ${score}\n${name.getName()}`
+      );
+    }
   }
 
   if (gameState && gameState === GameState.Paused) {
