@@ -163,9 +163,16 @@ const render: Render = (param, gameState): void => {
 
   if (gameState && gameState === GameState.HighScore) {
     if (name) {
+      const prefix = `High score! ${score}`;
       renderStringWithInfo = addInfoWindow(
         renderStringWithInfo,
-        `High score! ${score}\n${name.getName()}`
+        `${prefix} ${name
+          .getName()
+          .split('')
+          .map((char, index) =>
+            index === name.getIndex() ? `\x1b[7m${char}\x1b[0m` : char
+          )
+          .join('')}`
       );
     }
   }
