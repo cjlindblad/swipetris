@@ -1,3 +1,3 @@
 # swipetris
 
-Never wrote tetris, so let's write it! 👾
+Play at https://cjlindblad.github.io/swipetris/
